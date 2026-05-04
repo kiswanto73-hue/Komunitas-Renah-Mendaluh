@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SINDARA GUGUS PRO | OFFICIAL PORTAL</title>
+    <title>SINDARA PRO | PORTAL KOMUNITAS RENAH MENDALUH</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,124 +15,134 @@
         .page.active { display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .hero-bg {
-            background: linear-gradient(rgba(30, 27, 75, 0.8), rgba(30, 27, 75, 0.8)), 
-                        url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(rgba(30, 27, 75, 0.85), rgba(30, 27, 75, 0.85)), 
+                        url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover; background-position: center;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
-    <nav class="fixed w-full z-[100] bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <nav class="fixed w-full z-[100] bg-white/90 backdrop-blur-md border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="font-black text-2xl italic text-indigo-900 tracking-tighter">SINDARA<span class="text-emerald-500">PRO</span></h1>
             <div class="hidden md:flex space-x-8 font-bold text-sm uppercase text-slate-600">
                 <a href="#home" class="hover:text-indigo-600">Beranda</a>
-                <a href="#program" class="hover:text-indigo-600">Program</a>
-                <a href="#tentang" class="hover:text-indigo-600">Tentang</a>
-                <a href="#app" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">Login Aplikasi</a>
+                <a href="#tentang" class="hover:text-indigo-600">Visi Misi</a>
+                <a href="#app" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">Portal Login</a>
             </div>
         </div>
     </nav>
 
     <section id="home" class="hero-bg h-screen flex items-center justify-center text-center text-white px-6">
         <div class="max-w-4xl">
-            <h2 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Transformasi Digital Pelaporan Gugus</h2>
-            <p class="text-lg md:text-xl opacity-90 mb-10 font-medium">Sistem Informasi Pendataan Pendidikan Daerah khusus Komunitas Pengurus Inti dan Gugus. Akurat, Cepat, dan Transparan.</p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl transition-all">Mulai Melapor</a>
-                <a href="#program" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-10 py-4 rounded-2xl font-black uppercase text-sm border border-white/30 transition-all">Program Kerja</a>
-            </div>
+            <h2 class="text-5xl md:text-6xl font-black mb-6 leading-tight uppercase italic">Komunitas GTK Renah Mendaluh</h2>
+            <p class="text-lg opacity-90 mb-10 font-medium">Mewujudkan Pendidik yang Inovatif, Adaptif Teknologi, dan Kolaboratif.</p>
+            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl transition-all">Masuk Dashboard</a>
         </div>
     </section>
 
-    <section id="program" class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h3 class="text-3xl font-black uppercase italic text-indigo-950">Program Unggulan</h3>
-            <div class="h-1.5 w-20 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-10 rounded-[3rem] shadow-xl border-b-8 border-indigo-600">
-                <i class="fas fa-check-double text-4xl text-indigo-600 mb-6"></i>
-                <h4 class="text-xl font-black mb-4 uppercase">Validasi Data</h4>
-                <p class="text-slate-500 font-medium leading-relaxed">Verifikasi data profil anggota secara berkala untuk akurasi Dapodik dan SINDARA Pusat.</p>
+    <section id="tentang" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div>
+                <h3 class="text-3xl font-black uppercase italic text-indigo-950 mb-6 underline decoration-emerald-500">Visi Kami</h3>
+                <p class="text-slate-600 font-bold leading-relaxed text-lg">"Mewujudkan Pendidik Kecamatan yang Inovatif, Adaptif Teknologi, dan Kolaboratif."</p>
+                
+                <h3 class="text-3xl font-black uppercase italic text-indigo-950 mt-12 mb-6 underline decoration-indigo-500">Misi Kami</h3>
+                <ul class="space-y-4 text-sm font-semibold text-slate-500">
+                    <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-3"></i> Meningkatkan Kompetensi Profesional Pendidik melalui penyelenggaraan pelatihan rutin.</li>
+                    <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-3"></i> Memfasilitasi diskusi panel untuk memecahkan masalah pembelajaran di kelas.</li>
+                    <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-3"></i> Mendorong Transformasi Teknologi Digital dan pemanfaatan AI dalam pembuatan soal.</li>
+                </ul>
             </div>
-            <div class="bg-white p-10 rounded-[3rem] shadow-xl border-b-8 border-emerald-500">
-                <i class="fas fa-users-gear text-4xl text-emerald-500 mb-6"></i>
-                <h4 class="text-xl font-black mb-4 uppercase">Kolektifitas Gugus</h4>
-                <p class="text-slate-500 font-medium leading-relaxed">Penguatan koordinasi antar Gugus 1, Gugus 2, PAI, dan PJOK dalam satu platform terpadu.</p>
-            </div>
-            <div class="bg-white p-10 rounded-[3rem] shadow-xl border-b-8 border-orange-500">
-                <i class="fas fa-chart-line text-4xl text-orange-500 mb-6"></i>
-                <h4 class="text-xl font-black mb-4 uppercase">Laporan Digital</h4>
-                <p class="text-slate-500 font-medium leading-relaxed">Digitalisasi bukti fisik kegiatan (notulensi & foto) untuk mempermudah audit kinerja.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="app" class="py-24 bg-slate-900 px-6 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <div class="absolute top-10 left-10 w-64 h-64 bg-indigo-500 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500 rounded-full blur-3xl"></div>
-        </div>
-
-        <div id="loginArea" class="max-w-md mx-auto relative z-10">
-            <div class="bg-white p-10 rounded-[3rem] shadow-2xl border-t-[12px] border-yellow-400">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-black text-indigo-950 uppercase italic">Login Portal Gugus</h2>
-                    <p class="text-[10px] font-bold text-slate-400 mt-2">MASUKKAN KODE AKSES ANDA</p>
+            <div class="bg-indigo-950 p-10 rounded-[3rem] text-white shadow-2xl border-r-[12px] border-emerald-500">
+                <h3 class="text-2xl font-black uppercase mb-6 italic">Informasi Komunitas</h3>
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kecamatan</p>
+                        <p class="text-lg font-bold">Renah Mendaluh</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kabupaten</p>
+                        <p class="text-lg font-bold">Tanjung Jabung Barat, Prov. Jambi</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Status</p>
+                        <span class="bg-emerald-500 text-[10px] px-3 py-1 rounded-full font-black uppercase">Aktif</span>
+                    </div>
                 </div>
-                <input type="text" id="userKey" placeholder="KODE AKSES" class="w-full p-5 bg-slate-100 rounded-2xl mb-4 text-center font-black outline-none border-2 border-transparent focus:border-indigo-600 transition-all uppercase">
-                <button onclick="loginSindara()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg hover:bg-indigo-700 active:scale-95 transition-all">Masuk Dashboard</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="app" class="py-24 bg-slate-900 px-6 min-h-screen">
+        <div id="loginArea" class="max-w-md mx-auto">
+            <div class="bg-white p-10 rounded-[3rem] shadow-2xl border-t-[12px] border-indigo-600">
+                <h2 class="text-2xl font-black text-indigo-950 uppercase italic text-center mb-8">Login SINDARA PRO</h2>
+                <input type="text" id="userKey" placeholder="KODE AKSES" class="w-full p-5 bg-slate-100 rounded-2xl mb-4 text-center font-black outline-none border-2 border-transparent focus:border-indigo-600 uppercase">
+                <button onclick="loginSindara()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Masuk</button>
             </div>
         </div>
 
-        <div id="mainDashboard" class="hidden max-w-7xl mx-auto relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <div class="bg-white/10 backdrop-blur-md p-8 rounded-[3rem] text-white border border-white/10 h-fit">
+        <div id="mainDashboard" class="hidden max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 text-white">
+                <div class="bg-white/10 backdrop-blur-md p-8 rounded-[3rem] border border-white/10 h-fit">
                     <h3 id="welcomeName" class="text-xl font-black mb-1">...</h3>
                     <p id="labelGugus" class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-8"></p>
                     <nav class="space-y-2 text-sm font-bold">
                         <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3"></i> Ringkasan</button>
                         <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3"></i> Buat Laporan</button>
-                        <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10 flex items-center"><i class="fas fa-power-off mr-3"></i> Keluar</button>
+                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center text-yellow-400"><i class="fas fa-calendar-alt mr-3"></i> Agenda Kerja</button>
+                        <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-sign-out-alt mr-3"></i> Keluar</button>
                     </nav>
                 </div>
 
                 <div class="lg:col-span-3 space-y-6">
-                    <div id="masterView" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div onclick="filterGugus('G1-BAWAH')" class="bg-orange-500 p-6 rounded-[2rem] text-white cursor-pointer hover:scale-105 transition shadow-lg">
-                            <h4 class="font-black text-xs uppercase">Gugus 1 Bawah</h4>
-                        </div>
-                        <div onclick="filterGugus('G1-TINGGI')" class="bg-blue-500 p-6 rounded-[2rem] text-white cursor-pointer hover:scale-105 transition shadow-lg">
-                            <h4 class="font-black text-xs uppercase">Gugus 1 Tinggi</h4>
-                        </div>
-                        <div onclick="filterGugus('PAI')" class="bg-emerald-600 p-6 rounded-[2rem] text-white cursor-pointer hover:scale-105 transition shadow-lg">
-                            <h4 class="font-black text-xs uppercase">Komunitas PAI</h4>
+                    <div id="masterView" class="hidden">
+                        <p class="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-tighter">Panel Monitoring Master</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+                            <button onclick="filterGugus('G1-BAWAH')" class="p-4 bg-orange-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">G1-Bawah</button>
+                            <button onclick="filterGugus('G1-TINGGI')" class="p-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">G1-Tinggi</button>
+                            <button onclick="filterGugus('G2-ATAS')" class="p-4 bg-rose-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">G2-Atas</button>
+                            <button onclick="filterGugus('G2-BAWAH')" class="p-4 bg-yellow-600 rounded-2xl font-black text-[10px] uppercase shadow-lg text-slate-900">G2-Bawah</button>
+                            <button onclick="filterGugus('PJOK')" class="p-4 bg-emerald-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">PJOK</button>
+                            <button onclick="filterGugus('PAI')" class="p-4 bg-indigo-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">PAI</button>
                         </div>
                     </div>
 
                     <div id="page-stat" class="sub-page active">
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                            <div class="bg-white p-6 rounded-[2rem] shadow-xl">
-                                <p class="text-[10px] font-black text-slate-400 uppercase">Laporan</p>
-                                <h5 id="statLaporan" class="text-3xl font-black text-indigo-900">0</h5>
-                            </div>
-                        </div>
+                        <h4 class="text-xl font-black mb-6 italic">Feed Aktivitas Terkini</h4>
                         <div id="listLaporanFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
 
-                    <div id="page-input" class="sub-page hidden bg-white p-10 rounded-[3rem] shadow-2xl">
-                        <h3 class="text-2xl font-black uppercase italic mb-6">Formulir Pelaporan</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl outline-none font-bold">
-                            <textarea id="lapDesk" placeholder="Deskripsi Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl outline-none font-bold" rows="3"></textarea>
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="date" id="lapTgl" class="p-5 bg-slate-100 rounded-2xl font-bold">
-                                <input type="text" id="lapLink" placeholder="Link Bukti Fisik" class="p-5 bg-slate-100 rounded-2xl font-bold">
+                    <div id="page-agenda" class="sub-page hidden">
+                        <div class="bg-indigo-600 p-10 rounded-[3rem] shadow-2xl">
+                            <h3 class="text-2xl font-black uppercase italic mb-6 text-white"><i class="fas fa-calendar-check mr-3"></i> Agenda Komunitas</h3>
+                            <div class="space-y-4">
+                                <div class="bg-white/10 p-6 rounded-2xl border-l-4 border-yellow-400">
+                                    <p class="text-[10px] font-black opacity-60">RUTIN BULANAN</p>
+                                    <p class="font-bold">Pertemuan Rutin KKG (Penyusunan RPP/Modul Ajar)</p>
+                                </div>
+                                <div class="bg-white/10 p-6 rounded-2xl border-l-4 border-emerald-400">
+                                    <p class="text-[10px] font-black opacity-60">SEMESTERAN</p>
+                                    <p class="font-bold">Pelatihan Pemanfaatan Teknologi & AI dalam Pembelajaran</p>
+                                </div>
+                                <div class="bg-white/10 p-6 rounded-2xl border-l-4 border-blue-400">
+                                    <p class="text-[10px] font-black opacity-60">TAHUNAN</p>
+                                    <p class="font-bold">Pameran Inovasi Kelas & Berbagi Praktik Baik Nasional</p>
+                                </div>
                             </div>
-                            <button onclick="simpanLaporan()" class="w-full bg-emerald-500 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Kirim Laporan</button>
+                        </div>
+                    </div>
+
+                    <div id="page-input" class="sub-page hidden bg-white p-10 rounded-[3rem] text-slate-800 shadow-2xl">
+                        <h3 class="text-2xl font-black uppercase italic mb-6">Input Laporan Baru</h3>
+                        <div class="space-y-4">
+                            <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
+                            <textarea id="lapDesk" placeholder="Ringkasan Hasil Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold" rows="3"></textarea>
+                            <input type="date" id="lapTgl" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
+                            <input type="text" id="lapLink" placeholder="Link Dokumentasi (Drive/Foto)" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
+                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Kirim Laporan</button>
                         </div>
                     </div>
                 </div>
@@ -140,12 +150,11 @@
         </div>
     </section>
 
-    <footer class="py-12 text-center text-slate-400 text-xs font-bold uppercase tracking-widest border-t border-slate-200">
-        &copy; 2026 SINDARA GUGUS PRO | Ketua Komunitas: Pak Kiswanto
+    <footer class="py-12 bg-slate-100 text-center text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+        &copy; 2026 SINDARA GUGUS PRO | RENAH MENDALUH - TANJUNG JABUNG BARAT
     </footer>
 
     <script>
-        // CONFIG FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCUjE8WXa8Py4vnojrXDUR3uCvnQEzP6zQ",
             databaseURL: "https://e-kantin-91f0c-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -159,8 +168,11 @@
 
         const DATABASE_GUGUS = {
             "INTI-SINDARA": { nama: "Pak Kiswanto", role: "MASTER", gugus: "PENGURUS INTI" },
-            "G1-BAWAH": { nama: "Ketua Gugus 1 L", role: "GUGUS", gugus: "GUGUS 1 KELAS BAWAH" },
-            "G1-TINGGI": { nama: "Ketua Gugus 1 H", role: "GUGUS", gugus: "GUGUS 1 KELAS TINGGI" },
+            "G1-BAWAH": { nama: "Admin G1 Bawah", role: "GUGUS", gugus: "GUGUS 1 BAWAH" },
+            "G1-TINGGI": { nama: "Admin G1 Tinggi", role: "GUGUS", gugus: "GUGUS 1 TINGGI" },
+            "G2-ATAS": { nama: "Admin G2 Atas", role: "GUGUS", gugus: "GUGUS 2 ATAS" },
+            "G2-BAWAH": { nama: "Admin G2 Bawah", role: "GUGUS", gugus: "GUGUS 2 BAWAH" },
+            "PJOK": { nama: "Admin PJOK", role: "GUGUS", gugus: "KOMUNITAS PJOK" },
             "PAI": { nama: "Admin PAI", role: "GUGUS", gugus: "KOMUNITAS PAI" }
         };
 
@@ -170,13 +182,10 @@
                 sessionUser = DATABASE_GUGUS[key];
                 sessionUser.id = key;
                 currentGugusView = key;
-
                 document.getElementById('loginArea').classList.add('hidden');
                 document.getElementById('mainDashboard').classList.remove('hidden');
-                
                 document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
                 document.getElementById('labelGugus').innerText = sessionUser.gugus;
-
                 if (sessionUser.role === 'MASTER') document.getElementById('masterView').classList.remove('hidden');
                 muatLaporan();
             } else { alert("KODE AKSES SALAH!"); }
@@ -196,9 +205,9 @@
                 pengirim: sessionUser.nama,
                 timestamp: Date.now()
             };
-            if(!data.judul || !data.tgl) return alert("Lengkapi data!");
+            if(!data.judul || !data.tgl) return alert("Mohon lengkapi judul dan tanggal!");
             db.ref(`sindara_laporan/${sessionUser.id}`).push(data).then(() => {
-                alert("Laporan Terkirim!");
+                alert("Laporan Berhasil Dikirim!");
                 showSubPage('stat');
             });
         }
@@ -208,19 +217,16 @@
             db.ref(path).on('value', s => {
                 const list = document.getElementById('listLaporanFeed');
                 list.innerHTML = "";
-                let count = 0;
                 s.forEach(lx => {
-                    count++;
                     const l = lx.val();
                     list.innerHTML = `
-                    <div class="bg-white p-6 rounded-[2.5rem] shadow-lg border-l-8 border-indigo-600">
-                        <span class="text-[8px] font-black text-slate-400 uppercase">${l.tgl}</span>
+                    <div class="bg-white/5 p-6 rounded-[2rem] border border-white/10">
+                        <span class="text-[8px] font-black text-emerald-400 uppercase">${l.tgl}</span>
                         <h4 class="font-black text-sm uppercase my-1">${l.judul}</h4>
-                        <p class="text-[10px] text-slate-500 mb-4">${l.desk}</p>
-                        <a href="${l.link}" target="_blank" class="text-[9px] font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase">Lihat Bukti Fisik</a>
+                        <p class="text-[10px] text-white/50 mb-4 line-clamp-2">${l.desk}</p>
+                        <a href="${l.link}" target="_blank" class="text-[9px] font-black text-emerald-400"><i class="fas fa-link mr-1"></i> BUKTI FISIK</a>
                     </div>` + list.innerHTML;
                 });
-                document.getElementById('statLaporan').innerText = count;
             });
         }
 
