@@ -19,6 +19,11 @@
                         url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80');
             background-size: cover; background-position: center;
         }
+        /* Style Tambahan Kalender */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 12px; font-weight: 800; position: relative; }
+        .calendar-day:hover { background: rgba(16, 185, 129, 0.2); }
+        .has-note::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; background: #fbbf24; border-radius: 50%; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -47,7 +52,6 @@
             <div>
                 <h3 class="text-3xl font-black uppercase italic text-indigo-950 mb-6 underline decoration-emerald-500">Visi Kami</h3>
                 <p class="text-slate-600 font-bold leading-relaxed text-lg">"Mewujudkan Pendidik Kecamatan yang Inovatif, Adaptif Teknologi, dan Kolaboratif."</p>
-                
                 <h3 class="text-3xl font-black uppercase italic text-indigo-950 mt-12 mb-6 underline decoration-indigo-500">Misi Kami</h3>
                 <ul class="space-y-4 text-sm font-semibold text-slate-500">
                     <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-3"></i> Meningkatkan Kompetensi Profesional Pendidik melalui penyelenggaraan pelatihan rutin.</li>
@@ -58,18 +62,9 @@
             <div class="bg-indigo-950 p-10 rounded-[3rem] text-white shadow-2xl border-r-[12px] border-emerald-500">
                 <h3 class="text-2xl font-black uppercase mb-6 italic">Informasi Komunitas</h3>
                 <div class="space-y-6">
-                    <div>
-                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kecamatan</p>
-                        <p class="text-lg font-bold">Renah Mendaluh</p>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kabupaten</p>
-                        <p class="text-lg font-bold">Tanjung Jabung Barat, Prov. Jambi</p>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Status</p>
-                        <span class="bg-emerald-500 text-[10px] px-3 py-1 rounded-full font-black uppercase">Aktif</span>
-                    </div>
+                    <div><p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kecamatan</p><p class="text-lg font-bold">Renah Mendaluh</p></div>
+                    <div><p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kabupaten</p><p class="text-lg font-bold">Tanjung Jabung Barat, Prov. Jambi</p></div>
+                    <div><p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Status</p><span class="bg-emerald-500 text-[10px] px-3 py-1 rounded-full font-black uppercase">Aktif</span></div>
                 </div>
             </div>
         </div>
@@ -90,9 +85,14 @@
                     <h3 id="welcomeName" class="text-xl font-black mb-1">...</h3>
                     <p id="labelGugus" class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-8"></p>
                     <nav class="space-y-2 text-sm font-bold">
-                        <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3"></i> Ringkasan</button>
-                        <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3"></i> Buat Laporan</button>
-                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center text-yellow-400"><i class="fas fa-calendar-alt mr-3"></i> Agenda Kerja</button>
+                        <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3 text-indigo-400"></i> Ringkasan</button>
+                        <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3 text-emerald-400"></i> Buat Laporan</button>
+                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-3 text-yellow-400"></i> Agenda & Kalender</button>
+                        
+                        <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" class="w-full block text-left p-4 bg-indigo-600/30 hover:bg-indigo-600/50 rounded-2xl flex items-center mt-4 border border-indigo-500/30">
+                            <i class="fas fa-external-link-alt mr-3 text-white"></i> Laporan KKG (External)
+                        </a>
+
                         <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-sign-out-alt mr-3"></i> Keluar</button>
                     </nav>
                 </div>
@@ -101,12 +101,12 @@
                     <div id="masterView" class="hidden">
                         <p class="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-tighter">Panel Monitoring Master</p>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-                            <button onclick="filterGugus('G1-BAWAH')" class="p-4 bg-orange-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">G1-Bawah</button>
-                            <button onclick="filterGugus('G1-TINGGI')" class="p-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">G1-Tinggi</button>
-                            <button onclick="filterGugus('G2-ATAS')" class="p-4 bg-rose-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">G2-Atas</button>
-                            <button onclick="filterGugus('G2-BAWAH')" class="p-4 bg-yellow-600 rounded-2xl font-black text-[10px] uppercase shadow-lg text-slate-900">G2-Bawah</button>
-                            <button onclick="filterGugus('PJOK')" class="p-4 bg-emerald-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">PJOK</button>
-                            <button onclick="filterGugus('PAI')" class="p-4 bg-indigo-600 rounded-2xl font-black text-[10px] uppercase shadow-lg">PAI</button>
+                            <button onclick="filterGugus('G1-BAWAH')" class="p-4 bg-orange-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">G1-Bawah</button>
+                            <button onclick="filterGugus('G1-TINGGI')" class="p-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">G1-Tinggi</button>
+                            <button onclick="filterGugus('G2-ATAS')" class="p-4 bg-rose-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">G2-Atas</button>
+                            <button onclick="filterGugus('G2-BAWAH')" class="p-4 bg-yellow-600 rounded-2xl font-black text-[10px] uppercase shadow-lg text-slate-900 hover:scale-105 transition">G2-Bawah</button>
+                            <button onclick="filterGugus('PJOK')" class="p-4 bg-emerald-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">PJOK</button>
+                            <button onclick="filterGugus('PAI')" class="p-4 bg-indigo-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">PAI</button>
                         </div>
                     </div>
 
@@ -115,23 +115,38 @@
                         <div id="listLaporanFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
 
-                    <div id="page-agenda" class="sub-page hidden">
-                        <div class="bg-indigo-600 p-10 rounded-[3rem] shadow-2xl">
-                            <h3 class="text-2xl font-black uppercase italic mb-6 text-white"><i class="fas fa-calendar-check mr-3"></i> Agenda Komunitas</h3>
-                            <div class="space-y-4">
-                                <div class="bg-white/10 p-6 rounded-2xl border-l-4 border-yellow-400">
-                                    <p class="text-[10px] font-black opacity-60">RUTIN BULANAN</p>
-                                    <p class="font-bold">Pertemuan Rutin KKG (Penyusunan RPP/Modul Ajar)</p>
+                    <div id="page-agenda" class="sub-page hidden space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white text-slate-800 p-8 rounded-[2.5rem] shadow-xl">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="font-black uppercase italic text-indigo-900">Mei 2026</h3>
+                                    <span class="text-[10px] font-black bg-indigo-100 px-3 py-1 rounded-full">REALTIME</span>
                                 </div>
-                                <div class="bg-white/10 p-6 rounded-2xl border-l-4 border-emerald-400">
-                                    <p class="text-[10px] font-black opacity-60">SEMESTERAN</p>
-                                    <p class="font-bold">Pelatihan Pemanfaatan Teknologi & AI dalam Pembelajaran</p>
+                                <div class="calendar-grid text-center mb-2 font-black text-[10px] text-slate-400 uppercase">
+                                    <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
                                 </div>
-                                <div class="bg-white/10 p-6 rounded-2xl border-l-4 border-blue-400">
-                                    <p class="text-[10px] font-black opacity-60">TAHUNAN</p>
-                                    <p class="font-bold">Pameran Inovasi Kelas & Berbagi Praktik Baik Nasional</p>
+                                <div id="calendarDays" class="calendar-grid">
+                                    </div>
+                                <p class="mt-4 text-[9px] font-bold text-slate-400">*Klik tanggal untuk tambah catatan agenda</p>
+                            </div>
+
+                            <div class="bg-indigo-600 p-8 rounded-[2.5rem] shadow-xl">
+                                <h3 class="text-xl font-black uppercase italic mb-4"><i class="fas fa-plus-circle mr-2 text-yellow-400"></i> Catat Agenda</h3>
+                                <div id="agendaDisplay" class="mb-4 hidden">
+                                    <p class="text-[10px] font-black text-indigo-200">AGENDA PILIHAN: <span id="selectedDateText"></span></p>
+                                    <input type="text" id="noteInput" placeholder="Tulis agenda kegiatan..." class="w-full p-4 mt-2 rounded-xl bg-white/10 text-white placeholder-indigo-300 font-bold outline-none border border-indigo-400">
+                                    <button onclick="saveAgendaNote()" class="w-full mt-3 bg-yellow-400 text-indigo-900 font-black py-3 rounded-xl hover:bg-yellow-300 transition uppercase text-xs">Simpan Jadwal</button>
+                                </div>
+                                <div id="noDateSelected" class="text-center py-10 opacity-50 italic text-sm">
+                                    Klik tanggal pada kalender untuk mengisi agenda.
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="bg-white/5 p-8 rounded-[2.5rem] border border-white/10">
+                            <h4 class="font-black uppercase italic mb-6"><i class="fas fa-list-ul mr-2 text-emerald-400"></i> Daftar Agenda Gugus</h4>
+                            <div id="savedAgendaList" class="space-y-3">
+                                </div>
                         </div>
                     </div>
 
@@ -165,6 +180,7 @@
 
         let sessionUser = null;
         let currentGugusView = null;
+        let selectedDate = null;
 
         const DATABASE_GUGUS = {
             "INTI-SINDARA": { nama: "Pak Kiswanto", role: "MASTER", gugus: "PENGURUS INTI" },
@@ -187,7 +203,10 @@
                 document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
                 document.getElementById('labelGugus').innerText = sessionUser.gugus;
                 if (sessionUser.role === 'MASTER') document.getElementById('masterView').classList.remove('hidden');
+                
+                initCalendar();
                 muatLaporan();
+                muatAgenda();
             } else { alert("KODE AKSES SALAH!"); }
         }
 
@@ -196,6 +215,62 @@
             document.getElementById('page-' + id).classList.remove('hidden');
         }
 
+        // FUNGSI KALENDER
+        function initCalendar() {
+            const grid = document.getElementById('calendarDays');
+            grid.innerHTML = "";
+            // Menampilkan 31 hari (untuk simulasi Mei 2026)
+            for (let i = 1; i <= 31; i++) {
+                const day = document.createElement('div');
+                day.className = "calendar-day text-slate-600 bg-slate-50";
+                day.innerText = i;
+                day.onclick = () => selectDate(i);
+                grid.appendChild(day);
+            }
+        }
+
+        function selectDate(day) {
+            selectedDate = `${day}-05-2026`;
+            document.getElementById('noDateSelected').classList.add('hidden');
+            document.getElementById('agendaDisplay').classList.remove('hidden');
+            document.getElementById('selectedDateText').innerText = selectedDate;
+        }
+
+        function saveAgendaNote() {
+            const note = document.getElementById('noteInput').value;
+            if(!note) return alert("Isi catatan!");
+            const agendaData = {
+                tgl: selectedDate,
+                catatan: note,
+                pengirim: sessionUser.gugus,
+                timestamp: Date.now()
+            };
+            db.ref(`sindara_agenda/${sessionUser.id}`).push(agendaData).then(() => {
+                alert("Agenda Disimpan!");
+                document.getElementById('noteInput').value = "";
+            });
+        }
+
+        function muatAgenda() {
+            const path = sessionUser.role === 'MASTER' ? `sindara_agenda/${currentGugusView}` : `sindara_agenda/${sessionUser.id}`;
+            db.ref(path).on('value', s => {
+                const list = document.getElementById('savedAgendaList');
+                list.innerHTML = "";
+                s.forEach(ax => {
+                    const a = ax.val();
+                    list.innerHTML = `
+                    <div class="bg-white/10 p-4 rounded-2xl flex justify-between items-center">
+                        <div>
+                            <p class="text-[8px] font-black text-yellow-400 uppercase">${a.tgl}</p>
+                            <p class="text-[12px] font-bold">${a.catatan}</p>
+                        </div>
+                        <i class="fas fa-calendar-check text-white/20"></i>
+                    </div>` + list.innerHTML;
+                });
+            });
+        }
+
+        // FUNGSI LAPORAN (TIDAK BERUBAH)
         function simpanLaporan() {
             const data = {
                 judul: document.getElementById('lapJudul').value,
@@ -234,6 +309,7 @@
             currentGugusView = gugusId;
             document.getElementById('labelGugus').innerText = "MEMANTAU: " + DATABASE_GUGUS[gugusId].gugus;
             muatLaporan();
+            muatAgenda();
         }
     </script>
 </body>
