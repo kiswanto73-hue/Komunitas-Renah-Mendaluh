@@ -23,7 +23,6 @@
         .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 12px; font-weight: 800; position: relative; }
         .calendar-day:hover { background: rgba(16, 185, 129, 0.2); }
         .has-note::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; background: #fbbf24; border-radius: 50%; }
-        /* Custom Scrollbar for Finance List */
         #listTransaksi::-webkit-scrollbar { width: 4px; }
         #listTransaksi::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
     </style>
@@ -197,7 +196,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -245,7 +243,13 @@
                 initCalendar();
                 muatLaporan();
                 muatAgenda();
-                muatKeuangan(); // Muat data kas saat login
+                muatKeuangan();
+
+                // CEK PARAMETER URL UNTUK PINDAH HALAMAN OTOMATIS
+                const urlParams = new URLSearchParams(window.location.search);
+                const page = urlParams.get('page');
+                if(page) showSubPage(page);
+
             } else { alert("KODE AKSES SALAH!"); }
         }
 
@@ -277,10 +281,7 @@
             const note = document.getElementById('noteInput').value;
             if(!note) return alert("Isi catatan!");
             const agendaData = {
-                tgl: selectedDate,
-                catatan: note,
-                pengirim: sessionUser.gugus,
-                timestamp: Date.now()
+                tgl: selectedDate, catatan: note, pengirim: sessionUser.gugus, timestamp: Date.now()
             };
             db.ref(`sindara_agenda/${sessionUser.id}`).push(agendaData).then(() => {
                 alert("Agenda Disimpan!");
@@ -313,12 +314,11 @@
                 desk: document.getElementById('lapDesk').value,
                 tgl: document.getElementById('lapTgl').value,
                 link: document.getElementById('lapLink').value,
-                pengirim: sessionUser.nama,
-                timestamp: Date.now()
+                pengirim: sessionUser.nama, timestamp: Date.now()
             };
-            if(!data.judul || !data.tgl) return alert("Mohon lengkapi judul dan tanggal!");
+            if(!data.judul || !data.tgl) return alert("Mohon lengkapi data!");
             db.ref(`sindara_laporan/${sessionUser.id}`).push(data).then(() => {
-                alert("Laporan Berhasil Dikirim!");
+                alert("Laporan Berhasil!");
                 showSubPage('stat');
             });
         }
@@ -341,7 +341,6 @@
             });
         }
 
-        // LOGIKA BENDAHARA BARU
         function simpanTransaksi() {
             const tipe = document.getElementById('kasTipe').value;
             const ket = document.getElementById('kasKet').value;
@@ -354,7 +353,7 @@
                 timestamp: Date.now(), admin: sessionUser.nama
             };
             db.ref(`sindara_kas/${sessionUser.id}`).push(data).then(() => {
-                alert("Berhasil dicatat!");
+                alert("Berhasil!");
                 document.getElementById('kasKet').value = "";
                 document.getElementById('kasNominal').value = "";
                 document.getElementById('kasBukti').value = "";
