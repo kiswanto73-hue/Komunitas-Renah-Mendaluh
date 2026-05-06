@@ -21,7 +21,19 @@
         }
         #listTransaksi::-webkit-scrollbar { width: 4px; }
         #listTransaksi::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
-        /* Style untuk menyembunyikan elemen jika mode bendahara aktif */
+        
+        /* STYLE KALENDER TERBARU */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .calendar-day { 
+            aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; 
+            border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 12px; font-weight: 800; 
+            position: relative; border: 1px solid rgba(0,0,0,0.05);
+        }
+        .calendar-day:hover { transform: scale(1.1); z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        /* Warna jika ada jadwal */
+        .has-event { background: #fbbf24 !important; color: #1e1b4b !important; box-shadow: 0 0 10px rgba(251, 191, 36, 0.5); border: none; }
+        .has-event::after { content: ''; position: absolute; top: 4px; right: 4px; width: 4px; height: 4px; background: white; border-radius: 50%; }
+        
         .finance-only .hide-finance { display: none !important; }
     </style>
 </head>
@@ -64,9 +76,7 @@
                         <button onclick="showSubPage('stat')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3 text-indigo-400"></i> Ringkasan</button>
                         <button onclick="showSubPage('input')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3 text-emerald-400"></i> Buat Laporan</button>
                         <button onclick="showSubPage('agenda')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-3 text-yellow-400"></i> Agenda</button>
-                        
-                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 bg-emerald-600/20 rounded-2xl flex items-center border border-emerald-500/30"><i class="fas fa-wallet mr-3 text-emerald-400"></i> Bendahara & Kas</button>
-
+                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-wallet mr-3 text-emerald-400"></i> Bendahara & Kas</button>
                         <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-sign-out-alt mr-3"></i> Keluar</button>
                     </nav>
                 </div>
@@ -77,18 +87,47 @@
                         <div id="listLaporanFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
 
+                    <div id="page-agenda" class="sub-page hidden space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white text-slate-800 p-8 rounded-[2.5rem] shadow-xl">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="font-black uppercase italic text-indigo-900">Mei 2026</h3>
+                                    <span class="text-[10px] font-black bg-indigo-100 px-3 py-1 rounded-full">KALENDER</span>
+                                </div>
+                                <div class="calendar-grid text-center mb-2 font-black text-[10px] text-slate-400 uppercase">
+                                    <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                                </div>
+                                <div id="calendarDays" class="calendar-grid"></div>
+                            </div>
+                            <div class="bg-indigo-600 p-8 rounded-[2.5rem] shadow-xl text-white">
+                                <h3 class="text-xl font-black uppercase italic mb-4"><i class="fas fa-edit mr-2 text-yellow-400"></i> Detail Agenda</h3>
+                                <div id="agendaContent">
+                                    <p class="text-sm opacity-70 italic">Klik pada tanggal yang berwarna kuning untuk melihat catatan atau menambah agenda baru.</p>
+                                </div>
+                                <div id="agendaForm" class="hidden mt-4 space-y-3">
+                                    <p class="text-[10px] font-black text-yellow-400 uppercase tracking-widest">Tanggal: <span id="targetDate"></span></p>
+                                    <textarea id="agendaNoteInput" placeholder="Tulis agenda..." class="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold outline-none"></textarea>
+                                    <button onclick="saveAgenda()" class="w-full bg-yellow-400 text-indigo-900 font-black p-3 rounded-xl uppercase text-xs">Simpan Jadwal</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white/5 p-8 rounded-[2.5rem] border border-white/10">
+                            <h4 class="font-black uppercase italic mb-6 text-white"><i class="fas fa-list mr-2 text-emerald-400"></i> Daftar Semua Agenda</h4>
+                            <div id="savedAgendaList" class="space-y-3"></div>
+                        </div>
+                    </div>
+
                     <div id="page-keuangan" class="sub-page hidden space-y-6">
-                        <h2 class="text-2xl font-black italic uppercase text-emerald-400 mb-2">Manajemen Kas</h2>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-emerald-600 p-6 rounded-[2rem] shadow-xl">
+                            <div class="bg-emerald-600 p-6 rounded-[2rem] shadow-xl text-white">
                                 <p class="text-[10px] font-black opacity-80 uppercase">Total Saldo Kas</p>
                                 <h3 id="saldoTotal" class="text-2xl font-black italic">Rp 0</h3>
                             </div>
-                            <div class="bg-white/10 backdrop-blur-md p-6 rounded-[2rem] border border-white/10">
+                            <div class="bg-white/10 backdrop-blur-md p-6 rounded-[2rem] border border-white/10 text-white">
                                 <p class="text-[10px] font-black text-emerald-400 uppercase">Uang Masuk (+)</p>
                                 <h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3>
                             </div>
-                            <div class="bg-white/10 backdrop-blur-md p-6 rounded-[2rem] border border-white/10">
+                            <div class="bg-white/10 backdrop-blur-md p-6 rounded-[2rem] border border-white/10 text-white">
                                 <p class="text-[10px] font-black text-rose-400 uppercase">Uang Keluar (-)</p>
                                 <h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3>
                             </div>
@@ -107,8 +146,8 @@
                                     <button onclick="simpanTransaksi()" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-black uppercase shadow-lg">Simpan Pembukuan</button>
                                 </div>
                             </div>
-                            <div class="bg-slate-800 p-8 rounded-[2.5rem] border border-white/10">
-                                <h3 class="text-xl font-black uppercase italic mb-6 text-white"><i class="fas fa-history mr-2 text-yellow-400"></i> Riwayat Kas</h3>
+                            <div class="bg-slate-800 p-8 rounded-[2.5rem] border border-white/10 text-white">
+                                <h3 class="text-xl font-black uppercase italic mb-6"><i class="fas fa-history mr-2 text-yellow-400"></i> Riwayat Kas</h3>
                                 <div id="listTransaksi" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
                             </div>
                         </div>
@@ -121,14 +160,10 @@
                             <textarea id="lapDesk" placeholder="Ringkasan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold" rows="3"></textarea>
                             <input type="date" id="lapTgl" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
                             <input type="text" id="lapLink" placeholder="Link Dokumentasi" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
-                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Kirim</button>
+                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Kirim Laporan</button>
                          </div>
                     </div>
 
-                    <div id="page-agenda" class="sub-page hidden">
-                         <h3 class="text-white font-black uppercase mb-4">Agenda Kegiatan</h3>
-                         <div id="savedAgendaList" class="space-y-3"></div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -144,7 +179,8 @@
         const db = firebase.database();
 
         let sessionUser = null;
-        let currentGugusView = null;
+        let selectedDate = null;
+        let agendaDataLocal = {};
 
         const DATABASE_GUGUS = {
             "INTI-SINDARA": { nama: "Pak Kiswanto", role: "MASTER", gugus: "PENGURUS INTI" },
@@ -161,7 +197,6 @@
             if (DATABASE_GUGUS[key]) {
                 sessionUser = DATABASE_GUGUS[key];
                 sessionUser.id = key;
-                currentGugusView = key;
                 document.getElementById('loginArea').classList.add('hidden');
                 document.getElementById('mainDashboard').classList.remove('hidden');
                 document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
@@ -169,16 +204,15 @@
                 
                 muatLaporan();
                 muatKeuangan();
+                muatAgenda();
 
-                // CEK MODE KHUSUS BENDAHARA
                 const urlParams = new URLSearchParams(window.location.search);
                 if(urlParams.get('view') === 'finance_only') {
-                    document.body.classList.add('finance-only'); // Sembunyikan elemen non-finance
+                    document.body.classList.add('finance-only');
                     showSubPage('keuangan');
                 } else {
                     showSubPage('stat');
                 }
-
             } else { alert("KODE AKSES SALAH!"); }
         }
 
@@ -187,23 +221,77 @@
             document.getElementById('page-' + id).classList.remove('hidden');
         }
 
+        // FUNGSI KALENDER & AGENDA TERBARU
+        function initCalendar() {
+            const grid = document.getElementById('calendarDays');
+            grid.innerHTML = "";
+            for (let i = 1; i <= 31; i++) {
+                const dayId = `${i}-05-2026`;
+                const hasEvent = agendaDataLocal[dayId] ? 'has-event' : '';
+                const day = document.createElement('div');
+                day.className = `calendar-day bg-slate-100 ${hasEvent}`;
+                day.innerText = i;
+                day.onclick = () => selectDate(i);
+                grid.appendChild(day);
+            }
+        }
+
+        function selectDate(day) {
+            selectedDate = `${day}-05-2026`;
+            document.getElementById('agendaForm').classList.remove('hidden');
+            document.getElementById('targetDate').innerText = selectedDate;
+            
+            const content = document.getElementById('agendaContent');
+            if(agendaDataLocal[selectedDate]) {
+                content.innerHTML = `<div class="bg-white/20 p-4 rounded-xl border border-white/30 mb-2">
+                    <p class="font-black text-yellow-300 uppercase text-[10px]">Agenda Aktif:</p>
+                    <p class="text-sm font-bold">${agendaDataLocal[selectedDate]}</p>
+                </div>`;
+            } else {
+                content.innerHTML = `<p class="text-sm opacity-70">Belum ada agenda untuk tanggal ini.</p>`;
+            }
+        }
+
+        function saveAgenda() {
+            const note = document.getElementById('agendaNoteInput').value;
+            if(!note) return alert("Isi catatan!");
+            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g, '_')}`).set({
+                tgl: selectedDate, catatan: note
+            }).then(() => {
+                alert("Berhasil!");
+                document.getElementById('agendaNoteInput').value = "";
+            });
+        }
+
+        function muatAgenda() {
+            db.ref(`sindara_agenda/${sessionUser.id}`).on('value', s => {
+                agendaDataLocal = {};
+                const list = document.getElementById('savedAgendaList');
+                list.innerHTML = "";
+                s.forEach(ax => {
+                    const a = ax.val();
+                    agendaDataLocal[a.tgl] = a.catatan;
+                    list.innerHTML = `
+                    <div class="bg-white/10 p-4 rounded-2xl flex justify-between items-center">
+                        <div><p class="text-[8px] font-black text-yellow-400 uppercase">${a.tgl}</p><p class="text-xs text-white">${a.catatan}</p></div>
+                        <i class="fas fa-calendar-check text-yellow-400"></i>
+                    </div>` + list.innerHTML;
+                });
+                initCalendar();
+            });
+        }
+
+        // FUNGSI LAIN (KAS & LAPORAN)
         function simpanTransaksi() {
             const tipe = document.getElementById('kasTipe').value;
             const ket = document.getElementById('kasKet').value;
             const nominal = parseInt(document.getElementById('kasNominal').value);
             const bukti = document.getElementById('kasBukti').value;
             if(!ket || !nominal) return alert("Lengkapi data!");
-            const data = {
+            db.ref(`sindara_kas/${sessionUser.id}`).push({
                 tipe, keterangan: ket, nominal, bukti: bukti || "#",
-                tgl: new Date().toLocaleDateString('id-ID'),
-                timestamp: Date.now(), admin: sessionUser.nama
-            };
-            db.ref(`sindara_kas/${sessionUser.id}`).push(data).then(() => {
-                alert("Berhasil dicatat!");
-                document.getElementById('kasKet').value = "";
-                document.getElementById('kasNominal').value = "";
-                document.getElementById('kasBukti').value = "";
-            });
+                tgl: new Date().toLocaleDateString('id-ID'), admin: sessionUser.nama
+            }).then(() => { alert("Dicatat!"); });
         }
 
         function muatKeuangan() {
@@ -215,14 +303,9 @@
                     const t = tx.val();
                     const isM = t.tipe === 'masuk';
                     if(isM) masuk += t.nominal; else keluar += t.nominal;
-                    list.innerHTML = `
-                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border-l-4 ${isM ? 'border-emerald-500' : 'border-rose-500'}">
-                        <div>
-                            <p class="text-[8px] font-black uppercase opacity-50 text-white">${t.tgl}</p>
-                            <p class="text-sm font-bold text-white uppercase">${t.keterangan}</p>
-                            ${t.bukti !== '#' ? `<a href="${t.bukti}" target="_blank" class="text-[10px] text-indigo-400 underline">Lihat Bukti</a>` : ''}
-                        </div>
-                        <p class="font-black ${isM ? 'text-emerald-400' : 'text-rose-400'}">${isM ? '+' : '-'} Rp ${t.nominal.toLocaleString()}</p>
+                    list.innerHTML = `<div class="bg-white/5 p-4 rounded-xl border-l-4 ${isM ? 'border-emerald-500' : 'border-rose-500'} flex justify-between items-center">
+                        <div><p class="text-xs font-bold text-white uppercase">${t.keterangan}</p></div>
+                        <p class="font-black ${isM ? 'text-emerald-400' : 'text-rose-400'}">Rp ${t.nominal.toLocaleString()}</p>
                     </div>` + list.innerHTML;
                 });
                 document.getElementById('totalMasuk').innerText = "Rp " + masuk.toLocaleString();
@@ -237,10 +320,9 @@
                 list.innerHTML = "";
                 s.forEach(lx => {
                     const l = lx.val();
-                    list.innerHTML = `
-                    <div class="bg-white/5 p-6 rounded-[2rem] border border-white/10">
+                    list.innerHTML = `<div class="bg-white/5 p-6 rounded-3xl border border-white/10 text-white">
                         <span class="text-[8px] font-black text-emerald-400 uppercase">${l.tgl}</span>
-                        <h4 class="font-black text-sm text-white uppercase my-1">${l.judul}</h4>
+                        <h4 class="font-black text-sm uppercase my-1">${l.judul}</h4>
                     </div>` + list.innerHTML;
                 });
             });
