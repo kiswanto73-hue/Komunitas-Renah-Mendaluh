@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SINDARA PRO | PORTAL KOMUNITAS RENAH MENDALUH</title>
+    <title>SINDARA FINANCE | KAS KOMUNITAS</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,65 +16,39 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .hero-bg {
             background: linear-gradient(rgba(30, 27, 75, 0.85), rgba(30, 27, 75, 0.85)), 
-                        url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80');
+                        url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1350&q=80');
             background-size: cover; background-position: center;
         }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-        .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 12px; font-weight: 800; position: relative; }
-        .calendar-day:hover { background: rgba(16, 185, 129, 0.2); }
-        .has-note::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; background: #fbbf24; border-radius: 50%; }
         #listTransaksi::-webkit-scrollbar { width: 4px; }
         #listTransaksi::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
+        /* Style untuk menyembunyikan elemen jika mode bendahara aktif */
+        .finance-only .hide-finance { display: none !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
-    <nav class="fixed w-full z-[100] bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <nav id="mainNav" class="fixed w-full z-[100] bg-white/90 backdrop-blur-md border-b border-slate-200 hide-finance">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="font-black text-2xl italic text-indigo-900 tracking-tighter">SINDARA<span class="text-emerald-500">PRO</span></h1>
             <div class="hidden md:flex space-x-8 font-bold text-sm uppercase text-slate-600">
                 <a href="#home" class="hover:text-indigo-600">Beranda</a>
-                <a href="#tentang" class="hover:text-indigo-600">Visi Misi</a>
-                <a href="#app" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">Portal Login</a>
+                <a href="#app" class="bg-indigo-600 text-white px-6 py-2 rounded-full">Portal Login</a>
             </div>
         </div>
     </nav>
 
-    <section id="home" class="hero-bg h-screen flex items-center justify-center text-center text-white px-6">
+    <section id="home" class="hero-bg h-screen flex items-center justify-center text-center text-white px-6 hide-finance">
         <div class="max-w-4xl">
-            <h2 class="text-5xl md:text-6xl font-black mb-6 leading-tight uppercase italic">Komunitas GTK Renah Mendaluh</h2>
-            <p class="text-lg opacity-90 mb-10 font-medium">Mewujudkan Pendidik yang Inovatif, Adaptif Teknologi, dan Kolaboratif.</p>
-            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl transition-all">Masuk Dashboard</a>
-        </div>
-    </section>
-
-    <section id="tentang" class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div>
-                <h3 class="text-3xl font-black uppercase italic text-indigo-950 mb-6 underline decoration-emerald-500">Visi Kami</h3>
-                <p class="text-slate-600 font-bold leading-relaxed text-lg">"Mewujudkan Pendidik Kecamatan yang Inovatif, Adaptif Teknologi, dan Kolaboratif."</p>
-                <h3 class="text-3xl font-black uppercase italic text-indigo-950 mt-12 mb-6 underline decoration-indigo-500">Misi Kami</h3>
-                <ul class="space-y-4 text-sm font-semibold text-slate-500">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-3"></i> Meningkatkan Kompetensi Profesional Pendidik melalui penyelenggaraan pelatihan rutin.</li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-3"></i> Memfasilitasi diskusi panel untuk memecahkan masalah pembelajaran di kelas.</li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-3"></i> Mendorong Transformasi Teknologi Digital dan pemanfaatan AI dalam pembuatan soal.</li>
-                </ul>
-            </div>
-            <div class="bg-indigo-950 p-10 rounded-[3rem] text-white shadow-2xl border-r-[12px] border-emerald-500">
-                <h3 class="text-2xl font-black uppercase mb-6 italic">Informasi Komunitas</h3>
-                <div class="space-y-6">
-                    <div><p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kecamatan</p><p class="text-lg font-bold">Renah Mendaluh</p></div>
-                    <div><p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Kabupaten</p><p class="text-lg font-bold">Tanjung Jabung Barat, Prov. Jambi</p></div>
-                    <div><p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Status</p><span class="bg-emerald-500 text-[10px] px-3 py-1 rounded-full font-black uppercase">Aktif</span></div>
-                </div>
-            </div>
+            <h2 class="text-5xl md:text-6xl font-black mb-6 leading-tight uppercase italic">Sistem Keuangan Komunitas</h2>
+            <p class="text-lg opacity-90 mb-10 font-medium">Transparansi Keuangan GTK Renah Mendaluh.</p>
+            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl transition-all">Masuk Kas</a>
         </div>
     </section>
 
     <section id="app" class="py-24 bg-slate-900 px-6 min-h-screen">
         <div id="loginArea" class="max-w-md mx-auto">
             <div class="bg-white p-10 rounded-[3rem] shadow-2xl border-t-[12px] border-indigo-600">
-                <h2 class="text-2xl font-black text-indigo-950 uppercase italic text-center mb-8">Login SINDARA PRO</h2>
+                <h2 class="text-2xl font-black text-indigo-950 uppercase italic text-center mb-8">Login Akses</h2>
                 <input type="text" id="userKey" placeholder="KODE AKSES" class="w-full p-5 bg-slate-100 rounded-2xl mb-4 text-center font-black outline-none border-2 border-transparent focus:border-indigo-600 uppercase">
                 <button onclick="loginSindara()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Masuk</button>
             </div>
@@ -85,83 +59,26 @@
                 <div class="bg-white/10 backdrop-blur-md p-8 rounded-[3rem] border border-white/10 h-fit">
                     <h3 id="welcomeName" class="text-xl font-black mb-1">...</h3>
                     <p id="labelGugus" class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-8"></p>
+                    
                     <nav class="space-y-2 text-sm font-bold">
-                        <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3 text-indigo-400"></i> Ringkasan</button>
-                        <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3 text-emerald-400"></i> Buat Laporan</button>
-                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-3 text-yellow-400"></i> Agenda & Kalender</button>
+                        <button onclick="showSubPage('stat')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3 text-indigo-400"></i> Ringkasan</button>
+                        <button onclick="showSubPage('input')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3 text-emerald-400"></i> Buat Laporan</button>
+                        <button onclick="showSubPage('agenda')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-3 text-yellow-400"></i> Agenda</button>
                         
-                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-wallet mr-3 text-emerald-400"></i> Bendahara & Kas</button>
-
-                        <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" class="w-full block text-left p-4 bg-indigo-600/30 hover:bg-indigo-600/50 rounded-2xl flex items-center mt-4 border border-indigo-500/30">
-                            <i class="fas fa-external-link-alt mr-3 text-white"></i> Laporan KKG (External)
-                        </a>
+                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 bg-emerald-600/20 rounded-2xl flex items-center border border-emerald-500/30"><i class="fas fa-wallet mr-3 text-emerald-400"></i> Bendahara & Kas</button>
 
                         <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-sign-out-alt mr-3"></i> Keluar</button>
                     </nav>
                 </div>
 
                 <div class="lg:col-span-3 space-y-6">
-                    <div id="masterView" class="hidden">
-                        <p class="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-tighter">Panel Monitoring Master</p>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-                            <button onclick="filterGugus('G1-BAWAH')" class="p-4 bg-orange-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">G1-Bawah</button>
-                            <button onclick="filterGugus('G1-TINGGI')" class="p-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">G1-Tinggi</button>
-                            <button onclick="filterGugus('G2-ATAS')" class="p-4 bg-rose-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">G2-Atas</button>
-                            <button onclick="filterGugus('G2-BAWAH')" class="p-4 bg-yellow-600 rounded-2xl font-black text-[10px] uppercase shadow-lg text-slate-900 hover:scale-105 transition">G2-Bawah</button>
-                            <button onclick="filterGugus('PJOK')" class="p-4 bg-emerald-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">PJOK</button>
-                            <button onclick="filterGugus('PAI')" class="p-4 bg-indigo-600 rounded-2xl font-black text-[10px] uppercase shadow-lg hover:scale-105 transition">PAI</button>
-                        </div>
-                    </div>
-
-                    <div id="page-stat" class="sub-page active">
+                    <div id="page-stat" class="sub-page active hide-finance">
                         <h4 class="text-xl font-black mb-6 italic">Feed Aktivitas Terkini</h4>
                         <div id="listLaporanFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
 
-                    <div id="page-agenda" class="sub-page hidden space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white text-slate-800 p-8 rounded-[2.5rem] shadow-xl">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h3 class="font-black uppercase italic text-indigo-900">Mei 2026</h3>
-                                    <span class="text-[10px] font-black bg-indigo-100 px-3 py-1 rounded-full">REALTIME</span>
-                                </div>
-                                <div class="calendar-grid text-center mb-2 font-black text-[10px] text-slate-400 uppercase">
-                                    <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
-                                </div>
-                                <div id="calendarDays" class="calendar-grid"></div>
-                                <p class="mt-4 text-[9px] font-bold text-slate-400">*Klik tanggal untuk tambah catatan agenda</p>
-                            </div>
-
-                            <div class="bg-indigo-600 p-8 rounded-[2.5rem] shadow-xl">
-                                <h3 class="text-xl font-black uppercase italic mb-4"><i class="fas fa-plus-circle mr-2 text-yellow-400"></i> Catat Agenda</h3>
-                                <div id="agendaDisplay" class="mb-4 hidden">
-                                    <p class="text-[10px] font-black text-indigo-200">AGENDA PILIHAN: <span id="selectedDateText"></span></p>
-                                    <input type="text" id="noteInput" placeholder="Tulis agenda kegiatan..." class="w-full p-4 mt-2 rounded-xl bg-white/10 text-white placeholder-indigo-300 font-bold outline-none border border-indigo-400">
-                                    <button onclick="saveAgendaNote()" class="w-full mt-3 bg-yellow-400 text-indigo-900 font-black py-3 rounded-xl hover:bg-yellow-300 transition uppercase text-xs">Simpan Jadwal</button>
-                                </div>
-                                <div id="noDateSelected" class="text-center py-10 opacity-50 italic text-sm">
-                                    Klik tanggal pada kalender untuk mengisi agenda.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-white/5 p-8 rounded-[2.5rem] border border-white/10">
-                            <h4 class="font-black uppercase italic mb-6"><i class="fas fa-list-ul mr-2 text-emerald-400"></i> Daftar Agenda Gugus</h4>
-                            <div id="savedAgendaList" class="space-y-3"></div>
-                        </div>
-                    </div>
-
-                    <div id="page-input" class="sub-page hidden bg-white p-10 rounded-[3rem] text-slate-800 shadow-2xl">
-                        <h3 class="text-2xl font-black uppercase italic mb-6">Input Laporan Baru</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
-                            <textarea id="lapDesk" placeholder="Ringkasan Hasil Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold" rows="3"></textarea>
-                            <input type="date" id="lapTgl" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
-                            <input type="text" id="lapLink" placeholder="Link Dokumentasi (Drive/Foto)" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
-                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Kirim Laporan</button>
-                        </div>
-                    </div>
-
                     <div id="page-keuangan" class="sub-page hidden space-y-6">
+                        <h2 class="text-2xl font-black italic uppercase text-emerald-400 mb-2">Manajemen Kas</h2>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="bg-emerald-600 p-6 rounded-[2rem] shadow-xl">
                                 <p class="text-[10px] font-black opacity-80 uppercase">Total Saldo Kas</p>
@@ -196,14 +113,26 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="page-input" class="sub-page hidden bg-white p-10 rounded-[3rem] text-slate-800 shadow-2xl">
+                         <h3 class="text-2xl font-black uppercase italic mb-6">Input Laporan Baru</h3>
+                         <div class="space-y-4">
+                            <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
+                            <textarea id="lapDesk" placeholder="Ringkasan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold" rows="3"></textarea>
+                            <input type="date" id="lapTgl" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
+                            <input type="text" id="lapLink" placeholder="Link Dokumentasi" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
+                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Kirim</button>
+                         </div>
+                    </div>
+
+                    <div id="page-agenda" class="sub-page hidden">
+                         <h3 class="text-white font-black uppercase mb-4">Agenda Kegiatan</h3>
+                         <div id="savedAgendaList" class="space-y-3"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <footer class="py-12 bg-slate-100 text-center text-slate-400 text-[10px] font-bold uppercase tracking-widest">
-        &copy; 2026 SINDARA GUGUS PRO | RENAH MENDALUH - TANJUNG JABUNG BARAT
-    </footer>
 
     <script>
         const firebaseConfig = {
@@ -216,7 +145,6 @@
 
         let sessionUser = null;
         let currentGugusView = null;
-        let selectedDate = null;
 
         const DATABASE_GUGUS = {
             "INTI-SINDARA": { nama: "Pak Kiswanto", role: "MASTER", gugus: "PENGURUS INTI" },
@@ -238,17 +166,18 @@
                 document.getElementById('mainDashboard').classList.remove('hidden');
                 document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
                 document.getElementById('labelGugus').innerText = sessionUser.gugus;
-                if (sessionUser.role === 'MASTER') document.getElementById('masterView').classList.remove('hidden');
                 
-                initCalendar();
                 muatLaporan();
-                muatAgenda();
                 muatKeuangan();
 
-                // CEK PARAMETER URL UNTUK PINDAH HALAMAN OTOMATIS
+                // CEK MODE KHUSUS BENDAHARA
                 const urlParams = new URLSearchParams(window.location.search);
-                const page = urlParams.get('page');
-                if(page) showSubPage(page);
+                if(urlParams.get('view') === 'finance_only') {
+                    document.body.classList.add('finance-only'); // Sembunyikan elemen non-finance
+                    showSubPage('keuangan');
+                } else {
+                    showSubPage('stat');
+                }
 
             } else { alert("KODE AKSES SALAH!"); }
         }
@@ -256,89 +185,6 @@
         function showSubPage(id) {
             document.querySelectorAll('.sub-page').forEach(p => p.classList.add('hidden'));
             document.getElementById('page-' + id).classList.remove('hidden');
-        }
-
-        function initCalendar() {
-            const grid = document.getElementById('calendarDays');
-            grid.innerHTML = "";
-            for (let i = 1; i <= 31; i++) {
-                const day = document.createElement('div');
-                day.className = "calendar-day text-slate-600 bg-slate-50";
-                day.innerText = i;
-                day.onclick = () => selectDate(i);
-                grid.appendChild(day);
-            }
-        }
-
-        function selectDate(day) {
-            selectedDate = `${day}-05-2026`;
-            document.getElementById('noDateSelected').classList.add('hidden');
-            document.getElementById('agendaDisplay').classList.remove('hidden');
-            document.getElementById('selectedDateText').innerText = selectedDate;
-        }
-
-        function saveAgendaNote() {
-            const note = document.getElementById('noteInput').value;
-            if(!note) return alert("Isi catatan!");
-            const agendaData = {
-                tgl: selectedDate, catatan: note, pengirim: sessionUser.gugus, timestamp: Date.now()
-            };
-            db.ref(`sindara_agenda/${sessionUser.id}`).push(agendaData).then(() => {
-                alert("Agenda Disimpan!");
-                document.getElementById('noteInput').value = "";
-            });
-        }
-
-        function muatAgenda() {
-            const path = sessionUser.role === 'MASTER' ? `sindara_agenda/${currentGugusView}` : `sindara_agenda/${sessionUser.id}`;
-            db.ref(path).on('value', s => {
-                const list = document.getElementById('savedAgendaList');
-                list.innerHTML = "";
-                s.forEach(ax => {
-                    const a = ax.val();
-                    list.innerHTML = `
-                    <div class="bg-white/10 p-4 rounded-2xl flex justify-between items-center">
-                        <div>
-                            <p class="text-[8px] font-black text-yellow-400 uppercase">${a.tgl}</p>
-                            <p class="text-[12px] font-bold text-white">${a.catatan}</p>
-                        </div>
-                        <i class="fas fa-calendar-check text-white/20"></i>
-                    </div>` + list.innerHTML;
-                });
-            });
-        }
-
-        function simpanLaporan() {
-            const data = {
-                judul: document.getElementById('lapJudul').value,
-                desk: document.getElementById('lapDesk').value,
-                tgl: document.getElementById('lapTgl').value,
-                link: document.getElementById('lapLink').value,
-                pengirim: sessionUser.nama, timestamp: Date.now()
-            };
-            if(!data.judul || !data.tgl) return alert("Mohon lengkapi data!");
-            db.ref(`sindara_laporan/${sessionUser.id}`).push(data).then(() => {
-                alert("Laporan Berhasil!");
-                showSubPage('stat');
-            });
-        }
-
-        function muatLaporan() {
-            const path = sessionUser.role === 'MASTER' ? `sindara_laporan/${currentGugusView}` : `sindara_laporan/${sessionUser.id}`;
-            db.ref(path).on('value', s => {
-                const list = document.getElementById('listLaporanFeed');
-                list.innerHTML = "";
-                s.forEach(lx => {
-                    const l = lx.val();
-                    list.innerHTML = `
-                    <div class="bg-white/5 p-6 rounded-[2rem] border border-white/10">
-                        <span class="text-[8px] font-black text-emerald-400 uppercase">${l.tgl}</span>
-                        <h4 class="font-black text-sm text-white uppercase my-1">${l.judul}</h4>
-                        <p class="text-[10px] text-white/50 mb-4 line-clamp-2">${l.desk}</p>
-                        <a href="${l.link}" target="_blank" class="text-[9px] font-black text-emerald-400"><i class="fas fa-link mr-1"></i> BUKTI FISIK</a>
-                    </div>` + list.innerHTML;
-                });
-            });
         }
 
         function simpanTransaksi() {
@@ -353,7 +199,7 @@
                 timestamp: Date.now(), admin: sessionUser.nama
             };
             db.ref(`sindara_kas/${sessionUser.id}`).push(data).then(() => {
-                alert("Berhasil!");
+                alert("Berhasil dicatat!");
                 document.getElementById('kasKet').value = "";
                 document.getElementById('kasNominal').value = "";
                 document.getElementById('kasBukti').value = "";
@@ -361,8 +207,7 @@
         }
 
         function muatKeuangan() {
-            const path = sessionUser.role === 'MASTER' ? `sindara_kas/${currentGugusView}` : `sindara_kas/${sessionUser.id}`;
-            db.ref(path).on('value', s => {
+            db.ref(`sindara_kas/${sessionUser.id}`).on('value', s => {
                 const list = document.getElementById('listTransaksi');
                 let masuk = 0, keluar = 0;
                 list.innerHTML = "";
@@ -386,12 +231,19 @@
             });
         }
 
-        function filterGugus(gugusId) {
-            currentGugusView = gugusId;
-            document.getElementById('labelGugus').innerText = "MEMANTAU: " + DATABASE_GUGUS[gugusId].gugus;
-            muatLaporan();
-            muatAgenda();
-            muatKeuangan();
+        function muatLaporan() {
+            db.ref(`sindara_laporan/${sessionUser.id}`).on('value', s => {
+                const list = document.getElementById('listLaporanFeed');
+                list.innerHTML = "";
+                s.forEach(lx => {
+                    const l = lx.val();
+                    list.innerHTML = `
+                    <div class="bg-white/5 p-6 rounded-[2rem] border border-white/10">
+                        <span class="text-[8px] font-black text-emerald-400 uppercase">${l.tgl}</span>
+                        <h4 class="font-black text-sm text-white uppercase my-1">${l.judul}</h4>
+                    </div>` + list.innerHTML;
+                });
+            });
         }
     </script>
 </body>
