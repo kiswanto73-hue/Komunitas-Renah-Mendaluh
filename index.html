@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SINDARA PRO | SUPER DASHBOARD</title>
+    <title>SINDARA PRO | DASHBOARD LENGKAP</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,7 +28,7 @@
             <div class="hidden md:flex space-x-8 font-bold text-sm">
                 <a href="#home" class="hover:text-indigo-600">BERANDA</a>
                 <a href="#visi" class="hover:text-indigo-600">VISI MISI</a>
-                <a href="#app" class="bg-indigo-600 text-white px-6 py-2 rounded-full">PORTAL LOGIN</a>
+                <a href="#app" class="bg-indigo-600 text-white px-6 py-2 rounded-full shadow-lg">PORTAL LOGIN</a>
             </div>
         </div>
     </nav>
@@ -37,7 +37,7 @@
         <div>
             <h2 class="text-5xl md:text-6xl font-black mb-6 uppercase italic">Sistem Informasi Komunitas</h2>
             <p class="text-lg opacity-90 mb-10">Monitoring dan Transparansi GTK Renah Mendaluh.</p>
-            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase shadow-xl transition-all inline-block">Masuk Aplikasi</a>
+            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase shadow-xl transition-all inline-block">Masuk Dashboard</a>
         </div>
     </section>
 
@@ -61,7 +61,7 @@
     <section id="app" class="py-24 bg-slate-900 min-h-screen px-6">
         <div id="loginArea" class="max-w-md mx-auto">
             <div class="bg-white p-10 rounded-[3rem] shadow-2xl border-t-[12px] border-indigo-600 text-center">
-                <h2 class="text-2xl font-black text-indigo-950 uppercase italic mb-8">Akses Dashboard</h2>
+                <h2 class="text-2xl font-black text-indigo-950 uppercase italic mb-8">Akses SINDARA</h2>
                 <input type="text" id="userKey" placeholder="KODE AKSES" class="w-full p-5 bg-slate-100 rounded-2xl mb-4 text-center font-black outline-none border-2 border-transparent focus:border-indigo-600 uppercase">
                 <button onclick="loginSindara()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Masuk</button>
             </div>
@@ -98,8 +98,8 @@
                     </div>
 
                     <div id="page-monitor" class="sub-page">
-                        <h4 class="text-xl font-black mb-6 uppercase italic">Monitoring Seluruh Gugus</h4>
-                        <div class="bg-white rounded-[2.5rem] p-2 h-[600px] overflow-hidden">
+                        <h4 class="text-xl font-black mb-6 uppercase italic text-center">Monitoring Seluruh Gugus</h4>
+                        <div class="bg-white rounded-[2.5rem] p-2 h-[600px]">
                             <iframe src="https://kiswanto73-hue.github.io/Komunitas-Renah-Mendaluh/" class="w-full h-full rounded-[2rem]"></iframe>
                         </div>
                     </div>
@@ -118,12 +118,13 @@
                                 <div id="agendaContent" class="mb-6 opacity-80 text-sm italic">Pilih tanggal di kalender.</div>
                                 <div id="agendaForm" class="hidden space-y-3">
                                     <p class="text-[10px] font-black text-yellow-400 uppercase">Tanggal: <span id="targetDate"></span></p>
-                                    <textarea id="agendaNoteInput" placeholder="Catatan agenda..." class="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold outline-none"></textarea>
+                                    <textarea id="agendaNoteInput" placeholder="Catatan kegiatan..." class="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold outline-none"></textarea>
+                                    <input type="text" id="agendaBukti" placeholder="Link Bukti Agenda (Opsional)" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white font-bold text-xs outline-none">
                                     <button onclick="saveAgenda()" class="w-full bg-yellow-400 text-indigo-900 font-black p-3 rounded-xl uppercase">Simpan Jadwal</button>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
                     <div id="page-keuangan" class="sub-page space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -132,36 +133,37 @@
                                 <h3 id="saldoTotal" class="text-2xl font-black italic">Rp 0</h3>
                             </div>
                             <div class="bg-white/10 p-6 rounded-[2rem] border border-white/10">
-                                <p class="text-[10px] font-black text-emerald-400 uppercase">Masuk (+)</p>
+                                <p class="text-[10px] font-black text-emerald-400 uppercase">Masuk</p>
                                 <h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3>
                             </div>
                             <div class="bg-white/10 p-6 rounded-[2rem] border border-white/10">
-                                <p class="text-[10px] font-black text-rose-400 uppercase">Keluar (-)</p>
+                                <p class="text-[10px] font-black text-rose-400 uppercase">Keluar</p>
                                 <h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3>
                             </div>
                         </div>
                         <div class="bg-white p-8 rounded-[2.5rem] text-slate-800 shadow-xl">
-                            <h3 class="text-xl font-black uppercase italic mb-6">Input Transaksi</h3>
+                            <h3 class="text-xl font-black uppercase italic mb-6">Input Bendahara</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <select id="kasTipe" class="p-4 bg-slate-100 rounded-xl font-bold">
-                                    <option value="masuk">Uang Masuk (+)</option>
-                                    <option value="keluar">Uang Keluar (-)</option>
+                                    <option value="masuk">Pemasukan (+)</option>
+                                    <option value="keluar">Pengeluaran (-)</option>
                                 </select>
-                                <input type="number" id="kasNominal" placeholder="Nominal (Rp)" class="p-4 bg-slate-100 rounded-xl font-bold">
+                                <input type="number" id="kasNominal" placeholder="Nominal Rp" class="p-4 bg-slate-100 rounded-xl font-bold">
                                 <input type="text" id="kasKet" placeholder="Keterangan" class="p-4 bg-slate-100 rounded-xl font-bold md:col-span-2">
-                                <input type="text" id="kasBukti" placeholder="Link Bukti Transaksi (Drive/Foto)" class="p-4 bg-slate-100 rounded-xl font-bold md:col-span-2 border-2 border-indigo-100">
-                                <button onclick="simpanTransaksi()" class="md:col-span-2 bg-indigo-600 text-white p-4 rounded-xl font-black uppercase">Simpan ke Buku Kas</button>
+                                <input type="text" id="kasBukti" placeholder="Link Bukti Transaksi" class="p-4 bg-slate-100 rounded-xl font-bold md:col-span-2 border-2 border-indigo-50">
+                                <button onclick="simpanTransaksi()" class="md:col-span-2 bg-indigo-600 text-white p-4 rounded-xl font-black uppercase">Simpan</button>
                             </div>
                         </div>
                     </div>
 
                     <div id="page-input" class="sub-page bg-white p-10 rounded-[3rem] text-slate-800">
-                        <h4 class="text-2xl font-black mb-6 italic uppercase">Lapor Kegiatan</h4>
+                        <h4 class="text-2xl font-black mb-6 italic uppercase">Form Laporan Kegiatan</h4>
                         <div class="space-y-4">
-                            <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-4 bg-slate-100 rounded-xl font-bold">
-                            <textarea id="lapDesk" placeholder="Ringkasan..." class="w-full p-4 bg-slate-100 rounded-xl font-bold" rows="3"></textarea>
+                            <input type="text" id="lapJudul" placeholder="Nama Kegiatan" class="w-full p-4 bg-slate-100 rounded-xl font-bold">
+                            <textarea id="lapDesk" placeholder="Ringkasan kegiatan..." class="w-full p-4 bg-slate-100 rounded-xl font-bold" rows="3"></textarea>
                             <input type="date" id="lapTgl" class="w-full p-4 bg-slate-100 rounded-xl font-bold">
-                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-4 rounded-xl font-black uppercase shadow-lg">Kirim Sekarang</button>
+                            <input type="text" id="lapBukti" placeholder="Link Bukti Dukung (Drive/Lainnya)" class="w-full p-4 bg-slate-50 border-2 border-emerald-100 rounded-xl font-bold text-sm">
+                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-4 rounded-xl font-black uppercase shadow-lg">Kirim Laporan</button>
                         </div>
                     </div>
 
@@ -196,17 +198,14 @@
         function loginSindara() {
             const key = document.getElementById('userKey').value.toUpperCase();
             if (DATABASE_GUGUS[key]) {
-                sessionUser = DATABASE_GUGUS[key];
-                sessionUser.id = key;
+                sessionUser = DATABASE_GUGUS[key]; sessionUser.id = key;
                 document.getElementById('loginArea').classList.add('hidden');
                 document.getElementById('mainDashboard').classList.remove('hidden');
                 document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
                 document.getElementById('labelGugus').innerText = sessionUser.gugus;
-                
                 if(sessionUser.role === "MASTER") document.getElementById('menuMaster').classList.remove('hidden');
-
                 muatLaporan(); muatKeuangan(); muatAgenda();
-            } else { alert("KODE AKSES SALAH!"); }
+            } else { alert("KODE SALAH!"); }
         }
 
         function showSubPage(id) {
@@ -214,32 +213,33 @@
             document.getElementById('page-' + id).classList.add('active');
         }
 
+        // --- CRUD LAPORAN ---
         function simpanLaporan() {
             const judul = document.getElementById('lapJudul').value;
             const tgl = document.getElementById('lapTgl').value;
-            if(!judul || !tgl) return alert("Lengkapi data!");
-            db.ref(`sindara_laporan/${sessionUser.id}`).push({ judul, tgl, timestamp: Date.now() }).then(() => {
-                alert("Berhasil!"); showSubPage('stat');
-            });
+            const bukti = document.getElementById('lapBukti').value;
+            if(!judul || !tgl) return alert("Isi Judul & Tanggal!");
+            db.ref(`sindara_laporan/${sessionUser.id}`).push({ judul, tgl, bukti: bukti || "-", timestamp: Date.now() })
+            .then(() => { alert("Terkirim!"); showSubPage('stat'); });
         }
 
         function muatLaporan() {
             db.ref(`sindara_laporan/${sessionUser.id}`).on('value', s => {
-                const list = document.getElementById('listLaporanFeed');
-                list.innerHTML = "";
+                const list = document.getElementById('listLaporanFeed'); list.innerHTML = "";
                 s.forEach(lx => {
                     const l = lx.val();
                     list.innerHTML = `<div class="bg-white p-6 rounded-3xl border-l-8 border-indigo-600 shadow-sm">
-                        <span class="text-[10px] font-black text-indigo-500">${l.tgl}</span>
+                        <p class="text-[10px] font-black text-indigo-400">${l.tgl}</p>
                         <h4 class="font-black uppercase text-sm">${l.judul}</h4>
+                        ${l.bukti !== "-" ? `<a href="${l.bukti}" target="_blank" class="text-[9px] text-emerald-600 font-bold underline mt-2 block">Lihat Bukti Dukung</a>` : ""}
                     </div>` + list.innerHTML;
                 });
             });
         }
 
+        // --- CRUD AGENDA ---
         function initCalendar() {
-            const grid = document.getElementById('calendarDays');
-            grid.innerHTML = "";
+            const grid = document.getElementById('calendarDays'); grid.innerHTML = "";
             for (let i = 1; i <= 31; i++) {
                 const dId = `${i}-05-2026`;
                 const div = document.createElement('div');
@@ -249,7 +249,7 @@
                     selectedDate = dId;
                     document.getElementById('agendaForm').classList.remove('hidden');
                     document.getElementById('targetDate').innerText = dId;
-                    document.getElementById('agendaContent').innerText = agendaDataLocal[dId] || "Tidak ada agenda.";
+                    document.getElementById('agendaContent').innerText = agendaDataLocal[dId] ? agendaDataLocal[dId].catatan : "Kosong.";
                 };
                 grid.appendChild(div);
             }
@@ -257,23 +257,27 @@
 
         function saveAgenda() {
             const note = document.getElementById('agendaNoteInput').value;
-            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g,'_')}`).set({ tgl: selectedDate, catatan: note });
+            const bukti = document.getElementById('agendaBukti').value;
+            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g,'_')}`).set({ tgl: selectedDate, catatan: note, bukti: bukti || "-" })
+            .then(() => alert("Agenda Diperbarui!"));
         }
 
         function muatAgenda() {
             db.ref(`sindara_agenda/${sessionUser.id}`).on('value', s => {
                 agendaDataLocal = {};
-                s.forEach(ax => { const a = ax.val(); agendaDataLocal[a.tgl] = a.catatan; });
+                s.forEach(ax => { const a = ax.val(); agendaDataLocal[a.tgl] = a; });
                 initCalendar();
             });
         }
 
+        // --- CRUD KAS ---
         function simpanTransaksi() {
             const nominal = parseInt(document.getElementById('kasNominal').value);
-            const ket = document.getElementById('kasKet').value;
-            const bukti = document.getElementById('kasBukti').value;
-            db.ref(`sindara_kas/${sessionUser.id}`).push({ tipe: document.getElementById('kasTipe').value, nominal, keterangan: ket, bukti: bukti || "-", tgl: new Date().toLocaleDateString() });
-            alert("Tercatat!");
+            db.ref(`sindara_kas/${sessionUser.id}`).push({ 
+                tipe: document.getElementById('kasTipe').value, 
+                nominal, keterangan: document.getElementById('kasKet').value, 
+                bukti: document.getElementById('kasBukti').value || "-", tgl: new Date().toLocaleDateString() 
+            }).then(() => alert("Tersimpan!"));
         }
 
         function muatKeuangan() {
