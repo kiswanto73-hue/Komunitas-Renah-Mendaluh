@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SINDARA FINANCE | KAS KOMUNITAS</title>
+    <title>SINDARA PRO | KOMUNITAS</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,13 +31,11 @@
         .calendar-day:hover { transform: scale(1.1); z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .has-event { background: #fbbf24 !important; color: #1e1b4b !important; box-shadow: 0 0 10px rgba(251, 191, 36, 0.5); border: none; }
         .has-event::after { content: ''; position: absolute; top: 4px; right: 4px; width: 4px; height: 4px; background: white; border-radius: 50%; }
-        
-        .finance-only .hide-finance { display: none !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
-    <nav id="mainNav" class="fixed w-full z-[100] bg-white/90 backdrop-blur-md border-b border-slate-200 hide-finance">
+    <nav id="mainNav" class="fixed w-full z-[100] bg-white/90 backdrop-blur-md border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="font-black text-2xl italic text-indigo-900 tracking-tighter">SINDARA<span class="text-emerald-500">PRO</span></h1>
             <div class="hidden md:flex space-x-8 font-bold text-sm uppercase text-slate-600">
@@ -47,11 +45,11 @@
         </div>
     </nav>
 
-    <section id="home" class="hero-bg h-screen flex items-center justify-center text-center text-white px-6 hide-finance">
+    <section id="home" class="hero-bg h-screen flex items-center justify-center text-center text-white px-6">
         <div class="max-w-4xl">
-            <h2 class="text-5xl md:text-6xl font-black mb-6 leading-tight uppercase italic">Sistem Keuangan Komunitas</h2>
-            <p class="text-lg opacity-90 mb-10 font-medium">Transparansi Keuangan GTK Renah Mendaluh.</p>
-            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl transition-all">Masuk Kas</a>
+            <h2 class="text-5xl md:text-6xl font-black mb-6 leading-tight uppercase italic">Sistem Informasi Komunitas</h2>
+            <p class="text-lg opacity-90 mb-10 font-medium">Monitoring dan Transparansi GTK Renah Mendaluh.</p>
+            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl transition-all">Masuk Aplikasi</a>
         </div>
     </section>
 
@@ -71,9 +69,9 @@
                     <p id="labelGugus" class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-8"></p>
                     
                     <nav class="space-y-2 text-sm font-bold">
-                        <button onclick="showSubPage('stat')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3 text-indigo-400"></i> Ringkasan</button>
-                        <button onclick="showSubPage('input')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3 text-emerald-400"></i> Buat Laporan</button>
-                        <button onclick="showSubPage('agenda')" class="hide-finance w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-3 text-yellow-400"></i> Agenda</button>
+                        <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3 text-indigo-400"></i> Ringkasan</button>
+                        <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3 text-emerald-400"></i> Buat Laporan</button>
+                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-3 text-yellow-400"></i> Agenda</button>
                         <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-wallet mr-3 text-emerald-400"></i> Bendahara & Kas</button>
                         <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-sign-out-alt mr-3"></i> Keluar</button>
                     </nav>
@@ -213,7 +211,6 @@
             if(target) target.classList.remove('hidden');
         }
 
-        // --- FUNGSI LAPORAN ---
         function simpanLaporan() {
             const judul = document.getElementById('lapJudul').value;
             const desk = document.getElementById('lapDesk').value;
@@ -247,7 +244,6 @@
             });
         }
 
-        // --- FUNGSI AGENDA ---
         function initCalendar() {
             const grid = document.getElementById('calendarDays');
             grid.innerHTML = "";
@@ -300,7 +296,6 @@
             });
         }
 
-        // --- FUNGSI KAS ---
         function simpanTransaksi() {
             const tipe = document.getElementById('kasTipe').value;
             const ket = document.getElementById('kasKet').value;
