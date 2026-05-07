@@ -50,7 +50,7 @@
                     <h4 class="text-emerald-600 font-black text-xs tracking-widest uppercase mb-4">Profil Komunitas</h4>
                     <h3 class="text-4xl font-black mb-6 leading-tight italic">KKG Renah Mendaluh: <br>Wadah Transformasi Guru.</h3>
                     <p class="text-slate-500 leading-relaxed font-medium mb-8 text-justify">
-                        Kelompok Kerja Guru (KKG) Kecamatan Renah Mendaluh adalah wadah kolektif pendidik untuk berbagi praktik baik, meningkatkan profesionalisme, dan beradaptasi dengan perkembangan teknologi pendidikan demi memajukan kualitas belajar siswa di wilayah Renah Mendaluh.
+                        Kelompok Kerja Guru (KKG) Kecamatan Renah Mendaluh adalah wadah kolektif pendidik untuk berbagi praktik baik, meningkatkan profesionalisme, dan beradaptasi dengan teknologi pendidikan demi memajukan kualitas belajar siswa di wilayah Renah Mendaluh.
                     </p>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="p-6 bg-slate-50 rounded-3xl border-b-4 border-indigo-500">
@@ -64,9 +64,9 @@
                     </div>
                 </div>
                 <div class="grid gap-6">
-                    <div class="p-10 bg-indigo-900 text-white rounded-[3rem] shadow-2xl relative overflow-hidden">
+                    <div class="p-10 bg-indigo-900 text-white rounded-[3rem] shadow-2xl">
                         <h4 class="text-emerald-400 font-black text-xs uppercase tracking-widest mb-4 italic">Visi</h4>
-                        <p class="text-2xl font-black italic leading-snug">"Mewujudkan Pendidik Kecamatan yang inovatif, Adaptif Teknologi, dan Kolaboratif."</p>
+                        <p class="text-2xl font-black italic">"Mewujudkan Pendidik Kecamatan yang inovatif, Adaptif Teknologi, dan Kolaboratif."</p>
                     </div>
                     <div class="p-10 bg-slate-900 text-white rounded-[3rem] shadow-2xl">
                         <h4 class="text-emerald-400 font-black text-xs uppercase tracking-widest mb-6 italic">Misi</h4>
@@ -92,53 +92,74 @@
 
         <div id="mainDashboard" class="hidden max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                
                 <div class="glass p-8 rounded-[3rem] h-fit sticky top-24">
                     <h3 id="welcomeName" class="text-xl font-black mb-1">...</h3>
                     <p id="labelGugus" class="text-[10px] font-black text-emerald-400 uppercase mb-10"></p>
+                    
                     <nav class="space-y-2 text-xs font-black uppercase">
-                        <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-4 text-indigo-400"></i> Ringkasan</button>
-                        <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-4 text-emerald-400"></i> Buat Laporan</button>
-                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-4 text-yellow-400"></i> Agenda</button>
-                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-wallet mr-4 text-emerald-400"></i> Bendahara</button>
-                        <div id="menuMaster" class="hidden pt-6">
+                        <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-th-large mr-4 text-indigo-400"></i> Ringkasan</button>
+                        <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-edit mr-4 text-emerald-400"></i> Buat Laporan</button>
+                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-calendar-alt mr-4 text-yellow-400"></i> Agenda</button>
+                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-wallet mr-4 text-emerald-400"></i> Bendahara</button>
+                        
+                        <div id="menuMaster" class="hidden pt-6 space-y-2">
                             <button onclick="showSubPage('monitor')" class="w-full text-left p-4 bg-indigo-600 rounded-2xl flex items-center shadow-xl"><i class="fas fa-globe mr-4"></i> Pantau Gugus</button>
+                            <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" class="w-full block text-left p-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl flex items-center shadow-xl transition-all">
+                                <i class="fas fa-file-pdf mr-4"></i> Laporan KKG
+                            </a>
                         </div>
+                        
                         <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-power-off mr-4"></i> Keluar</button>
                     </nav>
                 </div>
 
                 <div class="lg:col-span-3 space-y-6">
+                    
                     <div id="page-stat" class="sub-page active">
                         <div class="flex justify-between items-center mb-6">
                             <h4 class="text-xl font-black uppercase italic">Arsip Kegiatan</h4>
-                            <input type="text" id="searchReport" onkeyup="filterLaporan()" placeholder="Cari..." class="p-3 bg-white/10 border border-white/20 rounded-xl text-xs outline-none">
+                            <input type="text" id="searchReport" onkeyup="filterLaporan()" placeholder="Cari kegiatan..." class="p-3 bg-white/10 border border-white/20 rounded-xl text-xs outline-none">
                         </div>
                         <div class="glass rounded-[2rem] overflow-hidden">
                             <table class="w-full text-left">
-                                <thead class="bg-white/5 text-[9px] font-black uppercase text-emerald-400">
-                                    <tr><th class="p-6">Waktu</th><th class="p-6">Kegiatan</th><th class="p-6 text-right">Bukti</th></tr>
+                                <thead class="bg-white/5 text-[9px] font-black uppercase text-emerald-400 tracking-widest">
+                                    <tr><th class="p-6">Waktu</th><th class="p-6">Kegiatan</th><th class="p-6 text-right">Aksi</th></tr>
                                 </thead>
                                 <tbody id="listLaporanFeed" class="text-sm font-bold"></tbody>
                             </table>
                         </div>
                     </div>
 
+                    <div id="page-input" class="sub-page">
+                        <div class="bg-white p-12 rounded-[4rem] text-slate-900 shadow-2xl">
+                            <h4 class="text-3xl font-black mb-8 italic uppercase">Formulir Pelaporan</h4>
+                            <div class="space-y-4">
+                                <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold outline-none">
+                                <textarea id="lapDesc" placeholder="Deskripsi Singkat Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold outline-none h-32"></textarea>
+                                <input type="date" id="lapTgl" class="w-full p-5 bg-slate-100 rounded-2xl font-bold outline-none">
+                                <input type="text" id="lapBukti" placeholder="Link Bukti Dukung (Drive/Foto)" class="w-full p-5 bg-slate-50 border-2 border-indigo-100 rounded-2xl font-bold text-xs">
+                                <button onclick="simpanLaporan()" class="w-full bg-slate-900 text-white p-6 rounded-2xl font-black uppercase shadow-xl hover:bg-emerald-600 transition-all">Kirim Laporan</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="page-monitor" class="sub-page">
                         <h4 class="text-xl font-black mb-8 uppercase italic">Panel Kontrol Gugus</h4>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                            <button onclick="bukaPantauan('G1-BAWAH')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase">G1 Bawah</button>
-                            <button onclick="bukaPantauan('G1-ATAS')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase">G1 Atas</button>
-                            <button onclick="bukaPantauan('G2-BAWAH')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase">G2 Bawah</button>
-                            <button onclick="bukaPantauan('G2-ATAS')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase">G2 Atas</button>
-                            <button onclick="bukaPantauan('PJOK')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase">PJOK</button>
-                            <button onclick="bukaPantauan('PAI')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase">PAI</button>
+                            <button onclick="bukaPantauan('G1-BAWAH')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">G1 Bawah</button>
+                            <button onclick="bukaPantauan('G1-ATAS')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">G1 Atas</button>
+                            <button onclick="bukaPantauan('G2-BAWAH')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">G2 Bawah</button>
+                            <button onclick="bukaPantauan('G2-ATAS')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">G2 Atas</button>
+                            <button onclick="bukaPantauan('PJOK')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">PJOK</button>
+                            <button onclick="bukaPantauan('PAI')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">PAI</button>
                         </div>
                         <div id="pantauanContainer" class="hidden">
                             <div class="flex justify-between items-center mb-2 px-4">
-                                <p class="text-[10px] font-black text-emerald-400">Pantauan: <span id="namaGugusPantau"></span></p>
-                                <button onclick="tutupPantauan()" class="text-rose-400 font-black text-[10px]">TUTUP X</button>
+                                <p class="text-[10px] font-black text-emerald-400 uppercase">Monitoring: <span id="namaGugusPantau"></span></p>
+                                <button onclick="tutupPantauan()" class="text-rose-400 font-black text-[10px] hover:underline tracking-widest">TUTUP X</button>
                             </div>
-                            <div class="bg-white rounded-[3rem] h-[600px] p-2">
+                            <div class="bg-white rounded-[3rem] h-[650px] p-2 shadow-2xl">
                                 <iframe id="framePantau" class="w-full h-full rounded-[2.5rem]"></iframe>
                             </div>
                         </div>
@@ -150,13 +171,13 @@
                                 <h3 class="font-black uppercase italic mb-6">Mei 2026</h3>
                                 <div id="calendarDays" class="calendar-grid"></div>
                             </div>
-                            <div class="bg-indigo-600 p-8 rounded-[3rem]">
-                                <h3 id="targetDate" class="text-xl font-black mb-4 uppercase">Agenda</h3>
-                                <div id="agendaContent" class="mb-8 text-sm italic">Pilih tanggal.</div>
+                            <div class="bg-indigo-600 p-8 rounded-[3rem] shadow-xl">
+                                <h3 id="targetDate" class="text-xl font-black mb-4 uppercase">Detail Agenda</h3>
+                                <div id="agendaContent" class="mb-8 text-sm italic opacity-80">Klik tanggal pada kalender.</div>
                                 <div id="agendaForm" class="hidden space-y-4">
-                                    <textarea id="agendaNoteInput" placeholder="Catatan..." class="w-full p-4 rounded-xl bg-white/10 text-white font-bold outline-none"></textarea>
-                                    <input type="text" id="agendaBukti" placeholder="Link Bukti Dukung" class="w-full p-3 rounded-xl bg-white/10 text-xs font-bold outline-none">
-                                    <button onclick="saveAgenda()" class="w-full bg-yellow-400 text-indigo-900 p-3 rounded-xl font-black uppercase">Simpan</button>
+                                    <textarea id="agendaNoteInput" placeholder="Catatan agenda..." class="w-full p-4 rounded-xl bg-white/10 text-white font-bold outline-none"></textarea>
+                                    <input type="text" id="agendaBukti" placeholder="Link Bukti" class="w-full p-3 rounded-xl bg-white/10 text-xs font-bold outline-none">
+                                    <button onclick="saveAgenda()" class="w-full bg-yellow-400 text-indigo-900 p-3 rounded-xl font-black uppercase">Simpan Agenda</button>
                                 </div>
                             </div>
                         </div>
@@ -164,35 +185,24 @@
 
                     <div id="page-keuangan" class="sub-page space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="bg-emerald-500 p-8 rounded-[2.5rem] text-slate-950">
-                                <p class="text-[10px] font-black uppercase">Sisa Kas</p>
+                            <div class="bg-emerald-500 p-8 rounded-[2.5rem] text-slate-950 shadow-lg">
+                                <p class="text-[10px] font-black uppercase opacity-70">Saldo Saat Ini</p>
                                 <h3 id="saldoTotal" class="text-3xl font-black italic">Rp 0</h3>
                             </div>
-                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-60">Masuk</p><h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3></div>
-                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-60">Keluar</p><h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3></div>
+                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50">Total Masuk</p><h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3></div>
+                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50">Total Keluar</p><h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3></div>
                         </div>
-                        <div class="bg-white p-10 rounded-[3rem] text-slate-900">
+                        <div class="bg-white p-10 rounded-[3rem] text-slate-900 shadow-xl">
                             <div class="grid md:grid-cols-2 gap-4">
                                 <select id="kasTipe" class="p-4 bg-slate-100 rounded-xl font-bold outline-none"><option value="masuk">Masuk (+)</option><option value="keluar">Keluar (-)</option></select>
                                 <input type="number" id="kasNominal" placeholder="Nominal Rp" class="p-4 bg-slate-100 rounded-xl font-bold">
                                 <input type="text" id="kasKet" placeholder="Keterangan" class="p-4 bg-slate-100 rounded-xl font-bold md:col-span-2">
                                 <input type="text" id="kasBukti" placeholder="Link Bukti" class="p-4 bg-slate-50 border-2 border-dashed rounded-xl font-bold text-xs md:col-span-2">
-                                <button onclick="simpanTransaksi()" class="md:col-span-2 bg-indigo-600 text-white p-4 rounded-xl font-black uppercase">Catat</button>
+                                <button onclick="simpanTransaksi()" class="md:col-span-2 bg-indigo-600 text-white p-4 rounded-xl font-black uppercase">Simpan Transaksi</button>
                             </div>
                         </div>
                     </div>
 
-                    <div id="page-input" class="sub-page">
-                        <div class="bg-white p-12 rounded-[4rem] text-slate-900">
-                            <h4 class="text-3xl font-black mb-8 italic uppercase">Buat Laporan</h4>
-                            <div class="space-y-4">
-                                <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
-                                <input type="date" id="lapTgl" class="w-full p-5 bg-slate-100 rounded-2xl font-bold">
-                                <input type="text" id="lapBukti" placeholder="Link Bukti Dukung" class="w-full p-5 bg-slate-50 border-2 border-indigo-100 rounded-2xl font-bold text-xs">
-                                <button onclick="simpanLaporan()" class="w-full bg-slate-900 text-white p-6 rounded-2xl font-black uppercase">Kirim Laporan</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -259,16 +269,20 @@
             const urlAsli = window.location.href.split('?')[0].split('#')[0];
             document.getElementById('framePantau').src = urlAsli + "?auto=" + kode;
             document.getElementById('pantauanContainer').classList.remove('hidden');
+            document.getElementById('pantauanContainer').scrollIntoView({behavior: 'smooth'});
         }
 
         function tutupPantauan() { document.getElementById('pantauanContainer').classList.add('hidden'); }
 
         function simpanLaporan() {
             const judul = document.getElementById('lapJudul').value;
+            const desc = document.getElementById('lapDesc').value;
             const tgl = document.getElementById('lapTgl').value;
             const bukti = document.getElementById('lapBukti').value;
-            db.ref(`sindara_laporan/${sessionUser.id}`).push({ judul, tgl, bukti: bukti || "-", timestamp: Date.now() })
-            .then(() => { alert("Tersimpan!"); showSubPage('stat'); });
+            if(!judul || !tgl) return alert("Isi Judul & Tanggal!");
+            
+            db.ref(`sindara_laporan/${sessionUser.id}`).push({ judul, desc, tgl, bukti: bukti || "-", timestamp: Date.now() })
+            .then(() => { alert("Laporan Berhasil Dikirim!"); showSubPage('stat'); });
         }
 
         function muatLaporan() {
@@ -276,7 +290,17 @@
                 const list = document.getElementById('listLaporanFeed'); list.innerHTML = "";
                 s.forEach(lx => {
                     const l = lx.val();
-                    const row = `<tr class="item-laporan border-b border-white/5"><td class="p-6 opacity-50">${l.tgl}</td><td class="p-6 judul-kegiatan">${l.judul}</td><td class="p-6 text-right">${l.bukti !== "-" ? `<a href="${l.bukti}" target="_blank" class="text-emerald-400">LIHAT</a>` : "-"}</td></tr>`;
+                    const row = `
+                        <tr class="item-laporan border-b border-white/5 hover:bg-white/5 transition-all">
+                            <td class="p-6 opacity-50 text-[10px]">${l.tgl}</td>
+                            <td class="p-6">
+                                <div class="font-black judul-kegiatan">${l.judul}</div>
+                                <div class="text-[10px] opacity-60 font-medium">${l.desc || ""}</div>
+                            </td>
+                            <td class="p-6 text-right">
+                                ${l.bukti !== "-" ? `<a href="${l.bukti}" target="_blank" class="text-emerald-400 text-[10px] border border-emerald-400/30 px-3 py-1 rounded-full">BUKTI</a>` : "-"}
+                            </td>
+                        </tr>`;
                     list.innerHTML = row + list.innerHTML;
                 });
             });
@@ -301,16 +325,19 @@
                 div.onclick = () => {
                     selectedDate = dId;
                     document.getElementById('agendaForm').classList.remove('hidden');
-                    document.getElementById('targetDate').innerText = dId;
-                    document.getElementById('agendaContent').innerText = agendaDataLocal[dId] ? agendaDataLocal[dId].catatan : "Kosong.";
+                    document.getElementById('targetDate').innerText = "Agenda " + dId;
+                    document.getElementById('agendaContent').innerText = agendaDataLocal[dId] ? agendaDataLocal[dId].catatan : "Belum ada rencana kegiatan.";
                 };
                 grid.appendChild(div);
             }
         }
 
         function saveAgenda() {
-            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g,'_')}`).set({ tgl: selectedDate, catatan: document.getElementById('agendaNoteInput').value, bukti: document.getElementById('agendaBukti').value || "-" })
-            .then(() => alert("Berhasil!"));
+            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g,'_')}`).set({ 
+                tgl: selectedDate, 
+                catatan: document.getElementById('agendaNoteInput').value, 
+                bukti: document.getElementById('agendaBukti').value || "-" 
+            }).then(() => alert("Agenda Diperbarui!"));
         }
 
         function muatAgenda() {
@@ -321,16 +348,21 @@
         }
 
         function simpanTransaksi() {
-            db.ref(`sindara_kas/${sessionUser.id}`).push({ tipe: document.getElementById('kasTipe').value, nominal: parseInt(document.getElementById('kasNominal').value), keterangan: document.getElementById('kasKet').value, bukti: document.getElementById('kasBukti').value || "-", tgl: new Date().toLocaleDateString() })
-            .then(() => alert("Dicatat!"));
+            db.ref(`sindara_kas/${sessionUser.id}`).push({ 
+                tipe: document.getElementById('kasTipe').value, 
+                nominal: parseInt(document.getElementById('kasNominal').value), 
+                keterangan: document.getElementById('kasKet').value, 
+                bukti: document.getElementById('kasBukti').value || "-", 
+                tgl: new Date().toLocaleDateString('id-ID') 
+            }).then(() => alert("Kas Tercatat!"));
         }
 
         function muatKeuangan() {
             db.ref(`sindara_kas/${sessionUser.id}`).on('value', s => {
                 let m = 0, k = 0; s.forEach(tx => { const t = tx.val(); if(t.tipe === 'masuk') m += t.nominal; else k += t.nominal; });
-                document.getElementById('totalMasuk').innerText = "Rp " + m.toLocaleString();
-                document.getElementById('totalKeluar').innerText = "Rp " + k.toLocaleString();
-                document.getElementById('saldoTotal').innerText = "Rp " + (m-k).toLocaleString();
+                document.getElementById('totalMasuk').innerText = "Rp " + m.toLocaleString('id-ID');
+                document.getElementById('totalKeluar').innerText = "Rp " + k.toLocaleString('id-ID');
+                document.getElementById('saldoTotal').innerText = "Rp " + (m-k).toLocaleString('id-ID');
             });
         }
     </script>
