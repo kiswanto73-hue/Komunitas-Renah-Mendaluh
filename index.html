@@ -3,82 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SINDARA PRO | KOMUNITAS</title>
+    <title>SINDARA PRO | PENGURUS INTI</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .hero-bg {
+            background: linear-gradient(rgba(30, 27, 75, 0.85), rgba(30, 27, 75, 0.85)), 
+                        url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover; background-position: center;
+        }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: 800; border: 1px solid rgba(0,0,0,0.05); }
+        .has-event { background: #fbbf24 !important; color: #1e1b4b !important; }
+        .sub-page { display: none; }
+        .sub-page.active { display: block; }
+    </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 text-slate-800">
 
     <nav class="fixed w-full z-[100] bg-white/90 backdrop-blur-md border-b">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="font-black text-2xl italic text-indigo-900">SINDARA<span class="text-emerald-500">PRO</span></h1>
-            <div class="flex space-x-6 font-bold text-sm">
+            <div class="hidden md:flex space-x-8 font-bold text-sm">
                 <a href="#home" class="hover:text-indigo-600">BERANDA</a>
                 <a href="#visi" class="hover:text-indigo-600">VISI MISI</a>
-                <a href="#app" class="bg-indigo-600 text-white px-5 py-2 rounded-full">PORTAL LOGIN</a>
+                <a href="#app" class="bg-indigo-600 text-white px-6 py-2 rounded-full">PORTAL LOGIN</a>
             </div>
         </div>
     </nav>
 
-    <section id="home" class="h-screen flex items-center justify-center text-center text-white bg-slate-900" style="background: linear-gradient(rgba(30, 27, 75, 0.8), rgba(30, 27, 75, 0.8)), url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1350&q=80'); background-size: cover;">
-        <div>
-            <h2 class="text-5xl font-black mb-4 italic uppercase">Sistem Informasi Komunitas</h2>
-            <p class="opacity-80 mb-8 font-medium">Monitoring dan Transparansi GTK Renah Mendaluh.</p>
-            <a href="#app" class="bg-emerald-500 px-10 py-4 rounded-2xl font-black uppercase shadow-xl hover:scale-105 transition-transform inline-block">Masuk Aplikasi</a>
+    <section id="home" class="hero-bg h-screen flex items-center justify-center text-center text-white px-6">
+        <div class="max-w-4xl">
+            <h2 class="text-5xl md:text-6xl font-black mb-6 uppercase italic">Sistem Informasi Komunitas</h2>
+            <p class="text-lg opacity-90 mb-10">Monitoring dan Transparansi GTK Renah Mendaluh.</p>
+            <a href="#app" class="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase shadow-xl transition-all inline-block">Masuk Aplikasi</a>
         </div>
     </section>
 
     <section id="visi" class="py-24 bg-white">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12">
             <div class="bg-slate-50 p-12 rounded-[3rem] border-l-[12px] border-indigo-600 shadow-sm">
-                <h3 class="text-3xl font-black text-indigo-900 mb-6 italic uppercase">Visi</h3>
-                <p class="text-lg text-slate-600 leading-relaxed font-semibold">Mewujudkan Pendidik Kecamatan yang inovatif, Adaptif Teknologi, dan Kolaboratif.</p>
+                <h3 class="text-3xl font-black text-indigo-900 mb-6 uppercase italic">Visi</h3>
+                <p class="text-lg text-slate-600 leading-relaxed font-semibold italic">"Mewujudkan Pendidik Kecamatan yang inovatif, Adaptif Teknologi, dan Kolaboratif."</p>
             </div>
             <div class="bg-slate-50 p-12 rounded-[3rem] border-l-[12px] border-emerald-500 shadow-sm">
-                <h3 class="text-3xl font-black text-emerald-600 mb-6 italic uppercase">Misi</h3>
-                <ul class="text-slate-600 space-y-3 font-medium">
-                    <li>• Meningkatkan kompetensi profesional pendidik secara berkelanjutan.</li>
+                <h3 class="text-3xl font-black text-emerald-600 mb-6 uppercase italic">Misi</h3>
+                <ul class="text-slate-600 space-y-3 font-bold">
+                    <li>• Meningkatkan kompetensi profesional pendidik.</li>
                     <li>• Mengembangkan budaya kolaborasi dan berbagi praktik baik.</li>
-                    <li>• Mendorong transformasi digital dalam pembelajaran di gugus.</li>
+                    <li>• Mendorong transformasi digital dalam pembelajaran.</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <section id="app" class="py-24 bg-slate-900 min-h-screen">
+    <section id="app" class="py-24 bg-slate-900 min-h-screen px-6">
         <div id="loginArea" class="max-w-md mx-auto">
-            <div class="bg-white p-12 rounded-[3rem] shadow-2xl border-t-[10px] border-indigo-600">
-                <h2 class="text-xl font-black text-center mb-8 uppercase italic">Login Akses</h2>
+            <div class="bg-white p-10 rounded-[3rem] shadow-2xl border-t-[12px] border-indigo-600 text-center">
+                <h2 class="text-2xl font-black text-indigo-950 uppercase italic mb-8">Akses Dashboard</h2>
                 <input type="text" id="userKey" placeholder="KODE AKSES" class="w-full p-5 bg-slate-100 rounded-2xl mb-4 text-center font-black outline-none border-2 border-transparent focus:border-indigo-600 uppercase">
                 <button onclick="loginSindara()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Masuk</button>
             </div>
         </div>
 
-        <div id="mainDashboard" class="hidden max-w-7xl mx-auto px-6 text-white">
+        <div id="mainDashboard" class="hidden max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <div class="bg-white/10 backdrop-blur-md p-8 rounded-[3rem] border border-white/10 h-fit">
-                    <h3 id="welcomeName" class="text-xl font-black">...</h3>
-                    <p id="labelGugus" class="text-[10px] font-black text-emerald-400 tracking-widest mb-10 uppercase"></p>
-                    <nav class="space-y-3 font-bold text-sm">
+                <div class="bg-white/10 backdrop-blur-md p-8 rounded-[3rem] border border-white/10 h-fit text-white">
+                    <h3 id="welcomeName" class="text-xl font-black mb-1">...</h3>
+                    <p id="labelGugus" class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-8"></p>
+                    
+                    <nav class="space-y-2 text-sm font-bold">
                         <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-th-large mr-3 text-indigo-400"></i> Ringkasan</button>
                         <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-edit mr-3 text-emerald-400"></i> Buat Laporan</button>
-                        <div id="menuMaster" class="hidden">
-                            <button onclick="window.open('https://kiswanto73-hue.github.io/Komunitas-Renah-Mendaluh/')" class="w-full text-left p-4 bg-indigo-600 hover:bg-indigo-700 rounded-2xl flex items-center mt-2 shadow-lg border border-indigo-400"><i class="fas fa-users-cog mr-3 text-white"></i> Pemantauan Gugus</button>
+                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-calendar-alt mr-3 text-yellow-400"></i> Agenda & Kalender</button>
+                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center"><i class="fas fa-wallet mr-3 text-emerald-400"></i> Bendahara & Kas</button>
+                        
+                        <div id="menuMaster" class="hidden pt-4">
+                            <hr class="opacity-20 mb-4">
+                            <button onclick="window.open('https://kiswanto73-hue.github.io/Komunitas-Renah-Mendaluh/')" class="w-full text-left p-4 bg-indigo-600 hover:bg-indigo-700 rounded-2xl flex items-center shadow-lg border border-indigo-400">
+                                <i class="fas fa-users-cog mr-3"></i> Pemantauan Seluruh Gugus
+                            </button>
                         </div>
+
                         <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-sign-out-alt mr-3"></i> Keluar</button>
                     </nav>
                 </div>
 
-                <div class="lg:col-span-3">
-                    <div id="page-stat" class="sub-page">
-                        <h4 class="text-xl font-black mb-6 italic uppercase">Aktivitas Terkini</h4>
+                <div class="lg:col-span-3 space-y-6">
+                    
+                    <div id="page-stat" class="sub-page active">
+                        <h4 class="text-xl font-black text-white mb-6 uppercase italic">Laporan Terbaru</h4>
                         <div id="listLaporanFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
-                    <div id="page-input" class="sub-page hidden bg-white text-slate-800 p-10 rounded-[3rem]">
-                        <h4 class="text-2xl font-black mb-6 italic uppercase">Formulir Pelaporan</h4>
+
+                    <div id="page-agenda" class="sub-page space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white p-8 rounded-[2.5rem] shadow-xl">
+                                <h3 class="font-black uppercase italic text-indigo-900 mb-6">Kalender Agenda - Mei 2026</h3>
+                                <div class="calendar-grid text-center mb-2 font-black text-[10px] text-slate-400">
+                                    <div>MIN</div><div>SEN</div><div>SEL</div><div>RAB</div><div>KAM</div><div>JUM</div><div>SAB</div>
+                                </div>
+                                <div id="calendarDays" class="calendar-grid"></div>
+                            </div>
+                            <div class="bg-indigo-600 p-8 rounded-[2.5rem] text-white">
+                                <h3 class="text-xl font-black mb-4 italic uppercase">Detail Agenda</h3>
+                                <div id="agendaContent" class="mb-6 opacity-80 text-sm">Klik tanggal pada kalender.</div>
+                                <div id="agendaForm" class="hidden space-y-3">
+                                    <p class="text-[10px] font-black text-yellow-400 uppercase">Tanggal: <span id="targetDate"></span></p>
+                                    <textarea id="agendaNoteInput" placeholder="Tulis catatan agenda..." class="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white outline-none font-bold"></textarea>
+                                    <button onclick="saveAgenda()" class="w-full bg-yellow-400 text-indigo-900 font-black p-3 rounded-xl uppercase text-xs">Simpan Agenda</button>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div id="page-keuangan" class="sub-page space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-emerald-600 p-6 rounded-[2rem] text-white shadow-xl">
+                                <p class="text-[10px] font-black opacity-80 uppercase">Total Saldo Kas</p>
+                                <h3 id="saldoTotal" class="text-2xl font-black italic">Rp 0</h3>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-[2rem] border border-white/10 text-white">
+                                <p class="text-[10px] font-black text-emerald-400 uppercase">Uang Masuk</p>
+                                <h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-[2rem] border border-white/10 text-white">
+                                <p class="text-[10px] font-black text-rose-400 uppercase">Uang Keluar</p>
+                                <h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl">
+                            <h3 class="text-xl font-black uppercase italic mb-6 text-indigo-900">Input Kas Bendahara</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <select id="kasTipe" class="p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                                    <option value="masuk">Uang Masuk (+)</option>
+                                    <option value="keluar">Uang Keluar (-)</option>
+                                </select>
+                                <input type="number" id="kasNominal" placeholder="Nominal (Rp)" class="p-4 bg-slate-100 rounded-xl font-bold">
+                                <input type="text" id="kasKet" placeholder="Keterangan" class="p-4 bg-slate-100 rounded-xl font-bold md:col-span-2">
+                                <button onclick="simpanTransaksi()" class="md:col-span-2 bg-indigo-600 text-white p-4 rounded-xl font-black uppercase">Simpan Transaksi</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="page-input" class="sub-page bg-white p-10 rounded-[3rem]">
+                        <h4 class="text-2xl font-black mb-6 italic uppercase">Input Laporan Kegiatan</h4>
+                        <div class="space-y-4">
+                            <input type="text" id="lapJudul" placeholder="Nama Kegiatan" class="w-full p-4 bg-slate-100 rounded-xl font-bold">
+                            <textarea id="lapDesk" placeholder="Ringkasan singkat..." class="w-full p-4 bg-slate-100 rounded-xl font-bold" rows="3"></textarea>
+                            <input type="date" id="lapTgl" class="w-full p-4 bg-slate-100 rounded-xl font-bold">
+                            <button onclick="simpanLaporan()" class="w-full bg-emerald-600 text-white p-4 rounded-xl font-black uppercase shadow-lg">Kirim Laporan</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -93,44 +174,120 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        let sessionUser = null;
+        let selectedDate = null;
+        let agendaDataLocal = {};
+
         const DATABASE_GUGUS = {
             "INTI-SINDARA": { nama: "Pak Kiswanto", role: "MASTER", gugus: "PENGURUS INTI" },
-            "G1-BAWAH": { nama: "Admin G1 Bawah", role: "GUGUS", gugus: "GUGUS 1 BAWAH" }
+            "G1-BAWAH": { nama: "Admin G1 Bawah", role: "GUGUS", gugus: "GUGUS 1 BAWAH" },
+            "G1-TINGGI": { nama: "Admin G1 Tinggi", role: "GUGUS", gugus: "GUGUS 1 TINGGI" },
+            "G2-ATAS": { nama: "Admin G2 Atas", role: "GUGUS", gugus: "GUGUS 2 ATAS" },
+            "G2-BAWAH": { nama: "Admin G2 Bawah", role: "GUGUS", gugus: "GUGUS 2 BAWAH" },
+            "PJOK": { nama: "Admin PJOK", role: "GUGUS", gugus: "KOMUNITAS PJOK" },
+            "PAI": { nama: "Admin PAI", role: "GUGUS", gugus: "KOMUNITAS PAI" }
         };
 
         function loginSindara() {
             const key = document.getElementById('userKey').value.toUpperCase();
             if (DATABASE_GUGUS[key]) {
-                const user = DATABASE_GUGUS[key];
+                sessionUser = DATABASE_GUGUS[key];
+                sessionUser.id = key;
                 document.getElementById('loginArea').classList.add('hidden');
                 document.getElementById('mainDashboard').classList.remove('hidden');
-                document.getElementById('welcomeName').innerText = "Halo, " + user.nama;
-                document.getElementById('labelGugus').innerText = user.gugus;
+                document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
+                document.getElementById('labelGugus').innerText = sessionUser.gugus;
                 
-                if(user.role === "MASTER") {
-                    document.getElementById('menuMaster').classList.remove('hidden');
-                }
-                muatLaporan(key);
+                if(sessionUser.role === "MASTER") document.getElementById('menuMaster').classList.remove('hidden');
+
+                muatLaporan();
+                muatKeuangan();
+                muatAgenda();
+                initCalendar();
             } else { alert("KODE AKSES SALAH!"); }
         }
 
-        function muatLaporan(key) {
-            db.ref(`sindara_laporan/${key}`).on('value', s => {
+        function showSubPage(id) {
+            document.querySelectorAll('.sub-page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+        }
+
+        // --- FITUR LAPORAN ---
+        function simpanLaporan() {
+            const judul = document.getElementById('lapJudul').value;
+            const tgl = document.getElementById('lapTgl').value;
+            if(!judul || !tgl) return alert("Lengkapi data!");
+            db.ref(`sindara_laporan/${sessionUser.id}`).push({ judul, tgl, timestamp: Date.now() }).then(() => {
+                alert("Laporan Terkirim!");
+                showSubPage('stat');
+            });
+        }
+
+        function muatLaporan() {
+            db.ref(`sindara_laporan/${sessionUser.id}`).on('value', s => {
                 const list = document.getElementById('listLaporanFeed');
                 list.innerHTML = "";
                 s.forEach(lx => {
                     const l = lx.val();
-                    list.innerHTML = `<div class="bg-white/10 p-6 rounded-3xl border border-white/20">
-                        <span class="text-[10px] text-emerald-400 font-bold">${l.tgl}</span>
-                        <h4 class="font-black uppercase text-sm mt-1">${l.judul}</h4>
+                    list.innerHTML = `<div class="bg-white/10 p-6 rounded-3xl border border-white/20 text-white">
+                        <p class="text-[10px] text-emerald-400 font-black">${l.tgl}</p>
+                        <h4 class="font-black uppercase italic mt-1">${l.judul}</h4>
                     </div>` + list.innerHTML;
                 });
             });
         }
 
-        function showSubPage(id) {
-            document.querySelectorAll('.sub-page').forEach(p => p.classList.add('hidden'));
-            document.getElementById('page-' + id).classList.remove('hidden');
+        // --- FITUR AGENDA ---
+        function initCalendar() {
+            const grid = document.getElementById('calendarDays');
+            grid.innerHTML = "";
+            for (let i = 1; i <= 31; i++) {
+                const dayId = `${i}-05-2026`;
+                const hasEvent = agendaDataLocal[dayId] ? 'has-event' : '';
+                const day = document.createElement('div');
+                day.className = `calendar-day bg-slate-100 ${hasEvent}`;
+                day.innerText = i;
+                day.onclick = () => {
+                    selectedDate = dayId;
+                    document.getElementById('agendaForm').classList.remove('hidden');
+                    document.getElementById('targetDate').innerText = selectedDate;
+                    document.getElementById('agendaContent').innerText = agendaDataLocal[dayId] || "Belum ada agenda.";
+                };
+                grid.appendChild(day);
+            }
+        }
+
+        function saveAgenda() {
+            const note = document.getElementById('agendaNoteInput').value;
+            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g, '_')}`).set({ tgl: selectedDate, catatan: note })
+            .then(() => alert("Agenda Disimpan!"));
+        }
+
+        function muatAgenda() {
+            db.ref(`sindara_agenda/${sessionUser.id}`).on('value', s => {
+                agendaDataLocal = {};
+                s.forEach(ax => { const a = ax.val(); agendaDataLocal[a.tgl] = a.catatan; });
+                initCalendar();
+            });
+        }
+
+        // --- FITUR KEUANGAN ---
+        function simpanTransaksi() {
+            const tipe = document.getElementById('kasTipe').value;
+            const nominal = parseInt(document.getElementById('kasNominal').value);
+            const ket = document.getElementById('kasKet').value;
+            db.ref(`sindara_kas/${sessionUser.id}`).push({ tipe, nominal, keterangan: ket, tgl: new Date().toLocaleDateString() })
+            .then(() => alert("Transaksi Berhasil!"));
+        }
+
+        function muatKeuangan() {
+            db.ref(`sindara_kas/${sessionUser.id}`).on('value', s => {
+                let m = 0, k = 0;
+                s.forEach(tx => { const t = tx.val(); if(t.tipe === 'masuk') m += t.nominal; else k += t.nominal; });
+                document.getElementById('totalMasuk').innerText = "Rp " + m.toLocaleString();
+                document.getElementById('totalKeluar').innerText = "Rp " + k.toLocaleString();
+                document.getElementById('saldoTotal').innerText = "Rp " + (m-k).toLocaleString();
+            });
         }
     </script>
 </body>
