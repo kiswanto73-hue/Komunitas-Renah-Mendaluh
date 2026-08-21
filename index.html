@@ -13,23 +13,46 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
         .hero-bg { background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-attachment: fixed; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 800; border: 1px solid rgba(0,0,0,0.05); transition: 0.3s; }
+        .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 800; border: 1px solid rgba(0,0,0,0.05); transition: 0.2s; }
+        .calendar-day:hover { transform: scale(1.08); }
+        .calendar-day.is-today { box-shadow: inset 0 0 0 2px #4f46e5; }
+        .calendar-day.is-selected { background: #4f46e5 !important; color: #fff !important; }
         .has-event { background: #fbbf24 !important; color: #1e1b4b !important; box-shadow: 0 4px 10px rgba(251, 191, 36, 0.4); }
         .sub-page { display: none; }
         .sub-page.active { display: block; animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .skeleton { background: linear-gradient(90deg, rgba(255,255,255,.06) 25%, rgba(255,255,255,.12) 37%, rgba(255,255,255,.06) 63%); background-size: 400% 100%; animation: shimmer 1.4s infinite; }
+        @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+        input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid #10b981; outline-offset: 2px; }
+        .navlink.is-active { color: #34d399; }
+        #toastBox > div { animation: toastIn .25s ease-out; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        #mobileMenu { transition: max-height .3s ease, opacity .3s ease; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100">
 
+    <!-- Toast notification container -->
+    <div id="toastBox" class="fixed top-4 right-4 z-[200] space-y-2 w-[90vw] max-w-sm"></div>
+
     <nav class="fixed w-full z-[100] bg-slate-900/80 backdrop-blur-xl border-b border-white/5">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="font-black text-2xl italic tracking-tighter">SINDARA<span class="text-emerald-500">PRO</span></h1>
-            <div class="hidden md:flex space-x-8 font-bold text-[10px] tracking-widest uppercase">
-                <a href="#home" class="hover:text-emerald-400">Beranda</a>
-                <a href="#tentang" class="hover:text-emerald-400">Profil KKG</a>
-                <a href="#app" class="bg-emerald-500 text-slate-900 px-6 py-2 rounded-full shadow-lg">Portal Login</a>
+            <div class="hidden md:flex space-x-8 font-bold text-[10px] tracking-widest uppercase items-center">
+                <a href="#home" class="navlink hover:text-emerald-400 transition-colors">Beranda</a>
+                <a href="#tentang" class="navlink hover:text-emerald-400 transition-colors">Profil KKG</a>
+                <a href="#app" class="bg-emerald-500 text-slate-900 px-6 py-2 rounded-full shadow-lg hover:bg-emerald-400 transition-colors">Portal Login</a>
+            </div>
+            <button id="btnMobileToggle" onclick="toggleMobileMenu()" class="md:hidden text-xl w-10 h-10 flex items-center justify-center" aria-label="Buka menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileMenu" class="md:hidden overflow-hidden max-h-0 opacity-0 px-6">
+            <div class="flex flex-col gap-1 pb-4 font-bold text-xs uppercase tracking-widest">
+                <a href="#home" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5">Beranda</a>
+                <a href="#tentang" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5">Profil KKG</a>
+                <a href="#app" onclick="toggleMobileMenu()" class="p-3 rounded-xl bg-emerald-500 text-slate-900 text-center">Portal Login</a>
             </div>
         </div>
     </nav>
@@ -84,44 +107,57 @@
     <section id="app" class="py-24 bg-slate-900 min-h-screen px-6">
         <div id="loginArea" class="max-w-md mx-auto">
             <div class="bg-white p-10 rounded-[3rem] shadow-2xl text-center">
-                <h2 class="text-2xl font-black text-indigo-950 uppercase italic mb-8">Akses Dashboard</h2>
-                <input type="text" id="userKey" placeholder="MASUKKAN KODE GUGUS" class="w-full p-5 bg-slate-100 rounded-2xl mb-4 text-center font-black text-slate-900 outline-none uppercase">
-                <button onclick="loginSindara()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg">Masuk</button>
+                <h2 class="text-2xl font-black text-indigo-950 uppercase italic mb-2">Akses Dashboard</h2>
+                <p class="text-xs text-slate-400 font-semibold mb-8">Masukkan kode gugus untuk masuk ke portal.</p>
+                <form onsubmit="event.preventDefault(); loginSindara();">
+                    <input type="text" id="userKey" placeholder="MASUKKAN KODE GUGUS" autocomplete="off"
+                        class="w-full p-5 bg-slate-100 rounded-2xl mb-4 text-center font-black text-slate-900 outline-none uppercase border-2 border-transparent focus:border-indigo-600 transition-colors">
+                    <button type="submit" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg hover:bg-indigo-700 active:scale-[.98] transition-all">Masuk</button>
+                </form>
             </div>
         </div>
 
         <div id="mainDashboard" class="hidden max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                
-                <div class="glass p-8 rounded-[3rem] h-fit sticky top-24">
+
+                <div class="glass p-8 rounded-[3rem] h-fit lg:sticky lg:top-24">
                     <h3 id="welcomeName" class="text-xl font-black mb-1">...</h3>
                     <p id="labelGugus" class="text-[10px] font-black text-emerald-400 uppercase mb-10"></p>
-                    
+
                     <nav class="space-y-2 text-xs font-black uppercase">
-                        <button onclick="showSubPage('stat')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-th-large mr-4 text-indigo-400"></i> Ringkasan</button>
-                        <button onclick="showSubPage('input')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-edit mr-4 text-emerald-400"></i> Buat Laporan</button>
-                        <button onclick="showSubPage('agenda')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-calendar-alt mr-4 text-yellow-400"></i> Agenda</button>
-                        <button onclick="showSubPage('keuangan')" class="w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-wallet mr-4 text-emerald-400"></i> Bendahara</button>
-                        
+                        <button data-page="stat" onclick="showSubPage('stat')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-th-large mr-4 text-indigo-400"></i> Ringkasan</button>
+                        <button data-page="input" onclick="showSubPage('input')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-edit mr-4 text-emerald-400"></i> Buat Laporan</button>
+                        <button data-page="agenda" onclick="showSubPage('agenda')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-calendar-alt mr-4 text-yellow-400"></i> Agenda</button>
+                        <button data-page="keuangan" onclick="showSubPage('keuangan')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-wallet mr-4 text-emerald-400"></i> Bendahara</button>
+
                         <div id="menuMaster" class="hidden pt-6 space-y-2">
-                            <button onclick="showSubPage('monitor')" class="w-full text-left p-4 bg-indigo-600 rounded-2xl flex items-center shadow-xl"><i class="fas fa-globe mr-4"></i> Pantau Gugus</button>
-                            <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" class="w-full block text-left p-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl flex items-center shadow-xl transition-all">
+                            <button data-page="monitor" onclick="showSubPage('monitor')" class="navbtn w-full text-left p-4 bg-indigo-600 rounded-2xl flex items-center shadow-xl"><i class="fas fa-globe mr-4"></i> Pantau Gugus</button>
+                            <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" rel="noopener" class="w-full block text-left p-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl flex items-center shadow-xl transition-all">
                                 <i class="fas fa-file-pdf mr-4"></i> Laporan KKG
                             </a>
                         </div>
-                        
-                        <button onclick="location.reload()" class="w-full text-left p-4 text-rose-400 mt-10"><i class="fas fa-power-off mr-4"></i> Keluar</button>
+
+                        <button onclick="konfirmasiKeluar()" class="w-full text-left p-4 text-rose-400 mt-10 hover:bg-rose-500/10 rounded-2xl transition-all"><i class="fas fa-power-off mr-4"></i> Keluar</button>
                     </nav>
                 </div>
 
                 <div class="lg:col-span-3 space-y-6">
-                    
+
                     <div id="page-stat" class="sub-page active">
-                        <div class="flex justify-between items-center mb-6">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
                             <h4 class="text-xl font-black uppercase italic">Arsip Kegiatan</h4>
                             <input type="text" id="searchReport" onkeyup="filterLaporan()" placeholder="Cari kegiatan..." class="p-3 bg-white/10 border border-white/20 rounded-xl text-xs outline-none">
                         </div>
-                        <div class="glass rounded-[2rem] overflow-hidden">
+                        <div id="loadingLaporan" class="space-y-3">
+                            <div class="skeleton h-16 rounded-2xl"></div>
+                            <div class="skeleton h-16 rounded-2xl"></div>
+                        </div>
+                        <div id="emptyLaporan" class="hidden text-center py-16 opacity-40">
+                            <i class="fas fa-folder-open text-4xl mb-3"></i>
+                            <p class="font-bold text-sm">Belum ada laporan kegiatan.</p>
+                            <p class="text-xs">Buat laporan pertama Anda lewat menu "Buat Laporan".</p>
+                        </div>
+                        <div id="wrapLaporan" class="hidden glass rounded-[2rem] overflow-hidden overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead class="bg-white/5 text-[9px] font-black uppercase text-emerald-400 tracking-widest">
                                     <tr><th class="p-6">Waktu</th><th class="p-6">Kegiatan</th><th class="p-6 text-right">Aksi</th></tr>
@@ -132,15 +168,15 @@
                     </div>
 
                     <div id="page-input" class="sub-page">
-                        <div class="bg-white p-12 rounded-[4rem] text-slate-900 shadow-2xl">
-                            <h4 class="text-3xl font-black mb-8 italic uppercase">Formulir Pelaporan</h4>
-                            <div class="space-y-4">
+                        <div class="bg-white p-8 md:p-12 rounded-[4rem] text-slate-900 shadow-2xl">
+                            <h4 class="text-2xl md:text-3xl font-black mb-8 italic uppercase">Formulir Pelaporan</h4>
+                            <form onsubmit="event.preventDefault(); simpanLaporan();" class="space-y-4">
                                 <input type="text" id="lapJudul" placeholder="Judul Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold outline-none">
                                 <textarea id="lapDesc" placeholder="Deskripsi Singkat Kegiatan" class="w-full p-5 bg-slate-100 rounded-2xl font-bold outline-none h-32"></textarea>
                                 <input type="date" id="lapTgl" class="w-full p-5 bg-slate-100 rounded-2xl font-bold outline-none">
-                                <input type="text" id="lapBukti" placeholder="Link Bukti Dukung (Drive/Foto)" class="w-full p-5 bg-slate-50 border-2 border-indigo-100 rounded-2xl font-bold text-xs">
-                                <button onclick="simpanLaporan()" class="w-full bg-slate-900 text-white p-6 rounded-2xl font-black uppercase shadow-xl hover:bg-emerald-600 transition-all">Kirim Laporan</button>
-                            </div>
+                                <input type="url" id="lapBukti" placeholder="Link Bukti Dukung (Drive/Foto)" class="w-full p-5 bg-slate-50 border-2 border-indigo-100 rounded-2xl font-bold text-xs">
+                                <button type="submit" id="btnKirimLaporan" class="w-full bg-slate-900 text-white p-6 rounded-2xl font-black uppercase shadow-xl hover:bg-emerald-600 transition-all">Kirim Laporan</button>
+                            </form>
                         </div>
                     </div>
 
@@ -160,7 +196,7 @@
                                 <button onclick="tutupPantauan()" class="text-rose-400 font-black text-[10px] hover:underline tracking-widest">TUTUP X</button>
                             </div>
                             <div class="bg-white rounded-[3rem] h-[650px] p-2 shadow-2xl">
-                                <iframe id="framePantau" class="w-full h-full rounded-[2.5rem]"></iframe>
+                                <iframe id="framePantau" class="w-full h-full rounded-[2.5rem]" title="Panel pemantauan gugus"></iframe>
                             </div>
                         </div>
                     </div>
@@ -168,17 +204,24 @@
                     <div id="page-agenda" class="sub-page">
                         <div class="grid md:grid-cols-2 gap-8">
                             <div class="bg-white p-8 rounded-[3rem] text-slate-900">
-                                <h3 class="font-black uppercase italic mb-6">Mei 2026</h3>
+                                <div class="flex justify-between items-center mb-6">
+                                    <button onclick="gantiBulan(-1)" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"><i class="fas fa-chevron-left"></i></button>
+                                    <h3 id="calendarLabel" class="font-black uppercase italic">-</h3>
+                                    <button onclick="gantiBulan(1)" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <div class="calendar-grid mb-2 text-[9px] font-black text-slate-400 uppercase text-center">
+                                    <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                                </div>
                                 <div id="calendarDays" class="calendar-grid"></div>
                             </div>
                             <div class="bg-indigo-600 p-8 rounded-[3rem] shadow-xl">
                                 <h3 id="targetDate" class="text-xl font-black mb-4 uppercase">Detail Agenda</h3>
                                 <div id="agendaContent" class="mb-8 text-sm italic opacity-80">Klik tanggal pada kalender.</div>
-                                <div id="agendaForm" class="hidden space-y-4">
+                                <form id="agendaForm" onsubmit="event.preventDefault(); saveAgenda();" class="hidden space-y-4">
                                     <textarea id="agendaNoteInput" placeholder="Catatan agenda..." class="w-full p-4 rounded-xl bg-white/10 text-white font-bold outline-none"></textarea>
-                                    <input type="text" id="agendaBukti" placeholder="Link Bukti" class="w-full p-3 rounded-xl bg-white/10 text-xs font-bold outline-none">
-                                    <button onclick="saveAgenda()" class="w-full bg-yellow-400 text-indigo-900 p-3 rounded-xl font-black uppercase">Simpan Agenda</button>
-                                </div>
+                                    <input type="url" id="agendaBukti" placeholder="Link Bukti" class="w-full p-3 rounded-xl bg-white/10 text-xs font-bold outline-none">
+                                    <button type="submit" class="w-full bg-yellow-400 text-indigo-900 p-3 rounded-xl font-black uppercase hover:bg-yellow-300 transition-colors">Simpan Agenda</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -189,16 +232,44 @@
                                 <p class="text-[10px] font-black uppercase opacity-70">Saldo Saat Ini</p>
                                 <h3 id="saldoTotal" class="text-3xl font-black italic">Rp 0</h3>
                             </div>
-                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50">Total Masuk</p><h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3></div>
-                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50">Total Keluar</p><h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3></div>
+                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50 text-emerald-400 font-black">Total Masuk</p><h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3></div>
+                            <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50 text-rose-400 font-black">Total Keluar</p><h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3></div>
                         </div>
-                        <div class="bg-white p-10 rounded-[3rem] text-slate-900 shadow-xl">
-                            <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-8 md:p-10 rounded-[3rem] text-slate-900 shadow-xl">
+                            <h4 class="font-black uppercase italic mb-6 border-b pb-4">Input Transaksi</h4>
+                            <form onsubmit="event.preventDefault(); simpanTransaksi();" class="grid md:grid-cols-2 gap-4">
                                 <select id="kasTipe" class="p-4 bg-slate-100 rounded-xl font-bold outline-none"><option value="masuk">Masuk (+)</option><option value="keluar">Keluar (-)</option></select>
-                                <input type="number" id="kasNominal" placeholder="Nominal Rp" class="p-4 bg-slate-100 rounded-xl font-bold">
-                                <input type="text" id="kasKet" placeholder="Keterangan" class="p-4 bg-slate-100 rounded-xl font-bold md:col-span-2">
-                                <input type="text" id="kasBukti" placeholder="Link Bukti" class="p-4 bg-slate-50 border-2 border-dashed rounded-xl font-bold text-xs md:col-span-2">
-                                <button onclick="simpanTransaksi()" class="md:col-span-2 bg-indigo-600 text-white p-4 rounded-xl font-black uppercase">Simpan Transaksi</button>
+                                <input type="number" id="kasNominal" min="1" placeholder="Nominal Rp" class="p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                                <input type="date" id="kasTanggal" class="p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                                <input type="text" id="kasKet" placeholder="Keterangan" class="p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                                <input type="url" id="kasBukti" placeholder="Link Bukti" class="p-4 bg-slate-50 border-2 border-dashed rounded-xl font-bold text-xs md:col-span-2 outline-none">
+                                <button type="submit" id="btnSimpanKas" class="md:col-span-2 bg-indigo-600 text-white p-4 rounded-xl font-black uppercase hover:bg-indigo-700 transition-colors">Simpan Transaksi</button>
+                            </form>
+                        </div>
+
+                        <div class="bg-white p-8 md:p-10 rounded-[3rem] text-slate-900 shadow-xl">
+                            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6 border-b pb-4">
+                                <h4 class="font-black uppercase italic">Riwayat Transaksi</h4>
+                                <div class="flex gap-2">
+                                    <select id="filterTipeKas" onchange="renderTransaksiKas()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none">
+                                        <option value="semua">Semua</option>
+                                        <option value="masuk">Masuk</option>
+                                        <option value="keluar">Keluar</option>
+                                    </select>
+                                    <input type="text" id="cariTransaksiKas" oninput="renderTransaksiKas()" placeholder="Cari..." class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none w-32 md:w-48">
+                                </div>
+                            </div>
+                            <div id="emptyKas" class="hidden text-center py-12 opacity-40">
+                                <i class="fas fa-receipt text-3xl mb-2"></i>
+                                <p class="font-bold text-sm">Belum ada transaksi.</p>
+                            </div>
+                            <div id="wrapKas" class="hidden overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="text-[9px] font-black uppercase text-slate-400 tracking-widest">
+                                        <tr><th class="py-3 pr-3">Tanggal</th><th class="py-3 pr-3">Jenis</th><th class="py-3 pr-3">Keterangan</th><th class="py-3 pr-3 text-right">Nominal</th><th class="py-3 pr-3 text-center">Bukti</th><th class="py-3 pl-3 text-right">Aksi</th></tr>
+                                    </thead>
+                                    <tbody id="listKas" class="divide-y divide-slate-100 font-bold"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -220,6 +291,10 @@
         let sessionUser = null;
         let selectedDate = null;
         let agendaDataLocal = {};
+        let semuaLaporan = [];
+        let semuaKas = [];
+        let calMonth = new Date().getMonth();
+        let calYear = new Date().getFullYear();
 
         const DATABASE_GUGUS = {
             "INTI-SINDARA": { nama: "Pak Kiswanto", role: "MASTER", gugus: "PENGURUS INTI" },
@@ -231,8 +306,37 @@
             "PAI": { nama: "Gugus PAI", role: "GUGUS", gugus: "KOMUNITAS PAI" }
         };
 
+        // ---------- util ----------
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str ?? '';
+            return div.innerHTML;
+        }
+        function formatRupiah(n) {
+            const angka = Number(n) || 0;
+            return "Rp " + angka.toLocaleString('id-ID');
+        }
+        function toast(msg, tipe = 'sukses') {
+            const box = document.getElementById('toastBox');
+            const warna = tipe === 'sukses' ? 'bg-emerald-600' : tipe === 'error' ? 'bg-rose-600' : 'bg-slate-700';
+            const ikon = tipe === 'sukses' ? 'fa-check-circle' : tipe === 'error' ? 'fa-circle-exclamation' : 'fa-info-circle';
+            const el = document.createElement('div');
+            el.className = `${warna} text-white text-sm font-bold px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3`;
+            el.innerHTML = `<i class="fas ${ikon}"></i><span>${escapeHtml(msg)}</span>`;
+            box.appendChild(el);
+            setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3200);
+        }
+        function toggleMobileMenu() {
+            const m = document.getElementById('mobileMenu');
+            const buka = m.style.maxHeight && m.style.maxHeight !== '0px';
+            m.style.maxHeight = buka ? '0px' : '300px';
+            m.style.opacity = buka ? '0' : '1';
+        }
+
+        // ---------- auth ----------
         function loginSindara() {
-            const key = document.getElementById('userKey').value.toUpperCase();
+            const key = document.getElementById('userKey').value.trim().toUpperCase();
+            if (!key) return toast("Kode gugus belum diisi.", "error");
             prosesAkses(key);
         }
 
@@ -243,12 +347,21 @@
                 document.getElementById('mainDashboard').classList.remove('hidden');
                 document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
                 document.getElementById('labelGugus').innerText = sessionUser.gugus;
-                if(sessionUser.role === "MASTER") document.getElementById('menuMaster').classList.remove('hidden');
+                if (sessionUser.role === "MASTER") document.getElementById('menuMaster').classList.remove('hidden');
+                const tglInputs = document.querySelectorAll('#kasTanggal');
+                tglInputs.forEach(el => el.valueAsDate = new Date());
                 muatLaporan(); muatKeuangan(); muatAgenda();
-            } else { alert("KODE SALAH!"); }
+            } else {
+                toast("Kode akses salah!", "error");
+                document.getElementById('userKey').value = "";
+            }
         }
 
-        window.onload = function() {
+        function konfirmasiKeluar() {
+            if (confirm("Keluar dari dashboard?")) location.reload();
+        }
+
+        window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             const autoKey = urlParams.get('auto');
             if (autoKey) {
@@ -262,6 +375,7 @@
         function showSubPage(id) {
             document.querySelectorAll('.sub-page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + id).classList.add('active');
+            document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('is-active', b.dataset.page === id));
         }
 
         function bukaPantauan(kode) {
@@ -269,75 +383,130 @@
             const urlAsli = window.location.href.split('?')[0].split('#')[0];
             document.getElementById('framePantau').src = urlAsli + "?auto=" + kode;
             document.getElementById('pantauanContainer').classList.remove('hidden');
-            document.getElementById('pantauanContainer').scrollIntoView({behavior: 'smooth'});
+            document.getElementById('pantauanContainer').scrollIntoView({ behavior: 'smooth' });
         }
-
         function tutupPantauan() { document.getElementById('pantauanContainer').classList.add('hidden'); }
 
+        // ---------- laporan ----------
         function simpanLaporan() {
-            const judul = document.getElementById('lapJudul').value;
-            const desc = document.getElementById('lapDesc').value;
+            const btn = document.getElementById('btnKirimLaporan');
+            const judul = document.getElementById('lapJudul').value.trim();
+            const desc = document.getElementById('lapDesc').value.trim();
             const tgl = document.getElementById('lapTgl').value;
-            const bukti = document.getElementById('lapBukti').value;
-            if(!judul || !tgl) return alert("Isi Judul & Tanggal!");
-            
+            const bukti = document.getElementById('lapBukti').value.trim();
+            if (!judul || !tgl) return toast("Judul & tanggal wajib diisi!", "error");
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
+
             db.ref(`sindara_laporan/${sessionUser.id}`).push({ judul, desc, tgl, bukti: bukti || "-", timestamp: Date.now() })
-            .then(() => { alert("Laporan Berhasil Dikirim!"); showSubPage('stat'); });
+                .then(() => {
+                    toast("Laporan berhasil dikirim!");
+                    document.getElementById('lapJudul').value = "";
+                    document.getElementById('lapDesc').value = "";
+                    document.getElementById('lapTgl').value = "";
+                    document.getElementById('lapBukti').value = "";
+                    showSubPage('stat');
+                })
+                .catch(err => toast("Gagal mengirim: " + err.message, "error"))
+                .finally(() => { btn.disabled = false; btn.innerHTML = "Kirim Laporan"; });
+        }
+
+        function hapusLaporan(key, judul) {
+            if (!confirm(`Hapus laporan "${judul}"?`)) return;
+            db.ref(`sindara_laporan/${sessionUser.id}/${key}`).remove()
+                .then(() => toast("Laporan dihapus."))
+                .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
         function muatLaporan() {
             db.ref(`sindara_laporan/${sessionUser.id}`).on('value', s => {
-                const list = document.getElementById('listLaporanFeed'); list.innerHTML = "";
-                s.forEach(lx => {
-                    const l = lx.val();
-                    const row = `
-                        <tr class="item-laporan border-b border-white/5 hover:bg-white/5 transition-all">
-                            <td class="p-6 opacity-50 text-[10px]">${l.tgl}</td>
-                            <td class="p-6">
-                                <div class="font-black judul-kegiatan">${l.judul}</div>
-                                <div class="text-[10px] opacity-60 font-medium">${l.desc || ""}</div>
-                            </td>
-                            <td class="p-6 text-right">
-                                ${l.bukti !== "-" ? `<a href="${l.bukti}" target="_blank" class="text-emerald-400 text-[10px] border border-emerald-400/30 px-3 py-1 rounded-full">BUKTI</a>` : "-"}
-                            </td>
-                        </tr>`;
-                    list.innerHTML = row + list.innerHTML;
-                });
+                semuaLaporan = [];
+                s.forEach(lx => semuaLaporan.push({ key: lx.key, ...lx.val() }));
+                semuaLaporan.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                document.getElementById('loadingLaporan').classList.add('hidden');
+                renderLaporan(semuaLaporan);
+            }, err => {
+                document.getElementById('loadingLaporan').classList.add('hidden');
+                toast("Gagal memuat laporan: " + err.message, "error");
             });
         }
 
-        function filterLaporan() {
-            const val = document.getElementById('searchReport').value.toUpperCase();
-            const items = document.getElementsByClassName('item-laporan');
-            for (let i = 0; i < items.length; i++) {
-                const txt = items[i].querySelector('.judul-kegiatan').innerText;
-                items[i].style.display = txt.toUpperCase().includes(val) ? "" : "none";
+        function renderLaporan(daftar) {
+            const list = document.getElementById('listLaporanFeed');
+            const empty = document.getElementById('emptyLaporan');
+            const wrap = document.getElementById('wrapLaporan');
+            if (daftar.length === 0) {
+                wrap.classList.add('hidden'); empty.classList.remove('hidden');
+                return;
             }
+            empty.classList.add('hidden'); wrap.classList.remove('hidden');
+            list.innerHTML = daftar.map(l => `
+                <tr class="item-laporan border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td class="p-6 opacity-50 text-[10px] whitespace-nowrap">${escapeHtml(l.tgl)}</td>
+                    <td class="p-6">
+                        <div class="font-black judul-kegiatan">${escapeHtml(l.judul)}</div>
+                        <div class="text-[10px] opacity-60 font-medium">${escapeHtml(l.desc || "")}</div>
+                    </td>
+                    <td class="p-6 text-right whitespace-nowrap">
+                        ${l.bukti && l.bukti !== "-" ? `<a href="${escapeHtml(l.bukti)}" target="_blank" rel="noopener" class="text-emerald-400 text-[10px] border border-emerald-400/30 px-3 py-1 rounded-full mr-2">BUKTI</a>` : ""}
+                        <button onclick="hapusLaporan('${l.key}', '${escapeHtml(l.judul).replace(/'/g, "\\'")}')" class="text-rose-400 hover:text-rose-300 text-[10px]"><i class="fas fa-trash-can"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function filterLaporan() {
+            const val = document.getElementById('searchReport').value.trim().toLowerCase();
+            const hasil = semuaLaporan.filter(l => (l.judul || '').toLowerCase().includes(val));
+            renderLaporan(hasil);
+        }
+
+        // ---------- agenda / kalender dinamis ----------
+        const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        function gantiBulan(delta) {
+            calMonth += delta;
+            if (calMonth > 11) { calMonth = 0; calYear++; }
+            if (calMonth < 0) { calMonth = 11; calYear--; }
+            initCalendar();
         }
 
         function initCalendar() {
+            document.getElementById('calendarLabel').innerText = `${NAMA_BULAN[calMonth]} ${calYear}`;
             const grid = document.getElementById('calendarDays'); grid.innerHTML = "";
-            for (let i = 1; i <= 31; i++) {
-                const dId = `${i}-05-2026`;
+            const jumlahHari = new Date(calYear, calMonth + 1, 0).getDate();
+            const hariPertama = new Date(calYear, calMonth, 1).getDay();
+            const hariIni = new Date();
+
+            for (let i = 0; i < hariPertama; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+            for (let i = 1; i <= jumlahHari; i++) {
+                const dId = `${i}-${String(calMonth + 1).padStart(2, '0')}-${calYear}`;
                 const div = document.createElement('div');
-                div.className = `calendar-day ${agendaDataLocal[dId] ? 'has-event' : 'bg-slate-50'}`;
+                const isToday = hariIni.getDate() === i && hariIni.getMonth() === calMonth && hariIni.getFullYear() === calYear;
+                div.className = `calendar-day ${agendaDataLocal[dId] ? 'has-event' : 'bg-slate-50'} ${isToday ? 'is-today' : ''} ${selectedDate === dId ? 'is-selected' : ''}`;
                 div.innerText = i;
                 div.onclick = () => {
                     selectedDate = dId;
                     document.getElementById('agendaForm').classList.remove('hidden');
-                    document.getElementById('targetDate').innerText = "Agenda " + dId;
+                    document.getElementById('targetDate').innerText = `Agenda ${i} ${NAMA_BULAN[calMonth]} ${calYear}`;
                     document.getElementById('agendaContent').innerText = agendaDataLocal[dId] ? agendaDataLocal[dId].catatan : "Belum ada rencana kegiatan.";
+                    document.getElementById('agendaNoteInput').value = agendaDataLocal[dId] ? agendaDataLocal[dId].catatan : "";
+                    document.getElementById('agendaBukti').value = agendaDataLocal[dId] && agendaDataLocal[dId].bukti !== '-' ? agendaDataLocal[dId].bukti : "";
+                    initCalendar();
                 };
                 grid.appendChild(div);
             }
         }
 
         function saveAgenda() {
-            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g,'_')}`).set({ 
-                tgl: selectedDate, 
-                catatan: document.getElementById('agendaNoteInput').value, 
-                bukti: document.getElementById('agendaBukti').value || "-" 
-            }).then(() => alert("Agenda Diperbarui!"));
+            if (!selectedDate) return toast("Pilih tanggal terlebih dahulu.", "error");
+            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g, '_')}`).set({
+                tgl: selectedDate,
+                catatan: document.getElementById('agendaNoteInput').value.trim(),
+                bukti: document.getElementById('agendaBukti').value.trim() || "-"
+            }).then(() => toast("Agenda diperbarui!")).catch(err => toast("Gagal menyimpan: " + err.message, "error"));
         }
 
         function muatAgenda() {
@@ -347,23 +516,91 @@
             });
         }
 
+        // ---------- keuangan (dipakai bersama oleh finance.html) ----------
         function simpanTransaksi() {
-            db.ref(`sindara_kas/${sessionUser.id}`).push({ 
-                tipe: document.getElementById('kasTipe').value, 
-                nominal: parseInt(document.getElementById('kasNominal').value), 
-                keterangan: document.getElementById('kasKet').value, 
-                bukti: document.getElementById('kasBukti').value || "-", 
-                tgl: new Date().toLocaleDateString('id-ID') 
-            }).then(() => alert("Kas Tercatat!"));
+            const nominal = parseInt(document.getElementById('kasNominal').value, 10);
+            const ket = document.getElementById('kasKet').value.trim();
+            const tipe = document.getElementById('kasTipe').value;
+            const bukti = document.getElementById('kasBukti').value.trim();
+            const tglInput = document.getElementById('kasTanggal').value;
+
+            if (!nominal || nominal <= 0) return toast("Nominal harus diisi dan lebih dari 0.", "error");
+            if (!ket) return toast("Keterangan wajib diisi.", "error");
+
+            const tglTampil = tglInput
+                ? new Date(tglInput + "T00:00:00").toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
+                : new Date().toLocaleDateString('id-ID');
+
+            db.ref(`sindara_kas/${sessionUser.id}`).push({
+                tipe, nominal, keterangan: ket, bukti: bukti || "-", tgl: tglTampil, timestamp: Date.now()
+            }).then(() => {
+                toast("Kas tercatat!");
+                document.getElementById('kasNominal').value = "";
+                document.getElementById('kasKet').value = "";
+                document.getElementById('kasBukti').value = "";
+            }).catch(err => toast("Gagal menyimpan: " + err.message, "error"));
+        }
+
+        function hapusKas(key, ket) {
+            if (!confirm(`Hapus transaksi "${ket}"?`)) return;
+            db.ref(`sindara_kas/${sessionUser.id}/${key}`).remove()
+                .then(() => toast("Transaksi dihapus."))
+                .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
         function muatKeuangan() {
             db.ref(`sindara_kas/${sessionUser.id}`).on('value', s => {
-                let m = 0, k = 0; s.forEach(tx => { const t = tx.val(); if(t.tipe === 'masuk') m += t.nominal; else k += t.nominal; });
-                document.getElementById('totalMasuk').innerText = "Rp " + m.toLocaleString('id-ID');
-                document.getElementById('totalKeluar').innerText = "Rp " + k.toLocaleString('id-ID');
-                document.getElementById('saldoTotal').innerText = "Rp " + (m-k).toLocaleString('id-ID');
+                semuaKas = [];
+                s.forEach(tx => semuaKas.push({ key: tx.key, ...tx.val() }));
+                semuaKas.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                let m = 0, k = 0;
+                semuaKas.forEach(t => t.tipe === 'masuk' ? m += Number(t.nominal) || 0 : k += Number(t.nominal) || 0);
+                document.querySelectorAll('#totalMasuk').forEach(el => el.innerText = formatRupiah(m));
+                document.querySelectorAll('#totalKeluar').forEach(el => el.innerText = formatRupiah(k));
+                document.querySelectorAll('#saldoTotal').forEach(el => el.innerText = formatRupiah(m - k));
+                renderTransaksiKas();
+            }, err => toast("Gagal memuat kas: " + err.message, "error"));
+        }
+
+        function renderTransaksiKas() {
+            const filterEl = document.getElementById('filterTipeKas');
+            const cariEl = document.getElementById('cariTransaksiKas');
+            if (!filterEl) return;
+            const filterTipe = filterEl.value;
+            const kataKunci = cariEl.value.trim().toLowerCase();
+
+            const hasil = semuaKas.filter(t => {
+                const cocokTipe = filterTipe === 'semua' || t.tipe === filterTipe;
+                const cocokKata = !kataKunci || (t.keterangan || '').toLowerCase().includes(kataKunci);
+                return cocokTipe && cocokKata;
             });
+
+            const tbody = document.getElementById('listKas');
+            const empty = document.getElementById('emptyKas');
+            const wrap = document.getElementById('wrapKas');
+            if (hasil.length === 0) { wrap.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+            empty.classList.add('hidden'); wrap.classList.remove('hidden');
+
+            tbody.innerHTML = hasil.map(t => {
+                const badge = t.tipe === 'masuk'
+                    ? '<span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full uppercase">Masuk</span>'
+                    : '<span class="text-[10px] font-black bg-rose-100 text-rose-700 px-3 py-1 rounded-full uppercase">Keluar</span>';
+                const bukti = t.bukti && t.bukti !== '-'
+                    ? `<a href="${escapeHtml(t.bukti)}" target="_blank" rel="noopener" class="text-indigo-600 hover:underline"><i class="fas fa-paperclip"></i></a>`
+                    : '<span class="opacity-30">-</span>';
+                const warna = t.tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600';
+                const tanda = t.tipe === 'masuk' ? '+' : '−';
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-4 pr-3 text-xs opacity-60 whitespace-nowrap">${escapeHtml(t.tgl || '-')}</td>
+                        <td class="py-4 pr-3">${badge}</td>
+                        <td class="py-4 pr-3">${escapeHtml(t.keterangan || '-')}</td>
+                        <td class="py-4 pr-3 text-right ${warna} whitespace-nowrap">${tanda} ${formatRupiah(t.nominal)}</td>
+                        <td class="py-4 pr-3 text-center">${bukti}</td>
+                        <td class="py-4 pl-3 text-right"><button onclick="hapusKas('${t.key}', '${escapeHtml(t.keterangan || '').replace(/'/g, "\\'")}')" class="text-rose-400 hover:text-rose-600"><i class="fas fa-trash-can"></i></button></td>
+                    </tr>`;
+            }).join('');
         }
     </script>
 </body>
