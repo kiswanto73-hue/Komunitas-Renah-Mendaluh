@@ -212,17 +212,15 @@
             if (!nominal || nominal <= 0) return toast("Nominal harus diisi dan lebih dari 0.", "error");
             if (!ket) return toast("Keterangan wajib diisi.", "error");
 
-            const tglTampil = tglInput
-                ? new Date(tglInput + "T00:00:00").toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
-                : new Date().toLocaleDateString('id-ID');
+const tglTampil = tglInput || new Date().toISOString().split('T')[0];
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+btn.disabled = true;
+btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
 
-            db.ref(`sindara_kas/${currentId}`).push({
-                tipe, nominal, keterangan: ket, bukti: bukti || "-",
-                tgl: tglTampil, timestamp: Date.now()
-            }).then(() => {
+db.ref(`sindara_kas/${currentId}`).push({
+    tipe, nominal, keterangan: ket, bukti: bukti || "-",
+    tgl: tglTampil, timestamp: firebase.database.ServerValue.TIMESTAMP
+}).then(() => {
                 toast("Transaksi berhasil dicatat!");
                 document.getElementById('kasNominal').value = "";
                 document.getElementById('kasKet').value = "";
