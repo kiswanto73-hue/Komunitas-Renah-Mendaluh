@@ -181,7 +181,46 @@
                     </div>
 
                     <div id="page-monitor" class="sub-page">
-                        <h4 class="text-xl font-black mb-8 uppercase italic">Panel Kontrol Gugus</h4>
+                        <h4 class="text-xl font-black mb-2 uppercase italic">Panel Kontrol Gugus</h4>
+                        <p class="text-xs opacity-50 font-semibold mb-8">Pantau laporan kegiatan & kondisi kas seluruh gugus dari satu tempat.</p>
+
+                        <!-- Rekap Keuangan Gabungan Seluruh Gugus -->
+                        <div class="bg-white p-6 md:p-8 rounded-[2.5rem] text-slate-900 shadow-xl mb-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h5 class="font-black uppercase italic">Rekap Keuangan Seluruh Gugus</h5>
+                                <button onclick="muatRekapKeuanganSemua()" class="text-[10px] font-black bg-slate-900 text-white px-4 py-2 rounded-full hover:bg-emerald-600 transition-colors">
+                                    <i class="fas fa-rotate mr-1"></i> Muat Ulang
+                                </button>
+                            </div>
+                            <div id="loadingRekap" class="space-y-2">
+                                <div class="skeleton h-10 rounded-xl"></div>
+                                <div class="skeleton h-10 rounded-xl"></div>
+                                <div class="skeleton h-10 rounded-xl"></div>
+                            </div>
+                            <div id="wrapRekap" class="hidden overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="text-[9px] font-black uppercase text-slate-400 tracking-widest">
+                                        <tr>
+                                            <th class="py-3 pr-3">Gugus</th>
+                                            <th class="py-3 pr-3 text-right">Total Masuk</th>
+                                            <th class="py-3 pr-3 text-right">Total Keluar</th>
+                                            <th class="py-3 pl-3 text-right">Saldo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listRekapGugus" class="divide-y divide-slate-100 font-bold"></tbody>
+                                    <tfoot>
+                                        <tr class="border-t-2 border-slate-900 font-black">
+                                            <td class="py-3 pr-3 uppercase text-xs">Total Gabungan</td>
+                                            <td id="rekapTotalMasuk" class="py-3 pr-3 text-right text-emerald-600">Rp 0</td>
+                                            <td id="rekapTotalKeluar" class="py-3 pr-3 text-right text-rose-600">Rp 0</td>
+                                            <td id="rekapTotalSaldo" class="py-3 pl-3 text-right">Rp 0</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h5 class="font-black uppercase italic mb-4 text-sm opacity-70">Lihat Detail per Gugus (Laporan, Agenda & Kas)</h5>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                             <button onclick="bukaPantauan('G1-BAWAH')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">G1 Bawah</button>
                             <button onclick="bukaPantauan('G1-ATAS')" class="p-6 glass hover:bg-emerald-500 rounded-[2rem] font-black text-[10px] uppercase transition-all">G1 Atas</button>
@@ -200,6 +239,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <div id="page-agenda" class="sub-page">
                         <div class="grid md:grid-cols-2 gap-8">
@@ -376,6 +416,53 @@
             document.querySelectorAll('.sub-page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + id).classList.add('active');
             document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('is-active', b.dataset.page === id));
+            if (id === 'monitor' && sessionUser && sessionUser.role === 'MASTER' && !rekapDimuat) {
+                muatRekapKeuanganSemua();
+            }
+        }
+
+        let rekapDimuat = false;
+
+        function muatRekapKeuanganSemua() {
+            rekapDimuat = true;
+            document.getElementById('loadingRekap').classList.remove('hidden');
+            document.getElementById('wrapRekap').classList.add('hidden');
+
+            const semuaKode = Object.keys(DATABASE_GUGUS);
+            const permintaan = semuaKode.map(kode =>
+                db.ref(`sindara_kas/${kode}`).once('value').then(snap => {
+                    let masuk = 0, keluar = 0;
+                    snap.forEach(tx => {
+                        const t = tx.val();
+                        if (t.tipe === 'masuk') masuk += Number(t.nominal) || 0;
+                        else keluar += Number(t.nominal) || 0;
+                    });
+                    return { kode, nama: DATABASE_GUGUS[kode].gugus, masuk, keluar, saldo: masuk - keluar };
+                }).catch(() => ({ kode, nama: DATABASE_GUGUS[kode].gugus, masuk: 0, keluar: 0, saldo: 0, error: true }))
+            );
+
+            Promise.all(permintaan).then(hasil => {
+                let totalMasuk = 0, totalKeluar = 0;
+                const tbody = document.getElementById('listRekapGugus');
+                tbody.innerHTML = hasil.map(g => {
+                    totalMasuk += g.masuk; totalKeluar += g.keluar;
+                    return `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 pr-3">${escapeHtml(g.nama)}${g.error ? ' <span class="text-rose-400 text-[9px]">(gagal muat)</span>' : ''}</td>
+                            <td class="py-3 pr-3 text-right text-emerald-600">${formatRupiah(g.masuk)}</td>
+                            <td class="py-3 pr-3 text-right text-rose-600">${formatRupiah(g.keluar)}</td>
+                            <td class="py-3 pl-3 text-right">${formatRupiah(g.saldo)}</td>
+                        </tr>`;
+                }).join('');
+                document.getElementById('rekapTotalMasuk').innerText = formatRupiah(totalMasuk);
+                document.getElementById('rekapTotalKeluar').innerText = formatRupiah(totalKeluar);
+                document.getElementById('rekapTotalSaldo').innerText = formatRupiah(totalMasuk - totalKeluar);
+                document.getElementById('loadingRekap').classList.add('hidden');
+                document.getElementById('wrapRekap').classList.remove('hidden');
+            }).catch(err => {
+                document.getElementById('loadingRekap').classList.add('hidden');
+                toast("Gagal memuat rekap keuangan gabungan: " + err.message, "error");
+            });
         }
 
         function bukaPantauan(kode) {
