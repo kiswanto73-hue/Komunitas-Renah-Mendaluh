@@ -209,24 +209,46 @@
             document.getElementById('saldoTotal').innerText = formatRupiah(masuk - keluar);
         }
 
-        function simpanTransaksi() {
-            const btn = document.getElementById('btnSimpan');
-            const nominal = parseInt(document.getElementById('kasNominal').value, 10);
-            const ket = document.getElementById('kasKet').value.trim();
-            const tipe = document.getElementById('kasTipe').value;
-            const bukti = document.getElementById('kasBukti').value.trim();
-            const tglInput = document.getElementById('kasTanggal').value;
+function simpanTransaksi() {
+    const btn = document.getElementById('btnSimpan');
+    const nominal = parseInt(document.getElementById('kasNominal').value, 10);
+    const ket = document.getElementById('kasKet').value.trim();
+    const tipe = document.getElementById('kasTipe').value;
+    const bukti = document.getElementById('kasBukti').value.trim();
+    const tglInput = document.getElementById('kasTanggal').value;
 
-            if (!nominal || nominal <= 0) return toast("Nominal harus diisi dan lebih dari 0.", "error");
-            if (!ket) return toast("Keterangan wajib diisi.", "error");
+    if (!nominal || nominal <= 0) return toast("Nominal harus diisi dan lebih dari 0.", "error");
+    if (!ket) return toast("Keterangan wajib diisi.", "error");
 
-            const tglTampil = tglInput
-                ? new Date(tglInput + "T00:00:00").toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
-                : new Date().toLocaleDateString('id-ID');
-            const dataBaru = { tipe, nominal, keterangan: ket, bukti: bukti || "-", tgl: tglTampil, timestamp: Date.now() };
+    const tglTampil = tglInput || new Date().toISOString().split('T')[0];
+    const dataBaru = { 
+        tipe, 
+        nominal, 
+        keterangan: ket, 
+        bukti: bukti || "-", 
+        tgl: tglTampil, 
+        timestamp: Date.now() 
+    };
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+
+    db.ref(`sindara_kas/${currentId}`).push(dataBaru)
+        .then(() => {
+            toast("Transaksi berhasil dicatat!");
+            document.getElementById('kasNominal').value = "";
+            document.getElementById('kasKet').value = "";
+            document.getElementById('kasBukti').value = "";
+            document.getElementById('kasTanggal').valueAsDate = new Date();
+        })
+        .catch(err => {
+            toast("Gagal menyimpan: " + err.message, "error");
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan Transaksi';
+        });
+}
 
             const refBaru = db.ref(`sindara_kas/${currentId}`).push();
             refBaru.set(dataBaru).then(() => {
