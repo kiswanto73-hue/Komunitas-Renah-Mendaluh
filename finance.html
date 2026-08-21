@@ -201,6 +201,14 @@
         }
 
         // ---------- simpan ----------
+        function hitungUlangTotalFinance() {
+            let masuk = 0, keluar = 0;
+            semuaTransaksi.forEach(t => t.tipe === 'masuk' ? masuk += Number(t.nominal) || 0 : keluar += Number(t.nominal) || 0);
+            document.getElementById('totalMasuk').innerText = formatRupiah(masuk);
+            document.getElementById('totalKeluar').innerText = formatRupiah(keluar);
+            document.getElementById('saldoTotal').innerText = formatRupiah(masuk - keluar);
+        }
+
         function simpanTransaksi() {
             const btn = document.getElementById('btnSimpan');
             const nominal = parseInt(document.getElementById('kasNominal').value, 10);
@@ -212,15 +220,23 @@
             if (!nominal || nominal <= 0) return toast("Nominal harus diisi dan lebih dari 0.", "error");
             if (!ket) return toast("Keterangan wajib diisi.", "error");
 
-const tglTampil = tglInput || new Date().toISOString().split('T')[0];
+            const tglTampil = tglInput
+                ? new Date(tglInput + "T00:00:00").toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
+                : new Date().toLocaleDateString('id-ID');
+            const dataBaru = { tipe, nominal, keterangan: ket, bukti: bukti || "-", tgl: tglTampil, timestamp: Date.now() };
 
-btn.disabled = true;
-btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
 
-db.ref(`sindara_kas/${currentId}`).push({
-    tipe, nominal, keterangan: ket, bukti: bukti || "-",
-    tgl: tglTampil, timestamp: firebase.database.ServerValue.TIMESTAMP
-}).then(() => {
+            const refBaru = db.ref(`sindara_kas/${currentId}`).push();
+            refBaru.set(dataBaru).then(() => {
+                // Update tampilan langsung tanpa menunggu event realtime, agar transaksi baru
+                // pasti langsung terlihat di Riwayat Transaksi meski listener sedang lambat.
+                semuaTransaksi.unshift({ key: refBaru.key, ...dataBaru });
+                semuaTransaksi.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                hitungUlangTotalFinance();
+                renderTransaksi();
+
                 toast("Transaksi berhasil dicatat!");
                 document.getElementById('kasNominal').value = "";
                 document.getElementById('kasKet').value = "";
@@ -238,7 +254,12 @@ db.ref(`sindara_kas/${currentId}`).push({
         function hapusTransaksi(key, keterangan) {
             if (!confirm(`Hapus transaksi "${keterangan}"? Tindakan ini tidak bisa dibatalkan.`)) return;
             db.ref(`sindara_kas/${currentId}/${key}`).remove()
-                .then(() => toast("Transaksi dihapus."))
+                .then(() => {
+                    semuaTransaksi = semuaTransaksi.filter(t => t.key !== key);
+                    hitungUlangTotalFinance();
+                    renderTransaksi();
+                    toast("Transaksi dihapus.");
+                })
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
@@ -250,12 +271,7 @@ db.ref(`sindara_kas/${currentId}`).push({
                     semuaTransaksi.push({ key: tx.key, ...tx.val() });
                 });
                 semuaTransaksi.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
-                let masuk = 0, keluar = 0;
-                semuaTransaksi.forEach(t => t.tipe === 'masuk' ? masuk += Number(t.nominal) || 0 : keluar += Number(t.nominal) || 0);
-                document.getElementById('totalMasuk').innerText = formatRupiah(masuk);
-                document.getElementById('totalKeluar').innerText = formatRupiah(keluar);
-                document.getElementById('saldoTotal').innerText = formatRupiah(masuk - keluar);
+                hitungUlangTotalFinance();
 
                 document.getElementById('loadingList').classList.add('hidden');
                 renderTransaksi();
