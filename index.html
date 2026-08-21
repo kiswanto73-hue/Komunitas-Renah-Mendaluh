@@ -486,8 +486,17 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
 
-            db.ref(`sindara_laporan/${sessionUser.id}`).push({ judul, desc, tgl, bukti: bukti || "-", timestamp: Date.now() })
+            const dataBaru = { judul, desc, tgl, bukti: bukti || "-", timestamp: Date.now() };
+            const refBaru = db.ref(`sindara_laporan/${sessionUser.id}`).push();
+
+            refBaru.set(dataBaru)
                 .then(() => {
+                    // Update tampilan langsung, tidak menunggu event realtime (lebih instan & tidak
+                    // bergantung pada listener yang kadang telat/tidak konsisten di beberapa browser).
+                    semuaLaporan.unshift({ key: refBaru.key, ...dataBaru });
+                    semuaLaporan.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    renderLaporan(semuaLaporan);
+
                     toast("Laporan berhasil dikirim!");
                     document.getElementById('lapJudul').value = "";
                     document.getElementById('lapDesc').value = "";
@@ -502,7 +511,11 @@
         function hapusLaporan(key, judul) {
             if (!confirm(`Hapus laporan "${judul}"?`)) return;
             db.ref(`sindara_laporan/${sessionUser.id}/${key}`).remove()
-                .then(() => toast("Laporan dihapus."))
+                .then(() => {
+                    semuaLaporan = semuaLaporan.filter(l => l.key !== key);
+                    renderLaporan(semuaLaporan);
+                    toast("Laporan dihapus.");
+                })
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
@@ -589,11 +602,20 @@
 
         function saveAgenda() {
             if (!selectedDate) return toast("Pilih tanggal terlebih dahulu.", "error");
-            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g, '_')}`).set({
+            const dataAgenda = {
                 tgl: selectedDate,
                 catatan: document.getElementById('agendaNoteInput').value.trim(),
                 bukti: document.getElementById('agendaBukti').value.trim() || "-"
-            }).then(() => toast("Agenda diperbarui!")).catch(err => toast("Gagal menyimpan: " + err.message, "error"));
+            };
+            db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g, '_')}`).set(dataAgenda)
+                .then(() => {
+                    // Update kalender langsung tanpa menunggu event realtime.
+                    agendaDataLocal[selectedDate] = dataAgenda;
+                    initCalendar();
+                    document.getElementById('agendaContent').innerText = dataAgenda.catatan || "Belum ada rencana kegiatan.";
+                    toast("Agenda diperbarui!");
+                })
+                .catch(err => toast("Gagal menyimpan: " + err.message, "error"));
         }
 
         function muatAgenda() {
@@ -604,7 +626,16 @@
         }
 
         // ---------- keuangan (dipakai bersama oleh finance.html) ----------
+        function hitungUlangTotalKas() {
+            let m = 0, k = 0;
+            semuaKas.forEach(t => t.tipe === 'masuk' ? m += Number(t.nominal) || 0 : k += Number(t.nominal) || 0);
+            document.querySelectorAll('#totalMasuk').forEach(el => el.innerText = formatRupiah(m));
+            document.querySelectorAll('#totalKeluar').forEach(el => el.innerText = formatRupiah(k));
+            document.querySelectorAll('#saldoTotal').forEach(el => el.innerText = formatRupiah(m - k));
+        }
+
         function simpanTransaksi() {
+            const btn = document.getElementById('btnSimpanKas');
             const nominal = parseInt(document.getElementById('kasNominal').value, 10);
             const ket = document.getElementById('kasKet').value.trim();
             const tipe = document.getElementById('kasTipe').value;
@@ -614,22 +645,42 @@
             if (!nominal || nominal <= 0) return toast("Nominal harus diisi dan lebih dari 0.", "error");
             if (!ket) return toast("Keterangan wajib diisi.", "error");
 
-const tglTampil = tglInput || new Date().toISOString().split('T')[0];
+            const tglTampil = tglInput
+                ? new Date(tglInput + "T00:00:00").toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
+                : new Date().toLocaleDateString('id-ID');
+            const dataBaru = { tipe, nominal, keterangan: ket, bukti: bukti || "-", tgl: tglTampil, timestamp: Date.now() };
 
-db.ref(`sindara_kas/${sessionUser.id}`).push({
-    tipe, nominal, keterangan: ket, bukti: bukti || "-", tgl: tglTampil, timestamp: firebase.database.ServerValue.TIMESTAMP
-}).then(() => {
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...'; }
+            const refBaru = db.ref(`sindara_kas/${sessionUser.id}`).push();
+
+            refBaru.set(dataBaru).then(() => {
+                // Update tampilan langsung tanpa menunggu event realtime, agar transaksi baru
+                // pasti langsung terlihat di Riwayat Transaksi meski listener sedang lambat.
+                semuaKas.unshift({ key: refBaru.key, ...dataBaru });
+                semuaKas.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                hitungUlangTotalKas();
+                renderTransaksiKas();
+
                 toast("Kas tercatat!");
                 document.getElementById('kasNominal').value = "";
                 document.getElementById('kasKet').value = "";
                 document.getElementById('kasBukti').value = "";
-            }).catch(err => toast("Gagal menyimpan: " + err.message, "error"));
+            }).catch(err => {
+                toast("Gagal menyimpan: " + err.message, "error");
+            }).finally(() => {
+                if (btn) { btn.disabled = false; btn.innerHTML = "Simpan Transaksi"; }
+            });
         }
 
         function hapusKas(key, ket) {
             if (!confirm(`Hapus transaksi "${ket}"?`)) return;
             db.ref(`sindara_kas/${sessionUser.id}/${key}`).remove()
-                .then(() => toast("Transaksi dihapus."))
+                .then(() => {
+                    semuaKas = semuaKas.filter(t => t.key !== key);
+                    hitungUlangTotalKas();
+                    renderTransaksiKas();
+                    toast("Transaksi dihapus.");
+                })
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
@@ -638,12 +689,7 @@ db.ref(`sindara_kas/${sessionUser.id}`).push({
                 semuaKas = [];
                 s.forEach(tx => semuaKas.push({ key: tx.key, ...tx.val() }));
                 semuaKas.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
-                let m = 0, k = 0;
-                semuaKas.forEach(t => t.tipe === 'masuk' ? m += Number(t.nominal) || 0 : k += Number(t.nominal) || 0);
-                document.querySelectorAll('#totalMasuk').forEach(el => el.innerText = formatRupiah(m));
-                document.querySelectorAll('#totalKeluar').forEach(el => el.innerText = formatRupiah(k));
-                document.querySelectorAll('#saldoTotal').forEach(el => el.innerText = formatRupiah(m - k));
+                hitungUlangTotalKas();
                 renderTransaksiKas();
             }, err => toast("Gagal memuat kas: " + err.message, "error"));
         }
