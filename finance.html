@@ -18,12 +18,12 @@
         input:focus, select:focus, button:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
         #toastBox > div { animation: toastIn .25s ease-out; }
         @keyframes toastIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        
-        /* CSS Khusus Cetak Invoice */
+
+        /* Style Khusus Media Cetak / PDF Kuitansi */
         @media print {
             body * { visibility: hidden; }
             #areaCetakInvoice, #areaCetakInvoice * { visibility: visible; }
-            #areaCetakInvoice { position: absolute; left: 0; top: 0; width: 100%; color: black !important; }
+            #areaCetakInvoice { position: absolute; left: 0; top: 0; width: 100%; color: black !important; background: white !important; padding: 20px; }
             .no-print { display: none !important; }
         }
     </style>
@@ -76,33 +76,61 @@
             </div>
         </div>
 
-        <!-- Tombol Buka Invoice Honorarium (Khusus Pengurus Inti/Master) -->
-        <div id="btnInvoiceMaster" class="hidden text-right">
-            <button onclick="toggleInvoiceModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-6 py-3 rounded-2xl shadow-xl transition-all text-xs uppercase">
+        <!-- Tombol Buka Panel Cetak Invoice -->
+        <div id="btnBukaInvoice" class="hidden text-right">
+            <button onclick="toggleInvoiceBox()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-6 py-3 rounded-2xl shadow-xl transition-all text-xs uppercase">
                 <i class="fas fa-file-invoice-dollar mr-2"></i> Buat / Cetak Invoice Honor
             </button>
         </div>
 
-        <!-- Area Modal/Cetak Invoice Honorarium -->
-        <div id="sectionInvoice" class="hidden bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
-            <div class="flex justify-between items-center mb-6 no-print">
-                <h3 class="text-lg md:text-xl font-black uppercase italic">Invoice Honorarium</h3>
+        <!-- Panel Modul Editor & Cetak Invoice -->
+        <div id="panelInvoice" class="hidden bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b pb-4 no-print">
+                <h4 class="font-black uppercase italic text-lg">Buat Invoice Honorarium</h4>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-xs uppercase">
-                        <i class="fas fa-print mr-1"></i> Cetak PDF
+                        <i class="fas fa-print mr-1"></i> Cetak / PDF
                     </button>
-                    <button onclick="toggleInvoiceModal()" class="bg-rose-500 hover:bg-rose-600 text-white font-black px-4 py-2 rounded-xl text-xs uppercase">
+                    <button onclick="toggleInvoiceBox()" class="bg-rose-500 hover:bg-rose-600 text-white font-black px-4 py-2 rounded-xl text-xs uppercase">
                         Tutup
                     </button>
                 </div>
             </div>
 
-            <!-- Area Kuitansi -->
-            <div id="areaCetakInvoice" class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+            <!-- Input Data Invoice -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 no-print bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">NOMOR INVOICE</label>
+                    <input type="text" id="inpInvNo" value="INV/KKG/2026/001" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">TANGGAL</label>
+                    <input type="text" id="inpInvTanggal" value="22 Agustus 2026" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">NAMA PENERIMA</label>
+                    <input type="text" id="inpInvPenerima" value="Pak Kiswanto" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">JABATAN / PERAN</label>
+                    <input type="text" id="inpInvJabatan" value="Narasumber / Pengurus Inti" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">URAIAN KEGIATAN</label>
+                    <input type="text" id="inpInvUraian" value="Honorarium Narsum / Kegiatan KKG Renah Mendaluh" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">NOMINAL HONOR (RP)</label>
+                    <input type="number" id="inpInvNominal" value="500000" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+            </div>
+
+            <!-- Area Pratinjau Kuitansi Cetak -->
+            <div id="areaCetakInvoice" class="p-6 bg-white rounded-2xl border border-slate-300">
                 <div class="text-center border-b-2 border-slate-900 pb-4 mb-6">
                     <h2 class="text-2xl font-black uppercase tracking-tight">KELOMPOK KERJA GURU (KKG)</h2>
                     <h3 class="text-lg font-bold text-slate-700">KECAMATAN RENAH MENDALUH</h3>
-                    <p class="text-xs text-slate-500 italic">Bukti Kuitansi &amp; Rincian Honorarium Narsum/Pengurus</p>
+                    <p class="text-xs text-slate-500 italic">Bukti Kuitansi &amp; Rincian Honorarium</p>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 text-xs font-semibold mb-6">
@@ -112,12 +140,12 @@
                     </div>
                     <div class="text-right">
                         <p><span class="text-slate-400">Penerima:</span> <strong id="invPenerima">Pak Kiswanto</strong></p>
-                        <p><span class="text-slate-400">Jabatan:</span> <strong id="invJabatan">Pengurus Inti</strong></p>
+                        <p><span class="text-slate-400">Jabatan:</span> <strong id="invJabatan">Narasumber / Pengurus Inti</strong></p>
                     </div>
                 </div>
 
                 <table class="w-full text-left text-xs mb-8">
-                    <thead class="bg-slate-200 uppercase text-[10px] font-black">
+                    <thead class="bg-slate-100 uppercase text-[10px] font-black">
                         <tr>
                             <th class="p-3">Uraian / Kegiatan</th>
                             <th class="p-3 text-right">Nominal</th>
@@ -125,21 +153,21 @@
                     </thead>
                     <tbody class="divide-y divide-slate-200 font-medium">
                         <tr>
-                            <td class="p-3">Honorarium Kegiatan KKG Renah Mendaluh</td>
-                            <td class="p-3 text-right">Rp 500.000</td>
+                            <td class="p-3" id="invUraian">Honorarium Narsum / Kegiatan KKG Renah Mendaluh</td>
+                            <td class="p-3 text-right font-bold" id="invNominal">Rp 500.000</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr class="font-black bg-slate-100">
                             <td class="p-3 uppercase">Total Diterima</td>
-                            <td class="p-3 text-right text-emerald-600">Rp 500.000</td>
+                            <td class="p-3 text-right text-emerald-600" id="invTotal">Rp 500.000</td>
                         </tr>
                     </tfoot>
                 </table>
 
                 <div class="flex justify-between items-end text-center text-xs pt-8">
                     <div>
-                        <p class="mb-12">Bendahara,</p>
+                        <p class="mb-12">Bendahara KKG,</p>
                         <p class="font-bold underline">(...................................)</p>
                     </div>
                     <div>
@@ -150,7 +178,7 @@
             </div>
         </div>
 
-        <!-- Form Input -->
+        <!-- Form Input Transaksi Kas -->
         <div class="bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
             <h3 class="text-lg md:text-xl font-black uppercase italic mb-6 md:mb-8 border-b pb-4">Input Transaksi Baru</h3>
             <form onsubmit="event.preventDefault(); simpanTransaksi();" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -261,14 +289,32 @@
             setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3200);
         }
 
-        function toggleInvoiceModal() {
-            const sec = document.getElementById('sectionInvoice');
-            sec.classList.toggle('hidden');
+        // ---------- invoice ----------
+        function toggleInvoiceBox() {
+            document.getElementById('panelInvoice').classList.toggle('hidden');
+        }
+
+        function updateInvoicePreview() {
+            const no = document.getElementById('inpInvNo').value.trim() || "-";
+            const tgl = document.getElementById('inpInvTanggal').value.trim() || "-";
+            const penerima = document.getElementById('inpInvPenerima').value.trim() || "-";
+            const jabatan = document.getElementById('inpInvJabatan').value.trim() || "-";
+            const uraian = document.getElementById('inpInvUraian').value.trim() || "-";
+            const nominal = parseInt(document.getElementById('inpInvNominal').value, 10) || 0;
+
+            document.getElementById('invNo').innerText = no;
+            document.getElementById('invTanggal').innerText = tgl;
+            document.getElementById('invPenerima').innerText = penerima;
+            document.getElementById('invJabatan').innerText = jabatan;
+            document.getElementById('invUraian').innerText = uraian;
+            document.getElementById('invNominal').innerText = formatRupiah(nominal);
+            document.getElementById('invTotal').innerText = formatRupiah(nominal);
+            document.getElementById('ttdPenerima').innerText = `( ${penerima} )`;
         }
 
         // ---------- auth ----------
-        function authFinance() {
-            const key = document.getElementById('passFinance').value.trim().toUpperCase();
+        function authFinance(autoKey = null) {
+            const key = autoKey || document.getElementById('passFinance').value.trim().toUpperCase();
             const authorized = ["INTI-SINDARA", "G1-BAWAH", "G1-ATAS", "G2-BAWAH", "G2-ATAS", "PJOK", "PAI"];
 
             if (!key) return toast("Kode akses belum diisi.", "error");
@@ -280,9 +326,8 @@
                 document.getElementById('userBadge').classList.remove('hidden');
                 document.getElementById('userBadge').innerHTML = `<i class="fas fa-user-shield mr-1"></i>${escapeHtml(key)}`;
                 
-                // Jika login sebagai INTI-SINDARA, tampilkan tombol invoice
                 if (key === "INTI-SINDARA") {
-                    document.getElementById('btnInvoiceMaster').classList.remove('hidden');
+                    document.getElementById('btnBukaInvoice').classList.remove('hidden');
                 }
 
                 document.getElementById('kasTanggal').valueAsDate = new Date();
@@ -292,6 +337,15 @@
                 document.getElementById('passFinance').value = "";
             }
         }
+
+        // Otomatisasi saat halaman dibuka dari iframe / parameter URL
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const autoKey = urlParams.get('auto');
+            if (autoKey) {
+                authFinance(autoKey.toUpperCase());
+            }
+        };
 
         // ---------- simpan ----------
         function hitungUlangTotalFinance() {
@@ -321,13 +375,7 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
 
-            const refBaru = db.ref(`sindara_kas/${currentId}`).push();
-            refBaru.set(dataBaru).then(() => {
-                semuaTransaksi.unshift({ key: refBaru.key, ...dataBaru });
-                semuaTransaksi.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                hitungUlangTotalFinance();
-                renderTransaksi();
-
+            db.ref(`sindara_kas/${currentId}`).push().set(dataBaru).then(() => {
                 toast("Transaksi berhasil dicatat!");
                 document.getElementById('kasNominal').value = "";
                 document.getElementById('kasKet').value = "";
@@ -345,12 +393,7 @@
         function hapusTransaksi(key, keterangan) {
             if (!confirm(`Hapus transaksi "${keterangan}"? Tindakan ini tidak bisa dibatalkan.`)) return;
             db.ref(`sindara_kas/${currentId}/${key}`).remove()
-                .then(() => {
-                    semuaTransaksi = semuaTransaksi.filter(t => t.key !== key);
-                    hitungUlangTotalFinance();
-                    renderTransaksi();
-                    toast("Transaksi dihapus.");
-                })
+                .then(() => toast("Transaksi dihapus."))
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
