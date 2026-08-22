@@ -19,7 +19,6 @@
         #toastBox > div { animation: toastIn .25s ease-out; }
         @keyframes toastIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* Style Khusus Media Cetak / PDF Kuitansi */
         @media print {
             body * { visibility: hidden; }
             #areaCetakInvoice, #areaCetakInvoice * { visibility: visible; }
@@ -30,10 +29,8 @@
 </head>
 <body class="min-h-screen p-4 md:p-6">
 
-    <!-- Toast notification container -->
     <div id="toastBox" class="fixed top-4 right-4 z-[200] space-y-2 w-[90vw] max-w-sm"></div>
 
-    <!-- DIPERLEBAR KERANGKA UTAMA DARI max-w-5xl MENJADI max-w-7xl -->
     <div class="max-w-7xl mx-auto flex justify-between items-center mb-8 md:mb-10">
         <h1 class="font-black text-xl md:text-2xl italic">SINDARA<span class="text-emerald-500">FINANCE</span></h1>
         <div class="flex items-center gap-4">
@@ -59,7 +56,6 @@
         </div>
     </div>
 
-    <!-- DIPERLEBAR DASHBOARD MENJADI max-w-7xl -->
     <div id="dashboardFinance" class="hidden max-w-7xl mx-auto space-y-6 fade-in">
 
         <!-- Ringkasan Saldo -->
@@ -78,14 +74,12 @@
             </div>
         </div>
 
-        <!-- Tombol Buka Panel Cetak Invoice -->
         <div id="btnBukaInvoice" class="hidden text-right">
             <button onclick="toggleInvoiceBox()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-6 py-3 rounded-2xl shadow-xl transition-all text-xs uppercase">
                 <i class="fas fa-file-invoice-dollar mr-2"></i> Buat / Cetak Invoice Honor
             </button>
         </div>
 
-        <!-- Panel Modul Editor & Cetak Invoice -->
         <div id="panelInvoice" class="hidden bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
             <div class="flex justify-between items-center mb-6 border-b pb-4 no-print">
                 <h4 class="font-black uppercase italic text-lg">Buat Invoice Honorarium</h4>
@@ -99,7 +93,6 @@
                 </div>
             </div>
 
-            <!-- Input Data Invoice -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 no-print bg-slate-50 p-6 rounded-2xl border border-slate-200">
                 <div>
                     <label class="text-[10px] font-black text-slate-400">NOMOR INVOICE</label>
@@ -127,7 +120,6 @@
                 </div>
             </div>
 
-            <!-- Area Pratinjau Kuitansi Cetak -->
             <div id="areaCetakInvoice" class="p-6 bg-white rounded-2xl border border-slate-300">
                 <div class="text-center border-b-2 border-slate-900 pb-4 mb-6">
                     <h2 class="text-2xl font-black uppercase tracking-tight">KELOMPOK KERJA GURU (KKG)</h2>
@@ -180,7 +172,7 @@
             </div>
         </div>
 
-        <!-- Form Input Transaksi Kas -->
+        <!-- Form Transaksi Kas -->
         <div class="bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
             <h3 class="text-lg md:text-xl font-black uppercase italic mb-6 md:mb-8 border-b pb-4">Input Transaksi Baru</h3>
             <form onsubmit="event.preventDefault(); simpanTransaksi();" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -213,7 +205,7 @@
             </form>
         </div>
 
-        <!-- Riwayat Transaksi -->
+        <!-- Tabel Riwayat Transaksi -->
         <div class="bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
             <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6 border-b pb-4">
                 <h3 class="text-lg md:text-xl font-black uppercase italic">Riwayat Transaksi</h3>
@@ -231,7 +223,6 @@
             <div id="loadingList" class="space-y-3">
                 <div class="skeleton h-14 rounded-2xl"></div>
                 <div class="skeleton h-14 rounded-2xl"></div>
-                <div class="skeleton h-14 rounded-2xl"></div>
             </div>
 
             <div id="emptyState" class="hidden text-center py-16 opacity-40">
@@ -240,17 +231,16 @@
                 <p class="text-xs">Transaksi yang Anda simpan akan muncul di sini.</p>
             </div>
 
-            <!-- DIPERLEBAR & DISUAP TABEL AGAR TIDAK MENCEPIT LEBAR KOLOMNYA -->
             <div id="listWrap" class="hidden overflow-x-auto">
-                <table class="w-full text-left text-sm min-w-[650px]">
+                <table class="w-full text-left text-sm min-w-[700px]">
                     <thead class="text-[10px] font-black uppercase text-slate-400 tracking-widest border-b border-slate-100">
                         <tr>
-                            <th class="py-3 px-3 w-1/6">Tanggal</th>
-                            <th class="py-3 px-3 w-1/6">Jenis</th>
-                            <th class="py-3 px-3 w-2/6">Keterangan</th>
-                            <th class="py-3 px-3 w-1/6 text-right">Nominal</th>
-                            <th class="py-3 px-3 text-center">Bukti</th>
-                            <th class="py-3 px-3 text-right">Aksi</th>
+                            <th class="py-3 px-3 w-[15%]">Tanggal</th>
+                            <th class="py-3 px-3 w-[15%]">Jenis</th>
+                            <th class="py-3 px-3 w-[40%]">Keterangan</th>
+                            <th class="py-3 px-3 w-[20%] text-right">Nominal</th>
+                            <th class="py-3 px-3 w-[5%] text-center">Bukti</th>
+                            <th class="py-3 px-3 w-[5%] text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="listTransaksi" class="divide-y divide-slate-100 font-bold"></tbody>
@@ -271,16 +261,16 @@
         let currentId = null;
         let semuaTransaksi = [];
 
-        // ---------- util ----------
         function escapeHtml(str) {
-            const div = document.createElement('div');
-            div.textContent = str ?? '';
-            return div.innerHTML;
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
+
         function formatRupiah(n) {
             const angka = Number(n) || 0;
             return "Rp " + angka.toLocaleString('id-ID');
         }
+
         function toast(msg, tipe = 'sukses') {
             const box = document.getElementById('toastBox');
             const warna = tipe === 'sukses' ? 'bg-emerald-600' : tipe === 'error' ? 'bg-rose-600' : 'bg-slate-700';
@@ -292,7 +282,6 @@
             setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3200);
         }
 
-        // ---------- invoice ----------
         function toggleInvoiceBox() {
             document.getElementById('panelInvoice').classList.toggle('hidden');
         }
@@ -315,7 +304,6 @@
             document.getElementById('ttdPenerima').innerText = `( ${penerima} )`;
         }
 
-        // ---------- auth ----------
         function authFinance(autoKey = null) {
             const key = autoKey || document.getElementById('passFinance').value.trim().toUpperCase();
             const authorized = ["INTI-SINDARA", "G1-BAWAH", "G1-ATAS", "G2-BAWAH", "G2-ATAS", "PJOK", "PAI"];
@@ -341,7 +329,6 @@
             }
         }
 
-        // Otomatisasi saat halaman dibuka dari iframe / parameter URL
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const autoKey = urlParams.get('auto');
@@ -350,7 +337,6 @@
             }
         };
 
-        // ---------- simpan ----------
         function hitungUlangTotalFinance() {
             let masuk = 0, keluar = 0;
             semuaTransaksi.forEach(t => t.tipe === 'masuk' ? masuk += Number(t.nominal) || 0 : keluar += Number(t.nominal) || 0);
@@ -359,7 +345,6 @@
             document.getElementById('saldoTotal').innerText = formatRupiah(masuk - keluar);
         }
 
-        // FIX PENYIMPANAN FIREBASE DENGAN FITUR PUSH UNIK
         function simpanTransaksi() {
             const btn = document.getElementById('btnSimpan');
             const nominal = parseInt(document.getElementById('kasNominal').value, 10);
@@ -374,15 +359,14 @@
             const tglTampil = tglInput
                 ? new Date(tglInput + "T00:00:00").toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
                 : new Date().toLocaleDateString('id-ID');
-                
+
             const dataBaru = { tipe, nominal, keterangan: ket, bukti: bukti || "-", tgl: tglTampil, timestamp: Date.now() };
 
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
 
-            // Menggunakan .push().set() murni agar ID acak Firebase selalu baru dan tidak menimpa
             db.ref(`sindara_kas/${currentId}`).push().set(dataBaru).then(() => {
-                toast("Transaksi berhasil dicatat!");
+                toast("Transaksi berhasil disimpan!");
                 document.getElementById('kasNominal').value = "";
                 document.getElementById('kasKet').value = "";
                 document.getElementById('kasBukti').value = "";
@@ -395,17 +379,14 @@
             });
         }
 
-        // ---------- hapus ----------
-        function hapusTransaksi(key, keterangan) {
-            if (!confirm(`Hapus transaksi "${keterangan}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+        function hapusTransaksi(key) {
+            if (!confirm("Hapus transaksi ini secara permanen?")) return;
             db.ref(`sindara_kas/${currentId}/${key}`).remove()
-                .then(() => toast("Transaksi dihapus."))
+                .then(() => toast("Transaksi berhasil dihapus."))
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
-        // ---------- muat & render ----------
         function muatDataFinance() {
-            // Matikan listener lama agar tidak menumpuk saat direload
             db.ref(`sindara_kas/${currentId}`).off();
             
             db.ref(`sindara_kas/${currentId}`).on('value', snap => {
@@ -443,33 +424,42 @@
                 emptyState.classList.remove('hidden');
                 return;
             }
+
             emptyState.classList.add('hidden');
             listWrap.classList.remove('hidden');
+            tbody.innerHTML = '';
 
-            tbody.innerHTML = hasil.map(t => {
+            hasil.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+
                 const badge = t.tipe === 'masuk'
-                    ? '<span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full uppercase"><i class="fas fa-arrow-down mr-1"></i>Masuk</span>'
-                    : '<span class="text-[10px] font-black bg-rose-100 text-rose-700 px-3 py-1 rounded-full uppercase"><i class="fas fa-arrow-up mr-1"></i>Keluar</span>';
+                    ? '<span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full uppercase inline-block"><i class="fas fa-arrow-down mr-1"></i>Masuk</span>'
+                    : '<span class="text-[10px] font-black bg-rose-100 text-rose-700 px-3 py-1.5 rounded-full uppercase inline-block"><i class="fas fa-arrow-up mr-1"></i>Keluar</span>';
+
                 const bukti = t.bukti && t.bukti !== '-'
-                    ? `<a href="${escapeHtml(t.bukti)}" target="_blank" rel="noopener" class="text-indigo-600 hover:underline"><i class="fas fa-paperclip"></i></a>`
-                    : '<span class="opacity-30">-</span>';
+                    ? `<a href="${escapeHtml(t.bukti)}" target="_blank" rel="noopener" class="text-indigo-600 hover:text-indigo-800 transition-colors p-2 text-base"><i class="fas fa-paperclip"></i></a>`
+                    : '<span class="opacity-30 text-xs">-</span>';
+
                 const warnaNominal = t.tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600';
                 const tandaNominal = t.tipe === 'masuk' ? '+' : '−';
-                return `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-4 px-3 text-xs opacity-60 whitespace-nowrap">${escapeHtml(t.tgl || '-')}</td>
-                        <td class="py-4 px-3 whitespace-nowrap">${badge}</td>
-                        <td class="py-4 px-3">${escapeHtml(t.keterangan || '-')}</td>
-                        <td class="py-4 px-3 text-right ${warnaNominal} whitespace-nowrap">${tandaNominal} ${formatRupiah(t.nominal)}</td>
-                        <td class="py-4 px-3 text-center">${bukti}</td>
-                        <td class="py-4 px-3 text-right">
-                            <button onclick="hapusTransaksi('${t.key}', '${escapeHtml(t.keterangan || '').replace(/'/g, "\\'")}')"
-                                class="text-rose-400 hover:text-rose-600 transition-colors" title="Hapus transaksi">
-                                <i class="fas fa-trash-can"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-            }).join('');
+
+                tr.innerHTML = `
+                    <td class="py-4 px-3 text-xs opacity-70 whitespace-nowrap">${escapeHtml(t.tgl || '-')}</td>
+                    <td class="py-4 px-3 whitespace-nowrap">${badge}</td>
+                    <td class="py-4 px-3 font-bold text-slate-800 break-words">${escapeHtml(t.keterangan || '-')}</td>
+                    <td class="py-4 px-3 text-right font-black ${warnaNominal} whitespace-nowrap">${tandaNominal} ${formatRupiah(t.nominal)}</td>
+                    <td class="py-4 px-3 text-center whitespace-nowrap">${bukti}</td>
+                    <td class="py-4 px-3 text-right whitespace-nowrap">
+                        <button class="btnHapus text-rose-400 hover:text-rose-600 p-2 transition-colors" title="Hapus transaksi">
+                            <i class="fas fa-trash-can text-sm"></i>
+                        </button>
+                    </td>
+                `;
+
+                tr.querySelector('.btnHapus').onclick = () => hapusTransaksi(t.key);
+                tbody.appendChild(tr);
+            });
         }
     </script>
 </body>
