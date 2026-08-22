@@ -39,10 +39,11 @@
     <nav class="fixed w-full z-[100] bg-slate-900/80 backdrop-blur-xl border-b border-white/5">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="font-black text-2xl italic tracking-tighter">SINDARA<span class="text-emerald-500">PRO</span></h1>
-            <div class="hidden md:flex space-x-6 font-bold text-[10px] tracking-widest uppercase items-center">
+            <div class="hidden md:flex space-x-5 font-bold text-[10px] tracking-widest uppercase items-center">
                 <a href="#home" class="navlink hover:text-emerald-400 transition-colors">Beranda</a>
                 <a href="#pantau-agenda" class="navlink hover:text-emerald-400 transition-colors"><i class="fas fa-calendar-check mr-1 text-yellow-400"></i> Pantau Agenda</a>
                 <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" rel="noopener" class="navlink hover:text-emerald-400 transition-colors"><i class="fas fa-file-pdf mr-1 text-emerald-400"></i> Laporan KKG</a>
+                <a href="#transparansi-kas" class="navlink hover:text-emerald-400 transition-colors"><i class="fas fa-wallet mr-1 text-cyan-400"></i> Keuangan & Kas</a>
                 <a href="#tentang" class="navlink hover:text-emerald-400 transition-colors">Profil KKG</a>
                 <a href="#app" class="bg-emerald-500 text-slate-900 px-6 py-2 rounded-full shadow-lg hover:bg-emerald-400 transition-colors">Portal Login</a>
             </div>
@@ -55,6 +56,7 @@
                 <a href="#home" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5">Beranda</a>
                 <a href="#pantau-agenda" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5 text-yellow-400"><i class="fas fa-calendar-check mr-2"></i> Pantau Agenda</a>
                 <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" rel="noopener" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5 text-emerald-400"><i class="fas fa-file-pdf mr-2"></i> Laporan KKG</a>
+                <a href="#transparansi-kas" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5 text-cyan-400"><i class="fas fa-wallet mr-2"></i> Keuangan & Kas</a>
                 <a href="#tentang" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5">Profil KKG</a>
                 <a href="#app" onclick="toggleMobileMenu()" class="p-3 rounded-xl bg-emerald-500 text-slate-900 text-center">Portal Login</a>
             </div>
@@ -70,7 +72,7 @@
         </div>
     </section>
 
-    <!-- Seksi Publik: Pantau Agenda -->
+    <!-- Seksi Publik 1: Pantau Agenda -->
     <section id="pantau-agenda" class="py-24 bg-slate-950 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-12">
@@ -103,6 +105,72 @@
                             <i class="fas fa-link"></i> Lihat Bukti / Lampiran Agenda
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seksi Publik 2: Transparansi Keuangan & Riwayat Transaksi -->
+    <section id="transparansi-kas" class="py-24 bg-slate-900 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-cyan-400 font-black text-xs uppercase tracking-widest">Akuntabilitas Publik</span>
+                <h3 class="text-3xl md:text-4xl font-black italic uppercase mt-2">Transparansi Keuangan & Kas</h3>
+                <p class="text-xs text-slate-400 font-semibold mt-2">Laporan arus kas dan riwayat transaksi keuangan secara terbuka.</p>
+            </div>
+
+            <!-- Ringkasan Kas Publik -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-5xl mx-auto">
+                <div class="bg-emerald-500 p-8 rounded-[2.5rem] text-slate-950 shadow-xl">
+                    <p class="text-[10px] font-black uppercase opacity-70">Total Saldo Tergabung</p>
+                    <h3 id="pubSaldoTotal" class="text-3xl font-black italic">Rp 0</h3>
+                </div>
+                <div class="glass p-8 rounded-[2.5rem]">
+                    <p class="text-[10px] uppercase opacity-50 text-emerald-400 font-black">Total Pemasukan</p>
+                    <h3 id="pubTotalMasuk" class="text-xl font-bold">Rp 0</h3>
+                </div>
+                <div class="glass p-8 rounded-[2.5rem]">
+                    <p class="text-[10px] uppercase opacity-50 text-rose-400 font-black">Total Pengeluaran</p>
+                    <h3 id="pubTotalKeluar" class="text-xl font-bold">Rp 0</h3>
+                </div>
+            </div>
+
+            <!-- Tabel Transaksi Publik -->
+            <div class="bg-white p-8 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl max-w-5xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6 border-b pb-4">
+                    <h4 class="font-black uppercase italic text-lg">Riwayat Transaksi Publik</h4>
+                    <div class="flex gap-2">
+                        <select id="pubFilterGugus" onchange="renderKasPublik()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none">
+                            <option value="semua">Semua Gugus</option>
+                            <option value="INTI-SINDARA">Pengurus Inti</option>
+                            <option value="G1-BAWAH">Gugus 1 Bawah</option>
+                            <option value="G1-ATAS">Gugus 1 Atas</option>
+                            <option value="G2-BAWAH">Gugus 2 Bawah</option>
+                            <option value="G2-ATAS">Gugus 2 Atas</option>
+                            <option value="PJOK">Komunitas PJOK</option>
+                            <option value="PAI">Komunitas PAI</option>
+                        </select>
+                        <input type="text" id="pubCariKas" oninput="renderKasPublik()" placeholder="Cari transaksi..." class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none w-36 md:w-48">
+                    </div>
+                </div>
+                <div id="pubEmptyKas" class="hidden text-center py-12 opacity-40">
+                    <i class="fas fa-receipt text-3xl mb-2"></i>
+                    <p class="font-bold text-sm">Belum ada data transaksi kas publik.</p>
+                </div>
+                <div id="pubWrapKas" class="hidden overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-[9px] font-black uppercase text-slate-400 tracking-widest">
+                            <tr>
+                                <th class="py-3 pr-3">Gugus</th>
+                                <th class="py-3 pr-3">Tanggal</th>
+                                <th class="py-3 pr-3">Jenis</th>
+                                <th class="py-3 pr-3">Keterangan</th>
+                                <th class="py-3 pr-3 text-right">Nominal</th>
+                                <th class="py-3 pl-3 text-center">Bukti</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pubListKas" class="divide-y divide-slate-100 font-bold"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -383,6 +451,7 @@
         let agendaDataPublik = {};
         let semuaLaporan = [];
         let semuaKas = [];
+        let semuaKasPublik = [];
         let calMonth = new Date().getMonth();
         let calYear = new Date().getFullYear();
         let calMonthPublik = new Date().getMonth();
@@ -421,7 +490,7 @@
         function toggleMobileMenu() {
             const m = document.getElementById('mobileMenu');
             const buka = m.style.maxHeight && m.style.maxHeight !== '0px';
-            m.style.maxHeight = buka ? '0px' : '300px';
+            m.style.maxHeight = buka ? '0px' : '350px';
             m.style.opacity = buka ? '0' : '1';
         }
 
@@ -455,6 +524,7 @@
 
         window.onload = function () {
             muatAgendaPublik();
+            muatKasPublik();
             const urlParams = new URLSearchParams(window.location.search);
             const autoKey = urlParams.get('auto');
             if (autoKey) {
@@ -529,7 +599,7 @@
         function tutupPantauan() { 
             document.getElementById('pantauanContainer').classList.add('hidden'); 
             document.getElementById('framePantau').src = "";
-            muatLaporan(); // Pemicu pembaruan riwayat laporan
+            muatLaporan();
             if (sessionUser && sessionUser.role === 'MASTER') {
                 muatRekapKeuanganSemua();
             }
@@ -578,7 +648,6 @@
         function muatLaporan() {
             if (!sessionUser) return;
             
-            // Jika MASTER: tarik seluruh data laporan dari semua gugus
             if (sessionUser.role === "MASTER") {
                 db.ref(`sindara_laporan`).on('value', snapshot => {
                     semuaLaporan = [];
@@ -600,7 +669,6 @@
                     toast("Gagal memuat laporan: " + err.message, "error");
                 });
             } else {
-                // Jika GUGUS BIASA: tarik data milik gugusnya saja
                 db.ref(`sindara_laporan/${sessionUser.id}`).on('value', s => {
                     semuaLaporan = [];
                     s.forEach(lx => semuaLaporan.push({ key: lx.key, gugusKode: sessionUser.id, ...lx.val() }));
@@ -772,7 +840,80 @@
             });
         }
 
-        // ---------- keuangan ----------
+        // ---------- transparansi kas publik ----------
+        function muatKasPublik() {
+            db.ref('sindara_kas').on('value', snapshot => {
+                semuaKasPublik = [];
+                let m = 0, k = 0;
+                snapshot.forEach(gugusSnap => {
+                    const gKode = gugusSnap.key;
+                    gugusSnap.forEach(tx => {
+                        const val = tx.val();
+                        if (val.tipe === 'masuk') m += Number(val.nominal) || 0;
+                        else k += Number(val.nominal) || 0;
+                        semuaKasPublik.push({
+                            key: tx.key,
+                            gugusKode: gKode,
+                            ...val
+                        });
+                    });
+                });
+                semuaKasPublik.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                document.getElementById('pubTotalMasuk').innerText = formatRupiah(m);
+                document.getElementById('pubTotalKeluar').innerText = formatRupiah(k);
+                document.getElementById('pubSaldoTotal').innerText = formatRupiah(m - k);
+
+                renderKasPublik();
+            });
+        }
+
+        function renderKasPublik() {
+            const filterGugus = document.getElementById('pubFilterGugus').value;
+            const kataKunci = document.getElementById('pubCariKas').value.trim().toLowerCase();
+
+            const hasil = semuaKasPublik.filter(t => {
+                const cocokGugus = filterGugus === 'semua' || t.gugusKode === filterGugus;
+                const cocokKata = !kataKunci || (t.keterangan || '').toLowerCase().includes(kataKunci);
+                return cocokGugus && cocokKata;
+            });
+
+            const tbody = document.getElementById('pubListKas');
+            const empty = document.getElementById('pubEmptyKas');
+            const wrap = document.getElementById('pubWrapKas');
+
+            if (hasil.length === 0) {
+                wrap.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            wrap.classList.remove('hidden');
+
+            tbody.innerHTML = hasil.map(t => {
+                const namaGugus = DATABASE_GUGUS[t.gugusKode]?.gugus || t.gugusKode || '-';
+                const badge = t.tipe === 'masuk'
+                    ? '<span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full uppercase">Masuk</span>'
+                    : '<span class="text-[9px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full uppercase">Keluar</span>';
+                const bukti = t.bukti && t.bukti !== '-'
+                    ? `<a href="${escapeHtml(t.bukti)}" target="_blank" rel="noopener" class="text-indigo-600 hover:underline"><i class="fas fa-paperclip"></i></a>`
+                    : '<span class="opacity-30">-</span>';
+                const warna = t.tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600';
+                const tanda = t.tipe === 'masuk' ? '+' : '−';
+
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 pr-3 text-xs font-bold text-slate-700 whitespace-nowrap">${escapeHtml(namaGugus)}</td>
+                        <td class="py-3 pr-3 text-xs opacity-60 whitespace-nowrap">${escapeHtml(t.tgl || '-')}</td>
+                        <td class="py-3 pr-3">${badge}</td>
+                        <td class="py-3 pr-3">${escapeHtml(t.keterangan || '-')}</td>
+                        <td class="py-3 pr-3 text-right ${warna} whitespace-nowrap font-black">${tanda} ${formatRupiah(t.nominal)}</td>
+                        <td class="py-3 pl-3 text-center">${bukti}</td>
+                    </tr>`;
+            }).join('');
+        }
+
+        // ---------- keuangan dashboard user ----------
         function hitungUlangTotalKas() {
             let m = 0, k = 0;
             semuaKas.forEach(t => t.tipe === 'masuk' ? m += Number(t.nominal) || 0 : k += Number(t.nominal) || 0);
