@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINDARA FINANCE | KHUSUS BENDAHARA</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; color: white; }
+        .fade-in { animation: fadeIn .35s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .skeleton { background: linear-gradient(90deg, rgba(255,255,255,.06) 25%, rgba(255,255,255,.12) 37%, rgba(255,255,255,.06) 63%); background-size: 400% 100%; animation: shimmer 1.4s infinite; }
+        @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+        input:focus, select:focus, button:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+        #toastBox > div { animation: toastIn .25s ease-out; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        @media print {
+            body * { visibility: hidden; }
+            #areaCetakInvoice, #areaCetakInvoice * { visibility: visible; }
+            #areaCetakInvoice { position: absolute; left: 0; top: 0; width: 100%; color: black !important; background: white !important; padding: 20px; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-6">
+
+    <div id="toastBox" class="fixed top-4 right-4 z-[200] space-y-2 w-[90vw] max-w-sm"></div>
+
+    <div class="max-w-7xl mx-auto flex justify-between items-center mb-8 md:mb-10">
+        <h1 class="font-black text-xl md:text-2xl italic">SINDARA<span class="text-emerald-500">FINANCE</span></h1>
+        <div class="flex items-center gap-4">
+            <span id="userBadge" class="hidden text-[10px] font-black bg-white/10 px-4 py-2 rounded-full uppercase tracking-widest"></span>
+            <button onclick="location.href='index.html'" class="text-xs font-bold opacity-50 hover:opacity-100 transition-opacity">
+                <i class="fas fa-arrow-left mr-1"></i> Beranda
+            </button>
+        </div>
+    </div>
+
+    <div id="loginFinance" class="max-w-md mx-auto mt-16 md:mt-20 fade-in">
+        <div class="bg-white p-8 md:p-10 rounded-[3rem] shadow-2xl text-slate-900 text-center">
+            <i class="fas fa-wallet text-4xl text-indigo-600 mb-4"></i>
+            <h2 class="text-xl font-black uppercase mb-2">Akses Bendahara</h2>
+            <p class="text-xs text-slate-400 font-semibold mb-6">Masukkan kode akses gugus Anda untuk membuka buku kas.</p>
+            <form onsubmit="event.preventDefault(); authFinance();">
+                <input type="text" id="passFinance" placeholder="MASUKKAN KODE AKSES" autocomplete="off"
+                    class="w-full p-4 bg-slate-100 rounded-2xl mb-4 text-center font-black outline-none border-2 border-transparent focus:border-indigo-600 uppercase transition-colors">
+                <button type="submit" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-black uppercase shadow-lg hover:bg-indigo-700 active:scale-[.98] transition-all">
+                    <i class="fas fa-unlock mr-2"></i>Buka Laporan Kas
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboardFinance" class="hidden max-w-7xl mx-auto space-y-6 fade-in">
+
+        <!-- Ringkasan Saldo -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-emerald-600 p-6 md:p-8 rounded-[2.5rem] shadow-xl">
+                <p class="text-[10px] font-black opacity-80 uppercase tracking-widest">Total Saldo Kas</p>
+                <h3 id="saldoTotal" class="text-2xl md:text-3xl font-black italic">Rp 0</h3>
+            </div>
+            <div class="bg-white/10 p-6 md:p-8 rounded-[2.5rem] border border-white/10">
+                <p class="text-[10px] font-black text-emerald-400 uppercase"><i class="fas fa-arrow-down mr-1"></i>Total Masuk</p>
+                <h3 id="totalMasuk" class="text-lg md:text-xl font-bold">Rp 0</h3>
+            </div>
+            <div class="bg-white/10 p-6 md:p-8 rounded-[2.5rem] border border-white/10">
+                <p class="text-[10px] font-black text-rose-400 uppercase"><i class="fas fa-arrow-up mr-1"></i>Total Keluar</p>
+                <h3 id="totalKeluar" class="text-lg md:text-xl font-bold">Rp 0</h3>
+            </div>
+        </div>
+
+        <div id="btnBukaInvoice" class="hidden text-right">
+            <button onclick="toggleInvoiceBox()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-6 py-3 rounded-2xl shadow-xl transition-all text-xs uppercase">
+                <i class="fas fa-file-invoice-dollar mr-2"></i> Buat / Cetak Invoice Honor
+            </button>
+        </div>
+
+        <div id="panelInvoice" class="hidden bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b pb-4 no-print">
+                <h4 class="font-black uppercase italic text-lg">Buat Invoice Honorarium</h4>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-xs uppercase">
+                        <i class="fas fa-print mr-1"></i> Cetak / PDF
+                    </button>
+                    <button onclick="toggleInvoiceBox()" class="bg-rose-500 hover:bg-rose-600 text-white font-black px-4 py-2 rounded-xl text-xs uppercase">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 no-print bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">NOMOR INVOICE</label>
+                    <input type="text" id="inpInvNo" value="INV/KKG/2026/001" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">TANGGAL</label>
+                    <input type="text" id="inpInvTanggal" value="22 Agustus 2026" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">NAMA PENERIMA</label>
+                    <input type="text" id="inpInvPenerima" value="Pak Kiswanto" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">JABATAN / PERAN</label>
+                    <input type="text" id="inpInvJabatan" value="Narasumber / Pengurus Inti" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">URAIAN KEGIATAN</label>
+                    <input type="text" id="inpInvUraian" value="Honorarium Narsum / Kegiatan KKG Renah Mendaluh" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400">NOMINAL HONOR (RP)</label>
+                    <input type="number" id="inpInvNominal" value="500000" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                </div>
+            </div>
+
+            <div id="areaCetakInvoice" class="p-6 bg-white rounded-2xl border border-slate-300">
+                <div class="text-center border-b-2 border-slate-900 pb-4 mb-6">
+                    <h2 class="text-2xl font-black uppercase tracking-tight">KELOMPOK KERJA GURU (KKG)</h2>
+                    <h3 class="text-lg font-bold text-slate-700">KECAMATAN RENAH MENDALUH</h3>
+                    <p class="text-xs text-slate-500 italic">Bukti Kuitansi &amp; Rincian Honorarium</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-xs font-semibold mb-6">
+                    <div>
+                        <p><span class="text-slate-400">No. Invoice:</span> <strong id="invNo">INV/KKG/2026/001</strong></p>
+                        <p><span class="text-slate-400">Tanggal:</span> <strong id="invTanggal">22 Agustus 2026</strong></p>
+                    </div>
+                    <div class="text-right">
+                        <p><span class="text-slate-400">Penerima:</span> <strong id="invPenerima">Pak Kiswanto</strong></p>
+                        <p><span class="text-slate-400">Jabatan:</span> <strong id="invJabatan">Narasumber / Pengurus Inti</strong></p>
+                    </div>
+                </div>
+
+                <table class="w-full text-left text-xs mb-8">
+                    <thead class="bg-slate-100 uppercase text-[10px] font-black">
+                        <tr>
+                            <th class="p-3">Uraian / Kegiatan</th>
+                            <th class="p-3 text-right">Nominal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 font-medium">
+                        <tr>
+                            <td class="p-3" id="invUraian">Honorarium Narsum / Kegiatan KKG Renah Mendaluh</td>
+                            <td class="p-3 text-right font-bold" id="invNominal">Rp 500.000</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="font-black bg-slate-100">
+                            <td class="p-3 uppercase">Total Diterima</td>
+                            <td class="p-3 text-right text-emerald-600" id="invTotal">Rp 500.000</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="flex justify-between items-end text-center text-xs pt-8">
+                    <div>
+                        <p class="mb-12">Bendahara KKG,</p>
+                        <p class="font-bold underline">(...................................)</p>
+                    </div>
+                    <div>
+                        <p class="mb-12">Penerima Honor,</p>
+                        <p class="font-bold underline" id="ttdPenerima">( Pak Kiswanto )</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
+            <h3 class="text-lg md:text-xl font-black uppercase italic mb-6 md:mb-8 border-b pb-4">Input Transaksi Baru</h3>
+            <form onsubmit="event.preventDefault(); simpanTransaksi();" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label for="kasTipe" class="text-[10px] font-black text-slate-400 ml-2">JENIS TRANSAKSI</label>
+                    <select id="kasTipe" class="w-full p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                        <option value="masuk">Pemasukan (+)</option>
+                        <option value="keluar">Pengeluaran (-)</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label for="kasNominal" class="text-[10px] font-black text-slate-400 ml-2">NOMINAL (RP)</label>
+                    <input type="number" id="kasNominal" min="1" placeholder="Contoh: 50000" class="w-full p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                </div>
+                <div class="space-y-1">
+                    <label for="kasTanggal" class="text-[10px] font-black text-slate-400 ml-2">TANGGAL</label>
+                    <input type="date" id="kasTanggal" class="w-full p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                </div>
+                <div class="space-y-1">
+                    <label for="kasKet" class="text-[10px] font-black text-slate-400 ml-2">KETERANGAN</label>
+                    <input type="text" id="kasKet" placeholder="Kegiatan apa atau dari siapa?" class="w-full p-4 bg-slate-100 rounded-xl font-bold outline-none">
+                </div>
+                <div class="space-y-1 md:col-span-2">
+                    <label for="kasBukti" class="text-[10px] font-black text-slate-400 ml-2">LINK BUKTI FISIK (DRIVE / FOTO)</label>
+                    <input type="url" id="kasBukti" placeholder="https://drive.google.com/..." class="w-full p-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl font-bold outline-none text-indigo-600">
+                </div>
+                <button type="submit" id="btnSimpan" class="md:col-span-2 bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase shadow-lg mt-2 hover:bg-indigo-700 active:scale-[.99] transition-all">
+                    <i class="fas fa-save mr-2"></i>Simpan Transaksi
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6 border-b pb-4">
+                <h3 class="text-lg md:text-xl font-black uppercase italic">Riwayat Transaksi</h3>
+                <div class="flex gap-2">
+                    <select id="filterTipe" onchange="renderTransaksi()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none">
+                        <option value="semua">Semua Jenis</option>
+                        <option value="masuk">Pemasukan</option>
+                        <option value="keluar">Pengeluaran</option>
+                    </select>
+                    <input type="text" id="cariTransaksi" oninput="renderTransaksi()" placeholder="Cari keterangan..."
+                        class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none w-40 md:w-56">
+                </div>
+            </div>
+
+            <div id="loadingList" class="space-y-3">
+                <div class="skeleton h-14 rounded-2xl"></div>
+                <div class="skeleton h-14 rounded-2xl"></div>
+            </div>
+
+            <div id="emptyState" class="hidden text-center py-16 opacity-40">
+                <i class="fas fa-receipt text-4xl mb-3"></i>
+                <p class="font-bold text-sm">Belum ada transaksi tercatat.</p>
+                <p class="text-xs">Transaksi yang Anda simpan akan muncul di sini.</p>
+            </div>
+
+            <div id="listWrap" class="hidden overflow-x-auto">
+                <table class="w-full text-left text-sm min-w-[700px]">
+                    <thead class="text-[10px] font-black uppercase text-slate-400 tracking-widest border-b border-slate-100">
+                        <tr>
+                            <th class="py-3 px-3 w-[15%]">Tanggal</th>
+                            <th class="py-3 px-3 w-[15%]">Jenis</th>
+                            <th class="py-3 px-3 w-[40%]">Keterangan</th>
+                            <th class="py-3 px-3 w-[20%] text-right">Nominal</th>
+                            <th class="py-3 px-3 w-[5%] text-center">Bukti</th>
+                            <th class="py-3 px-3 w-[5%] text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listTransaksi" class="divide-y divide-slate-100 font-bold"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCUjE8WXa8Py4vnojrXDUR3uCvnQEzP6zQ",
+            databaseURL: "https://e-kantin-91f0c-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "e-kantin-91f0c",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentId = null;
+        let semuaTransaksi = [];
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function formatRupiah(n) {
+            const angka = Number(n) || 0;
+            return "Rp " + angka.toLocaleString('id-ID');
+        }
+
+        function toast(msg, tipe = 'sukses') {
+            const box = document.getElementById('toastBox');
+            const warna = tipe === 'sukses' ? 'bg-emerald-600' : tipe === 'error' ? 'bg-rose-600' : 'bg-slate-700';
+            const ikon = tipe === 'sukses' ? 'fa-check-circle' : tipe === 'error' ? 'fa-circle-exclamation' : 'fa-info-circle';
+            const el = document.createElement('div');
+            el.className = `${warna} text-white text-sm font-bold px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3`;
+            el.innerHTML = `<i class="fas ${ikon}"></i><span>${escapeHtml(msg)}</span>`;
+            box.appendChild(el);
+            setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3200);
+        }
+
+        function toggleInvoiceBox() {
+            document.getElementById('panelInvoice').classList.toggle('hidden');
+        }
+
+        function updateInvoicePreview() {
+            const no = document.getElementById('inpInvNo').value.trim() || "-";
+            const tgl = document.getElementById('inpInvTanggal').value.trim() || "-";
+            const penerima = document.getElementById('inpInvPenerima').value.trim() || "-";
+            const jabatan = document.getElementById('inpInvJabatan').value.trim() || "-";
+            const uraian = document.getElementById('inpInvUraian').value.trim() || "-";
+            const nominal = parseInt(document.getElementById('inpInvNominal').value, 10) || 0;
+
+            document.getElementById('invNo').innerText = no;
+            document.getElementById('invTanggal').innerText = tgl;
+            document.getElementById('invPenerima').innerText = penerima;
+            document.getElementById('invJabatan').innerText = jabatan;
+            document.getElementById('invUraian').innerText = uraian;
+            document.getElementById('invNominal').innerText = formatRupiah(nominal);
+            document.getElementById('invTotal').innerText = formatRupiah(nominal);
+            document.getElementById('ttdPenerima').innerText = `( ${penerima} )`;
+        }
+
+        function authFinance(autoKey = null) {
+            const inputVal = document.getElementById('passFinance').value.trim().toUpperCase();
+            const key = autoKey ? autoKey.toUpperCase() : inputVal;
+            const authorized = ["INTI-SINDARA", "G1-BAWAH", "G1-ATAS", "G2-BAWAH", "G2-ATAS", "PJOK", "PAI"];
+
+            if (!key) return toast("Kode akses belum diisi.", "error");
+
+            if (authorized.includes(key)) {
+                currentId = key;
+                localStorage.setItem('sindara_active_key', key);
+
+                document.getElementById('loginFinance').classList.add('hidden');
+                document.getElementById('dashboardFinance').classList.remove('hidden');
+                document.getElementById('userBadge').classList.remove('hidden');
+                document.getElementById('userBadge').innerHTML = `<i class="fas fa-user-shield mr-1"></i>${escapeHtml(key)}`;
+                
+                if (key === "INTI-SINDARA") {
+                    document.getElementById('btnBukaInvoice').classList.remove('hidden');
+                }
+
+                document.getElementById('kasTanggal').valueAsDate = new Date();
+                muatDataFinance();
+            } else {
+                toast("Kode akses tidak valid!", "error");
+                document.getElementById('passFinance').value = "";
+            }
+        }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const autoKey = urlParams.get('auto');
+            const savedKey = localStorage.getItem('sindara_active_key');
+
+            if (autoKey) {
+                authFinance(autoKey);
+            } else if (savedKey) {
+                authFinance(savedKey);
+            }
+        };
+
+        function hitungUlangTotalFinance() {
+            let masuk = 0, keluar = 0;
+            semuaTransaksi.forEach(t => t.tipe === 'masuk' ? masuk += Number(t.nominal) || 0 : keluar += Number(t.nominal) || 0);
+            document.getElementById('totalMasuk').innerText = formatRupiah(masuk);
+            document.getElementById('totalKeluar').innerText = formatRupiah(keluar);
+            document.getElementById('saldoTotal').innerText = formatRupiah(masuk - keluar);
+        }
+
+        function simpanTransaksi() {
+            if (!currentId) {
+                toast("Sesi login kadaluarsa, silakan buka ulang.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btnSimpan');
+            const nominal = parseInt(document.getElementById('kasNominal').value, 10);
+            const ket = document.getElementById('kasKet').value.trim();
+            const tipe = document.getElementById('kasTipe').value;
+            const bukti = document.getElementById('kasBukti').value.trim();
+            const tglInput = document.getElementById('kasTanggal').value;
+
+            if (!nominal || nominal <= 0) return toast("Nominal harus diisi dan lebih dari 0.", "error");
+            if (!ket) return toast("Keterangan wajib diisi.", "error");
+
+            const tglTampil = tglInput
+                ? new Date(tglInput + "T00:00:00").toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
+                : new Date().toLocaleDateString('id-ID');
+
+            const newRef = db.ref(`sindara_kas/${currentId}`).push();
+            const dataBaru = { 
+                id: newRef.key, 
+                tipe, 
+                nominal, 
+                keterangan: ket, 
+                bukti: bukti || "-", 
+                tgl: tglTampil, 
+                timestamp: Date.now() 
+            };
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+
+            newRef.set(dataBaru).then(() => {
+                toast("Transaksi berhasil disimpan!");
+                document.getElementById('kasNominal').value = "";
+                document.getElementById('kasKet').value = "";
+                document.getElementById('kasBukti').value = "";
+                document.getElementById('kasTanggal').valueAsDate = new Date();
+            }).catch(err => {
+                toast("Gagal menyimpan: " + err.message, "error");
+            }).finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan Transaksi';
+            });
+        }
+
+        function hapusTransaksi(key, ket) {
+            if (!confirm(`Hapus transaksi "${ket}"?`)) return;
+            db.ref(`sindara_kas/${currentId}/${key}`).remove()
+                .then(() => toast("Transaksi berhasil dihapus."))
+                .catch(err => toast("Gagal menghapus: " + err.message, "error"));
+        }
+
+        function muatDataFinance() {
+            if (!currentId) return;
+
+            db.ref(`sindara_kas/${currentId}`).off();
+            
+            db.ref(`sindara_kas/${currentId}`).on('value', snap => {
+                semuaTransaksi = [];
+                if (snap.exists()) {
+                    snap.forEach(tx => {
+                        semuaTransaksi.push({ key: tx.key, ...tx.val() });
+                    });
+                }
+                semuaTransaksi.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                hitungUlangTotalFinance();
+
+                document.getElementById('loadingList').classList.add('hidden');
+                renderTransaksi();
+            }, err => {
+                document.getElementById('loadingList').classList.add('hidden');
+                toast("Gagal memuat data: " + err.message, "error");
+            });
+        }
+
+        function renderTransaksi() {
+            const filterTipe = document.getElementById('filterTipe').value;
+            const kataKunci = document.getElementById('cariTransaksi').value.trim().toLowerCase();
+
+            const hasil = semuaTransaksi.filter(t => {
+                const cocokTipe = filterTipe === 'semua' || t.tipe === filterTipe;
+                const cocokKata = !kataKunci || (t.keterangan || '').toLowerCase().includes(kataKunci);
+                return cocokTipe && cocokKata;
+            });
+
+            const tbody = document.getElementById('listTransaksi');
+            const emptyState = document.getElementById('emptyState');
+            const listWrap = document.getElementById('listWrap');
+
+            if (hasil.length === 0) {
+                listWrap.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            listWrap.classList.remove('hidden');
+            tbody.innerHTML = '';
+
+            hasil.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+
+                const badge = t.tipe === 'masuk'
+                    ? '<span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full uppercase inline-block"><i class="fas fa-arrow-down mr-1"></i>Masuk</span>'
+                    : '<span class="text-[10px] font-black bg-rose-100 text-rose-700 px-3 py-1.5 rounded-full uppercase inline-block"><i class="fas fa-arrow-up mr-1"></i>Keluar</span>';
+
+                const bukti = t.bukti && t.bukti !== '-'
+                    ? `<a href="${escapeHtml(t.bukti)}" target="_blank" rel="noopener" class="text-indigo-600 hover:text-indigo-800 transition-colors p-2 text-base"><i class="fas fa-paperclip"></i></a>`
+                    : '<span class="opacity-30 text-xs">-</span>';
+
+                const warnaNominal = t.tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600';
+                const tandaNominal = t.tipe === 'masuk' ? '+' : '−';
+
+                tr.innerHTML = `
+                    <td class="py-4 px-3 text-xs opacity-70 whitespace-nowrap">${escapeHtml(t.tgl || '-')}</td>
+                    <td class="py-4 px-3 whitespace-nowrap">${badge}</td>
+                    <td class="py-4 px-3 font-bold text-slate-800 break-words">${escapeHtml(t.keterangan || '-')}</td>
+                    <td class="py-4 px-3 text-right font-black ${warnaNominal} whitespace-nowrap">${tandaNominal} ${formatRupiah(t.nominal)}</td>
+                    <td class="py-4 px-3 text-center whitespace-nowrap">${bukti}</td>
+                    <td class="py-4 px-3 text-right whitespace-nowrap">
+                        <button class="btnHapus text-rose-400 hover:text-rose-600 p-2 transition-colors" title="Hapus transaksi">
+                            <i class="fas fa-trash-can text-sm"></i>
+                        </button>
+                    </td>
+                `;
+
+                tr.querySelector('.btnHapus').onclick = () => hapusTransaksi(t.key, t.keterangan || '');
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
