@@ -3,95 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Honorarium KKG</title>
+    <title>Invoice Honorarium KKG - SINDARA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         @media print {
             .no-print { display: none !important; }
-            body { background: white !important; p: 0; }
-            .print-container { shadow: none !important; border: none !important; padding: 0 !important; }
+            body { background: white !important; padding: 0 !important; }
+            .print-container { shadow: none !important; border: none !important; padding: 0 !important; max-width: 100% !important; }
         }
     </style>
 </head>
-<body class="bg-gray-100 p-4 md:p-8 font-sans">
+<body class="bg-slate-100 p-4 md:p-8 text-slate-800">
 
-    <!-- Tombol Aksi (Tidak ikut tercetak saat di-download/print) -->
-    <div class="max-w-4xl mx-auto mb-6 flex justify-between items-center no-print">
-        <h1 class="text-xl font-bold text-gray-700">Preview Invoice Honorarium</h1>
-        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-            Download / Cetak PDF
-        </button>
-    </div>
-
-    <!-- Area Dokumen Invoice -->
-    <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-md print-container border border-gray-200">
-        
-        <!-- Header / Kop Surat -->
-        <div class="flex justify-between items-start border-b-2 border-gray-800 pb-6 mb-6">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800 tracking-wide uppercase">KELOMPOK KERJA GURU (KKG)</h2>
-                <p class="text-sm text-gray-600 font-medium">Gugus Sekolah Dasar / Wilayah Kecamatan [Nama Kecamatan]</p>
-                <p class="text-xs text-gray-500">Jl. Pendidikan No. 123, Kabupaten/Kota, Provinsi</p>
-                <p class="text-xs text-gray-500">Email: kkg.official@email.com | HP: 0812-3456-7890</p>
-            </div>
-            <div class="text-right">
-                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-bold text-xs rounded-full mb-2">INVOICE / BUKTI PEMBAYARAN</span>
-                <p class="text-sm font-semibold text-gray-700">No: <span class="font-normal text-gray-600">INV/KKG/2026/08/001</span></p>
-                <p class="text-sm font-semibold text-gray-700">Tanggal: <span class="font-normal text-gray-600">22 Agustus 2026</span></p>
+    <!-- Panel Kontrol & Editor Data (Tidak ikut tercetak saat di-print) -->
+    <div class="max-w-4xl mx-auto mb-6 bg-white p-6 rounded-2xl shadow-md border border-slate-200 no-print">
+        <div class="flex justify-between items-center mb-4 border-b pb-3">
+            <h1 class="text-lg font-black text-slate-800 uppercase italic">Editor Invoice Honorarium</h1>
+            <div class="flex gap-2">
+                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-5 rounded-xl text-xs shadow transition flex items-center gap-2 uppercase">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    Cetak / Simpan PDF
+                </button>
             </div>
         </div>
 
-        <!-- Detail Penerima (Narasumber / Fasilitator) -->
-        <div class="grid grid-cols-2 gap-6 mb-8 bg-gray-50 p-4 rounded-lg border border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div>
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Dibayarkan Kepada (Penerima):</h3>
-                <p class="text-base font-bold text-gray-800">Dr. Nama Narasumber, M.Pd.</p>
-                <p class="text-sm text-gray-600">NIP / NUPTK: 19850101 201001 1 005</p>
-                <p class="text-sm text-gray-600">Jabatan/Instansi: Pengawas / Universitas / SDN 1 Contoh</p>
-                <p class="text-sm text-gray-600">No. Rekening: 1234-5678-90 (Bank BNI a.n Nama Penerima)</p>
+                <label class="font-bold text-slate-500">No. Invoice</label>
+                <input type="text" id="inpNo" value="INV/KKG/2026/08/001" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
             </div>
             <div>
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Rincian Kegiatan:</h3>
-                <p class="text-sm font-semibold text-gray-800">Kombel / In-House Training KKG</p>
-                <p class="text-sm text-gray-600">Materi: "Pemanfaatan AI dan Media Digital dalam Pembelajaran"</p>
-                <p class="text-sm text-gray-600">Hari/Tanggal: Sabtu, 22 Agustus 2026</p>
-                <p class="text-sm text-gray-600">Tempat: Aula SDN 1 [Nama Sekolah]</p>
+                <label class="font-bold text-slate-500">Tanggal</label>
+                <input type="text" id="inpTanggal" value="22 Agustus 2026" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
+            </div>
+            <div>
+                <label class="font-bold text-slate-500">Nama Penerima</label>
+                <input type="text" id="inpNama" value="Pak Kiswanto" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
+            </div>
+            <div>
+                <label class="font-bold text-slate-500">NIP / NUPTK</label>
+                <input type="text" id="inpNip" value="19850101 201001 1 005" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
+            </div>
+            <div>
+                <label class="font-bold text-slate-500">Jabatan / Peran</label>
+                <input type="text" id="inpJabatan" value="Narasumber Utama / Pengurus Inti" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
+            </div>
+            <div>
+                <label class="font-bold text-slate-500">Nominal Bruto (Rp)</label>
+                <input type="number" id="inpNominal" value="1200000" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
+            </div>
+            <div class="md:col-span-2">
+                <label class="font-bold text-slate-500">Deskripsi Kegiatan</label>
+                <input type="text" id="inpKegiatan" value="Honorarium Kegiatan Kombel &amp; Pelatihan Media Digital KKG" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
+            </div>
+            <div>
+                <label class="font-bold text-slate-500">Potongan Pajak (PPh 21 %)</label>
+                <input type="number" id="inpPajak" value="5" oninput="updateInvoice()" class="w-full p-2 border rounded-lg font-semibold mt-1">
+            </div>
+        </div>
+    </div>
+
+    <!-- Area Dokumen Cetak Invoice -->
+    <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-md print-container border border-slate-200">
+        
+        <!-- Header / Kop Surat -->
+        <div class="flex justify-between items-start border-b-2 border-slate-900 pb-6 mb-6">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-wide uppercase">KELOMPOK KERJA GURU (KKG)</h2>
+                <p class="text-sm text-slate-700 font-bold">KECAMATAN RENAH MENDALUH</p>
+                <p class="text-xs text-slate-500">Jl. Pendidikan No. 01, Renah Mendaluh, Kabupaten Tanjung Jabung Barat</p>
+                <p class="text-xs text-slate-500">Email: kkg.renahmendaluh@gmail.com</p>
+            </div>
+            <div class="text-right">
+                <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-900 font-black text-xs rounded-full mb-2 uppercase">Kuitansi Pembayaran</span>
+                <p class="text-xs font-bold text-slate-500">No: <span id="outNo" class="font-bold text-slate-800">INV/KKG/2026/08/001</span></p>
+                <p class="text-xs font-bold text-slate-500">Tanggal: <span id="outTanggal" class="font-bold text-slate-800">22 Agustus 2026</span></p>
+            </div>
+        </div>
+
+        <!-- Detail Penerima -->
+        <div class="grid grid-cols-2 gap-6 mb-8 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+            <div>
+                <h3 class="font-black text-slate-400 uppercase tracking-wider mb-2">Dibayarkan Kepada:</h3>
+                <p id="outNama" class="text-sm font-bold text-slate-900">Pak Kiswanto</p>
+                <p class="text-slate-600">NIP/NUPTK: <span id="outNip">19850101 201001 1 005</span></p>
+                <p class="text-slate-600">Jabatan: <span id="outJabatan">Narasumber Utama / Pengurus Inti</span></p>
+            </div>
+            <div>
+                <h3 class="font-black text-slate-400 uppercase tracking-wider mb-2">Rincian Kegiatan:</h3>
+                <p id="outKegiatan" class="font-bold text-slate-800">Honorarium Kegiatan Kombel &amp; Pelatihan Media Digital KKG</p>
+                <p class="text-slate-600">Wilayah: KKG Renah Mendaluh</p>
             </div>
         </div>
 
         <!-- Tabel Rincian Honorarium -->
-        <div class="overflow-x-auto mb-8">
-            <table class="w-full text-left border-collapse">
+        <div class="overflow-x-auto mb-6">
+            <table class="w-full text-left border-collapse text-xs">
                 <thead>
-                    <tr class="bg-gray-800 text-white text-xs uppercase tracking-wider">
+                    <tr class="bg-slate-900 text-white uppercase tracking-wider">
                         <th class="py-3 px-4 rounded-tl-lg">No</th>
-                        <th class="py-3 px-4">Deskripsi Peran / Layanan</th>
-                        <th class="py-3 px-4 text-center">Volume (JP/Jam)</th>
-                        <th class="py-3 px-4 text-right">Satuan (Rp)</th>
-                        <th class="py-3 px-4 text-right rounded-tr-lg">Jumlah Total (Rp)</th>
+                        <th class="py-3 px-4">Deskripsi Layanan / Peran</th>
+                        <th class="py-3 px-4 text-right rounded-tr-lg">Jumlah Bruto</th>
                     </tr>
                 </thead>
-                <tbody class="text-sm divide-y divide-gray-200">
+                <tbody class="divide-y divide-slate-200 border-b">
                     <tr>
-                        <td class="py-4 px-4 font-medium text-gray-900">1</td>
+                        <td class="py-4 px-4 font-bold">1</td>
                         <td class="py-4 px-4">
-                            <p class="font-bold text-gray-800">Honorarium Narasumber Utama</p>
-                            <p class="text-xs text-gray-500">Penyampaian Materi & Workshop Praktik Media Pembelajaran</p>
+                            <p id="outTabelKegiatan" class="font-bold text-slate-800">Honorarium Kegiatan Kombel &amp; Pelatihan Media Digital KKG</p>
+                            <p class="text-[10px] text-slate-500">Penyampaian materi dan fasilitasi kegiatan KKG</p>
                         </td>
-                        <td class="py-4 px-4 text-center font-semibold">3 JP</td>
-                        <td class="py-4 px-4 text-right">300.000</td>
-                        <td class="py-4 px-4 text-right font-bold text-gray-800">900.000</td>
-                    </tr>
-                    <tr>
-                        <td class="py-4 px-4 font-medium text-gray-900">2</td>
-                        <td class="py-4 px-4">
-                            <p class="font-bold text-gray-800">Honorarium Fasilitator Pendamping</p>
-                            <p class="text-xs text-gray-500">Pendampingan Diskusi Kelompok & Evaluasi Modul</p>
-                        </td>
-                        <td class="py-4 px-4 text-center font-semibold">2 JP</td>
-                        <td class="py-4 px-4 text-right">150.000</td>
-                        <td class="py-4 px-4 text-right font-bold text-gray-800">300.000</td>
+                        <td id="outBruto" class="py-4 px-4 text-right font-bold text-slate-900">Rp 1.200.000</td>
                     </tr>
                 </tbody>
             </table>
@@ -99,40 +123,104 @@
 
         <!-- Ringkasan Pembayaran & Pajak -->
         <div class="flex justify-end mb-8">
-            <div class="w-full md:w-1/2 space-y-2 text-sm">
-                <div class="flex justify-between text-gray-600">
-                    <span>Subtotal:</span>
-                    <span class="font-semibold">Rp 1.200.000</span>
+            <div class="w-full md:w-1/2 space-y-2 text-xs">
+                <div class="flex justify-between text-slate-600">
+                    <span>Total Bruto:</span>
+                    <span id="outSubtotal" class="font-bold">Rp 1.200.000</span>
                 </div>
-                <div class="flex justify-between text-gray-600">
-                    <span>Pajak Penghasilan (PPh 21 - 5%):</span>
-                    <span class="font-semibold text-red-500">- Rp 60.000</span>
+                <div class="flex justify-between text-slate-600">
+                    <span id="labelPajak">Potongan Pajak (PPh 21 - 5%):</span>
+                    <span id="outPajak" class="font-bold text-rose-600">- Rp 60.000</span>
                 </div>
-                <div class="border-t border-gray-300 pt-2 flex justify-between text-base font-bold text-gray-900">
-                    <span>Total Bersih Diterima (Neto):</span>
-                    <span class="text-blue-700 text-lg">Rp 1.140.000</span>
+                <div class="border-t border-slate-300 pt-2 flex justify-between text-sm font-black text-slate-900">
+                    <span>Total Neto Diterima:</span>
+                    <span id="outNeto" class="text-indigo-700 text-base">Rp 1.140.000</span>
                 </div>
-                <p class="text-xs text-gray-500 italic mt-1">*Terbilang: Satu Juta Seratus Empat Puluh Ribu Rupiah</p>
+                <p class="text-[11px] text-slate-500 italic mt-1 font-semibold">*Terbilang: <span id="outTerbilang">Satu Juta Seratus Empat Puluh Ribu Rupiah</span></p>
             </div>
         </div>
 
-        <!-- Tanda Tangan Validation -->
-        <div class="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200 text-center text-sm">
+        <!-- Tanda Tangan -->
+        <div class="grid grid-cols-2 gap-8 pt-8 border-t border-slate-200 text-center text-xs">
             <div>
-                <p class="text-gray-500 mb-1">Setuju Dibayarkan,</p>
-                <p class="font-bold text-gray-800 mb-16">Ketua KKG / Bendahara</p>
-                <p class="font-bold underline text-gray-800">Nama Ketua/Bendahara, S.Pd.</p>
-                <p class="text-xs text-gray-500">NIP. 19800000 200501 1 001</p>
+                <p class="text-slate-500 mb-1">Setuju Dibayarkan,</p>
+                <p class="font-bold text-slate-800 mb-16">Bendahara KKG</p>
+                <p class="font-bold underline text-slate-900">( ................................... )</p>
             </div>
             <div>
-                <p class="text-gray-500 mb-1">Penerima Honorarium,</p>
-                <p class="font-bold text-gray-800 mb-16">Narasumber / Fasilitator</p>
-                <p class="font-bold underline text-gray-800">Dr. Nama Narasumber, M.Pd.</p>
-                <p class="text-xs text-gray-500">NIP/NUPTK. 19850101 201001 1 005</p>
+                <p class="text-slate-500 mb-1">Penerima Honorarium,</p>
+                <p class="font-bold text-slate-800 mb-16">Narasumber / Penerima</p>
+                <p id="outTtdNama" class="font-bold underline text-slate-900">Pak Kiswanto</p>
+                <p class="text-[10px] text-slate-500">NIP/NUPTK: <span id="outTtdNip">19850101 201001 1 005</span></p>
             </div>
         </div>
 
     </div>
 
+    <script>
+        function formatRupiah(n) {
+            return "Rp " + (Number(n) || 0).toLocaleString('id-ID');
+        }
+
+        function terbilang(angka) {
+            const bil = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+            let n = Math.floor(Math.abs(angka));
+            if (n < 12) return bil[n];
+            if (n < 20) return terbilang(n - 10) + " Belas";
+            if (n < 100) return terbilang(Math.floor(n / 10)) + " Puluh " + terbilang(n % 10);
+            if (n < 200) return "Seratus " + terbilang(n - 100);
+            if (n < 1000) return terbilang(Math.floor(n / 100)) + " Ratus " + terbilang(n % 100);
+            if (n < 2000) return "Seribu " + terbilang(n - 1000);
+            if (n < 1000000) return terbilang(Math.floor(n / 1000)) + " Ribu " + terbilang(n % 1000);
+            if (n < 1000000000) return terbilang(Math.floor(n / 1000000)) + " Juta " + terbilang(n % 1000000);
+            return n.toString();
+        }
+
+        function updateInvoice() {
+            const no = document.getElementById('inpNo').value || '-';
+            const tgl = document.getElementById('inpTanggal').value || '-';
+            const nama = document.getElementById('inpNama').value || '-';
+            const nip = document.getElementById('inpNip').value || '-';
+            const jabatan = document.getElementById('inpJabatan').value || '-';
+            const kegiatan = document.getElementById('inpKegiatan').value || '-';
+            const nominalBruto = parseInt(document.getElementById('inpNominal').value, 10) || 0;
+            const persenPajak = parseFloat(document.getElementById('inpPajak').value) || 0;
+
+            const nilaiPajak = Math.round(nominalBruto * (persenPajak / 100));
+            const nominalNeto = nominalBruto - nilaiPajak;
+
+            document.getElementById('outNo').innerText = no;
+            document.getElementById('outTanggal').innerText = tgl;
+            document.getElementById('outNama').innerText = nama;
+            document.getElementById('outNip').innerText = nip;
+            document.getElementById('outJabatan').innerText = jabatan;
+            document.getElementById('outKegiatan').innerText = kegiatan;
+            document.getElementById('outTabelKegiatan').innerText = kegiatan;
+
+            document.getElementById('outBruto').innerText = formatRupiah(nominalBruto);
+            document.getElementById('outSubtotal').innerText = formatRupiah(nominalBruto);
+            document.getElementById('labelPajak').innerText = `Potongan Pajak (PPh 21 - ${persenPajak}%):`;
+            document.getElementById('outPajak').innerText = `- ${formatRupiah(nilaiPajak)}`;
+            document.getElementById('outNeto').innerText = formatRupiah(nominalNeto);
+            
+            document.getElementById('outTerbilang').innerText = nominalNeto > 0 ? (terbilang(nominalNeto).trim() + " Rupiah") : "Nol Rupiah";
+            document.getElementById('outTtdNama').innerText = nama;
+            document.getElementById('outTtdNip').innerText = nip;
+        }
+
+        // Baca URL parameter jika ada pembukaan otomatis dari modul luar
+        window.onload = function() {
+            const p = new URLSearchParams(window.location.search);
+            if (p.has('no')) document.getElementById('inpNo').value = p.get('no');
+            if (p.has('tgl')) document.getElementById('inpTanggal').value = p.get('tgl');
+            if (p.has('nama')) document.getElementById('inpNama').value = p.get('nama');
+            if (p.has('nip')) document.getElementById('inpNip').value = p.get('nip');
+            if (p.has('jabatan')) document.getElementById('inpJabatan').value = p.get('jabatan');
+            if (p.has('kegiatan')) document.getElementById('inpKegiatan').value = p.get('kegiatan');
+            if (p.has('nominal')) document.getElementById('inpNominal').value = p.get('nominal');
+            if (p.has('pajak')) document.getElementById('inpPajak').value = p.get('pajak');
+            updateInvoice();
+        };
+    </script>
 </body>
 </html>
