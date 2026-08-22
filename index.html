@@ -129,7 +129,6 @@
                         <button data-page="input" onclick="showSubPage('input')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-edit mr-4 text-emerald-400"></i> Buat Laporan</button>
                         <button data-page="agenda" onclick="showSubPage('agenda')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-calendar-alt mr-4 text-yellow-400"></i> Agenda</button>
                         
-                        <!-- BARIS YANG DIUBAH (OPSI B) -->
                         <a href="finance.html" class="w-full block text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all">
                             <i class="fas fa-wallet mr-4 text-emerald-400"></i> Bendahara
                         </a>
@@ -164,7 +163,11 @@
                         <div id="wrapLaporan" class="hidden glass rounded-[2rem] overflow-hidden overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead class="bg-white/5 text-[9px] font-black uppercase text-emerald-400 tracking-widest">
-                                    <tr><th class="p-6">Waktu</th><th class="p-6">Kegiatan</th><th class="p-6 text-right">Aksi</th></tr>
+                                    <tr>
+                                        <th class="p-6">Gugus / Waktu</th>
+                                        <th class="p-6">Kegiatan</th>
+                                        <th class="p-6 text-right">Aksi</th>
+                                    </tr>
                                 </thead>
                                 <tbody id="listLaporanFeed" class="text-sm font-bold"></tbody>
                             </table>
@@ -475,7 +478,15 @@
             document.getElementById('pantauanContainer').classList.remove('hidden');
             document.getElementById('pantauanContainer').scrollIntoView({ behavior: 'smooth' });
         }
-        function tutupPantauan() { document.getElementById('pantauanContainer').classList.add('hidden'); }
+        
+        function tutupPantauan() { 
+            document.getElementById('pantauanContainer').classList.add('hidden'); 
+            document.getElementById('framePantau').src = "";
+            muatLaporan(); // Pemicu pembaruan riwayat laporan
+            if (sessionUser && sessionUser.role === 'MASTER') {
+                muatRekapKeuanganSemua();
+            }
+        }
 
         // ---------- laporan ----------
         function simpanLaporan() {
@@ -494,43 +505,66 @@
 
             refBaru.set(dataBaru)
                 .then(() => {
-                    semuaLaporan.unshift({ key: refBaru.key, ...dataBaru });
-                    semuaLaporan.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                    renderLaporan(semuaLaporan);
-
                     toast("Laporan berhasil dikirim!");
                     document.getElementById('lapJudul').value = "";
                     document.getElementById('lapDesc').value = "";
                     document.getElementById('lapTgl').value = "";
                     document.getElementById('lapBukti').value = "";
+                    muatLaporan();
                     showSubPage('stat');
                 })
                 .catch(err => toast("Gagal mengirim: " + err.message, "error"))
                 .finally(() => { btn.disabled = false; btn.innerHTML = "Kirim Laporan"; });
         }
 
-        function hapusLaporan(key, judul) {
+        function hapusLaporan(key, gId, judul) {
             if (!confirm(`Hapus laporan "${judul}"?`)) return;
-            db.ref(`sindara_laporan/${sessionUser.id}/${key}`).remove()
+            const targetId = gId || sessionUser.id;
+            db.ref(`sindara_laporan/${targetId}/${key}`).remove()
                 .then(() => {
-                    semuaLaporan = semuaLaporan.filter(l => l.key !== key);
-                    renderLaporan(semuaLaporan);
                     toast("Laporan dihapus.");
+                    muatLaporan();
                 })
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
         function muatLaporan() {
-            db.ref(`sindara_laporan/${sessionUser.id}`).on('value', s => {
-                semuaLaporan = [];
-                s.forEach(lx => semuaLaporan.push({ key: lx.key, ...lx.val() }));
-                semuaLaporan.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                document.getElementById('loadingLaporan').classList.add('hidden');
-                renderLaporan(semuaLaporan);
-            }, err => {
-                document.getElementById('loadingLaporan').classList.add('hidden');
-                toast("Gagal memuat laporan: " + err.message, "error");
-            });
+            if (!sessionUser) return;
+            
+            // Jika MASTER: tarik seluruh data laporan dari semua gugus
+            if (sessionUser.role === "MASTER") {
+                db.ref(`sindara_laporan`).on('value', snapshot => {
+                    semuaLaporan = [];
+                    snapshot.forEach(gugusSnap => {
+                        const kodeG = gugusSnap.key;
+                        gugusSnap.forEach(lx => {
+                            semuaLaporan.push({ 
+                                key: lx.key, 
+                                gugusKode: kodeG,
+                                ...lx.val() 
+                            });
+                        });
+                    });
+                    semuaLaporan.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    document.getElementById('loadingLaporan').classList.add('hidden');
+                    renderLaporan(semuaLaporan);
+                }, err => {
+                    document.getElementById('loadingLaporan').classList.add('hidden');
+                    toast("Gagal memuat laporan: " + err.message, "error");
+                });
+            } else {
+                // Jika GUGUS BIASA: tarik data milik gugusnya saja
+                db.ref(`sindara_laporan/${sessionUser.id}`).on('value', s => {
+                    semuaLaporan = [];
+                    s.forEach(lx => semuaLaporan.push({ key: lx.key, gugusKode: sessionUser.id, ...lx.val() }));
+                    semuaLaporan.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    document.getElementById('loadingLaporan').classList.add('hidden');
+                    renderLaporan(semuaLaporan);
+                }, err => {
+                    document.getElementById('loadingLaporan').classList.add('hidden');
+                    toast("Gagal memuat laporan: " + err.message, "error");
+                });
+            }
         }
 
         function renderLaporan(daftar) {
@@ -542,23 +576,29 @@
                 return;
             }
             empty.classList.add('hidden'); wrap.classList.remove('hidden');
-            list.innerHTML = daftar.map(l => `
+            list.innerHTML = daftar.map(l => {
+                const namaGugusTampil = DATABASE_GUGUS[l.gugusKode]?.gugus || l.gugusKode || '-';
+                return `
                 <tr class="item-laporan border-b border-white/5 hover:bg-white/5 transition-all">
-                    <td class="p-6 opacity-50 text-[10px] whitespace-nowrap">${escapeHtml(l.tgl)}</td>
+                    <td class="p-6 opacity-70 text-[10px] whitespace-nowrap">
+                        <span class="block text-emerald-400 font-bold uppercase">${escapeHtml(namaGugusTampil)}</span>
+                        ${escapeHtml(l.tgl)}
+                    </td>
                     <td class="p-6">
                         <div class="font-black judul-kegiatan">${escapeHtml(l.judul)}</div>
                         <div class="text-[10px] opacity-60 font-medium">${escapeHtml(l.desc || "")}</div>
                     </td>
                     <td class="p-6 text-right whitespace-nowrap">
                         ${l.bukti && l.bukti !== "-" ? `<a href="${escapeHtml(l.bukti)}" target="_blank" rel="noopener" class="text-emerald-400 text-[10px] border border-emerald-400/30 px-3 py-1 rounded-full mr-2">BUKTI</a>` : ""}
-                        <button onclick="hapusLaporan('${l.key}', '${escapeHtml(l.judul).replace(/'/g, "\\'")}')" class="text-rose-400 hover:text-rose-300 text-[10px]"><i class="fas fa-trash-can"></i></button>
+                        <button onclick="hapusLaporan('${l.key}', '${l.gugusKode}', '${escapeHtml(l.judul).replace(/'/g, "\\'")}')" class="text-rose-400 hover:text-rose-300 text-[10px]"><i class="fas fa-trash-can"></i></button>
                     </td>
-                </tr>`).join('');
+                </tr>`;
+            }).join('');
         }
 
         function filterLaporan() {
             const val = document.getElementById('searchReport').value.trim().toLowerCase();
-            const hasil = semuaLaporan.filter(l => (l.judul || '').toLowerCase().includes(val));
+            const hasil = semuaLaporan.filter(l => (l.judul || '').toLowerCase().includes(val) || (l.desc || '').toLowerCase().includes(val));
             renderLaporan(hasil);
         }
 
