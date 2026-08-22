@@ -39,8 +39,10 @@
     <nav class="fixed w-full z-[100] bg-slate-900/80 backdrop-blur-xl border-b border-white/5">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="font-black text-2xl italic tracking-tighter">SINDARA<span class="text-emerald-500">PRO</span></h1>
-            <div class="hidden md:flex space-x-8 font-bold text-[10px] tracking-widest uppercase items-center">
+            <div class="hidden md:flex space-x-6 font-bold text-[10px] tracking-widest uppercase items-center">
                 <a href="#home" class="navlink hover:text-emerald-400 transition-colors">Beranda</a>
+                <a href="#pantau-agenda" class="navlink hover:text-emerald-400 transition-colors"><i class="fas fa-calendar-check mr-1 text-yellow-400"></i> Pantau Agenda</a>
+                <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" rel="noopener" class="navlink hover:text-emerald-400 transition-colors"><i class="fas fa-file-pdf mr-1 text-emerald-400"></i> Laporan KKG</a>
                 <a href="#tentang" class="navlink hover:text-emerald-400 transition-colors">Profil KKG</a>
                 <a href="#app" class="bg-emerald-500 text-slate-900 px-6 py-2 rounded-full shadow-lg hover:bg-emerald-400 transition-colors">Portal Login</a>
             </div>
@@ -51,6 +53,8 @@
         <div id="mobileMenu" class="md:hidden overflow-hidden max-h-0 opacity-0 px-6">
             <div class="flex flex-col gap-1 pb-4 font-bold text-xs uppercase tracking-widest">
                 <a href="#home" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5">Beranda</a>
+                <a href="#pantau-agenda" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5 text-yellow-400"><i class="fas fa-calendar-check mr-2"></i> Pantau Agenda</a>
+                <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" rel="noopener" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5 text-emerald-400"><i class="fas fa-file-pdf mr-2"></i> Laporan KKG</a>
                 <a href="#tentang" onclick="toggleMobileMenu()" class="p-3 rounded-xl hover:bg-white/5">Profil KKG</a>
                 <a href="#app" onclick="toggleMobileMenu()" class="p-3 rounded-xl bg-emerald-500 text-slate-900 text-center">Portal Login</a>
             </div>
@@ -63,6 +67,44 @@
             <h2 class="text-5xl md:text-7xl font-black mb-6 uppercase italic leading-none">Membangun Sinergi <br><span class="text-emerald-500 underline decoration-indigo-500">Pendidik Modern</span></h2>
             <p class="text-lg opacity-60 mb-10 font-medium max-w-2xl mx-auto">Platform Monitoring, Transparansi, dan Dokumentasi Kegiatan GTK Kecamatan Renah Mendaluh.</p>
             <a href="#app" class="bg-white text-slate-900 px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-2xl hover:scale-105 transition-all inline-block">Mulai Aplikasi</a>
+        </div>
+    </section>
+
+    <!-- Seksi Publik: Pantau Agenda -->
+    <section id="pantau-agenda" class="py-24 bg-slate-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-emerald-400 font-black text-xs uppercase tracking-widest">Informasi Terbuka</span>
+                <h3 class="text-3xl md:text-4xl font-black italic uppercase mt-2">Pantau Agenda Kegiatan</h3>
+                <p class="text-xs text-slate-400 font-semibold mt-2">Lihat jadwal dan rencana kegiatan KKG Kecamatan Renah Mendaluh.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-[3rem] text-slate-900 shadow-xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <button onclick="gantiBulanPublik(-1)" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="calendarLabelPublik" class="font-black uppercase italic text-slate-900">-</h3>
+                        <button onclick="gantiBulanPublik(1)" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid mb-2 text-[9px] font-black text-slate-400 uppercase text-center">
+                        <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                    </div>
+                    <div id="calendarDaysPublik" class="calendar-grid"></div>
+                </div>
+                <div class="bg-indigo-900 p-8 rounded-[3rem] shadow-xl text-white flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 id="targetDatePublik" class="text-xl font-black uppercase">Detail Agenda</h3>
+                            <span class="text-[10px] font-bold bg-indigo-800 text-indigo-200 px-3 py-1 rounded-full uppercase">Mode Pantau</span>
+                        </div>
+                        <div id="agendaContentPublik" class="mb-6 text-sm italic opacity-90 leading-relaxed bg-white/5 p-6 rounded-2xl border border-white/10">Klik tanggal bernoda kuning pada kalender untuk melihat rincian agenda.</div>
+                    </div>
+                    <div id="agendaBuktiPublikWrap" class="hidden">
+                        <a id="agendaBuktiPublik" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-yellow-400 text-slate-900 px-5 py-3 rounded-xl font-black text-xs uppercase hover:bg-yellow-300 transition-colors">
+                            <i class="fas fa-link"></i> Lihat Bukti / Lampiran Agenda
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -336,11 +378,15 @@
 
         let sessionUser = null;
         let selectedDate = null;
+        let selectedDatePublik = null;
         let agendaDataLocal = {};
+        let agendaDataPublik = {};
         let semuaLaporan = [];
         let semuaKas = [];
         let calMonth = new Date().getMonth();
         let calYear = new Date().getFullYear();
+        let calMonthPublik = new Date().getMonth();
+        let calYearPublik = new Date().getFullYear();
 
         const DATABASE_GUGUS = {
             "INTI-SINDARA": { nama: "Pak Kiswanto", role: "MASTER", gugus: "PENGURUS INTI" },
@@ -408,6 +454,7 @@
         }
 
         window.onload = function () {
+            muatAgendaPublik();
             const urlParams = new URLSearchParams(window.location.search);
             const autoKey = urlParams.get('auto');
             if (autoKey) {
@@ -654,6 +701,7 @@
                     initCalendar();
                     document.getElementById('agendaContent').innerText = dataAgenda.catatan || "Belum ada rencana kegiatan.";
                     toast("Agenda diperbarui!");
+                    muatAgendaPublik();
                 })
                 .catch(err => toast("Gagal menyimpan: " + err.message, "error"));
         }
@@ -662,6 +710,65 @@
             db.ref(`sindara_agenda/${sessionUser.id}`).on('value', s => {
                 agendaDataLocal = {}; s.forEach(ax => { const a = ax.val(); agendaDataLocal[a.tgl] = a; });
                 initCalendar();
+            });
+        }
+
+        // ---------- agenda publik (hanya pantau) ----------
+        function gantiBulanPublik(delta) {
+            calMonthPublik += delta;
+            if (calMonthPublik > 11) { calMonthPublik = 0; calYearPublik++; }
+            if (calMonthPublik < 0) { calMonthPublik = 11; calYearPublik--; }
+            initCalendarPublik();
+        }
+
+        function initCalendarPublik() {
+            document.getElementById('calendarLabelPublik').innerText = `${NAMA_BULAN[calMonthPublik]} ${calYearPublik}`;
+            const grid = document.getElementById('calendarDaysPublik'); grid.innerHTML = "";
+            const jumlahHari = new Date(calYearPublik, calMonthPublik + 1, 0).getDate();
+            const hariPertama = new Date(calYearPublik, calMonthPublik, 1).getDay();
+            const hariIni = new Date();
+
+            for (let i = 0; i < hariPertama; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+            for (let i = 1; i <= jumlahHari; i++) {
+                const dId = `${i}-${String(calMonthPublik + 1).padStart(2, '0')}-${calYearPublik}`;
+                const div = document.createElement('div');
+                const isToday = hariIni.getDate() === i && hariIni.getMonth() === calMonthPublik && hariIni.getFullYear() === calYearPublik;
+                const itemAgenda = agendaDataPublik[dId];
+                div.className = `calendar-day ${itemAgenda ? 'has-event' : 'bg-slate-50 text-slate-900'} ${isToday ? 'is-today' : ''} ${selectedDatePublik === dId ? 'is-selected' : ''}`;
+                div.innerText = i;
+                div.onclick = () => {
+                    selectedDatePublik = dId;
+                    document.getElementById('targetDatePublik').innerText = `Agenda ${i} ${NAMA_BULAN[calMonthPublik]} ${calYearPublik}`;
+                    if (itemAgenda && itemAgenda.catatan) {
+                        document.getElementById('agendaContentPublik').innerText = itemAgenda.catatan;
+                        if (itemAgenda.bukti && itemAgenda.bukti !== "-") {
+                            document.getElementById('agendaBuktiPublik').href = itemAgenda.bukti;
+                            document.getElementById('agendaBuktiPublikWrap').classList.remove('hidden');
+                        } else {
+                            document.getElementById('agendaBuktiPublikWrap').classList.add('hidden');
+                        }
+                    } else {
+                        document.getElementById('agendaContentPublik').innerText = "Tidak ada agenda kegiatan pada tanggal ini.";
+                        document.getElementById('agendaBuktiPublikWrap').classList.add('hidden');
+                    }
+                    initCalendarPublik();
+                };
+                grid.appendChild(div);
+            }
+        }
+
+        function muatAgendaPublik() {
+            db.ref('sindara_agenda').on('value', s => {
+                agendaDataPublik = {};
+                s.forEach(gugusSnap => {
+                    gugusSnap.forEach(ax => {
+                        const a = ax.val();
+                        if (a && a.tgl) agendaDataPublik[a.tgl] = a;
+                    });
+                });
+                initCalendarPublik();
             });
         }
 
