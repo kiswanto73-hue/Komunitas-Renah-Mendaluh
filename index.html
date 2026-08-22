@@ -29,12 +29,12 @@
         #toastBox > div { animation: toastIn .25s ease-out; }
         @keyframes toastIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
         #mobileMenu { transition: max-height .3s ease, opacity .3s ease; }
-        
-        /* CSS Khusus Cetak Invoice */
+
+        /* Media Cetak Invoice */
         @media print {
             body * { visibility: hidden; }
             #areaCetakInvoice, #areaCetakInvoice * { visibility: visible; }
-            #areaCetakInvoice { position: absolute; left: 0; top: 0; width: 100%; color: black !important; }
+            #areaCetakInvoice { position: absolute; left: 0; top: 0; width: 100%; color: black !important; background: white !important; padding: 20px; }
             .no-print { display: none !important; }
         }
     </style>
@@ -138,15 +138,8 @@
                         <button data-page="agenda" onclick="showSubPage('agenda')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-calendar-alt mr-4 text-yellow-400"></i> Agenda</button>
                         <button data-page="keuangan" onclick="showSubPage('keuangan')" class="navbtn w-full text-left p-4 hover:bg-white/10 rounded-2xl flex items-center transition-all"><i class="fas fa-wallet mr-4 text-emerald-400"></i> Bendahara</button>
 
-                        <!-- KHUSUS PENGURUS INTI (MASTER) -->
-                        <div id="menuMaster" class="hidden pt-6 space-y-2 border-t border-white/10">
-                            <button data-page="monitor" onclick="showSubPage('monitor')" class="navbtn w-full text-left p-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl flex items-center shadow-xl transition-all"><i class="fas fa-globe mr-4"></i> Pantau Gugus</button>
-                            
-                            <!-- TOMBOL NAVIGASI INVOICE KHUSUS PENGURUS INTI -->
-                            <button data-page="invoice" onclick="showSubPage('invoice')" class="navbtn w-full text-left p-4 bg-amber-600 hover:bg-amber-500 text-white rounded-2xl flex items-center shadow-xl transition-all">
-                                <i class="fas fa-file-invoice-dollar mr-4"></i> Invoice Honor
-                            </button>
-
+                        <div id="menuMaster" class="hidden pt-6 space-y-2">
+                            <button data-page="monitor" onclick="showSubPage('monitor')" class="navbtn w-full text-left p-4 bg-indigo-600 rounded-2xl flex items-center shadow-xl"><i class="fas fa-globe mr-4"></i> Pantau Gugus</button>
                             <a href="https://kiswanto7384-cmyk.github.io/Laporan-KKG-Renah-Mendaluh/" target="_blank" rel="noopener" class="w-full block text-left p-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl flex items-center shadow-xl transition-all">
                                 <i class="fas fa-file-pdf mr-4"></i> Laporan KKG
                             </a>
@@ -255,70 +248,6 @@
                         </div>
                     </div>
 
-                    <!-- HALAMAN KHUSUS INVOICE HONORARIUM (HANYA PENGURUS INTI) -->
-                    <div id="page-invoice" class="sub-page">
-                        <div class="bg-white p-8 md:p-10 rounded-[3rem] text-slate-900 shadow-xl">
-                            <div class="flex justify-between items-center mb-6 no-print">
-                                <h4 class="font-black uppercase italic text-xl">Invoice Honorarium</h4>
-                                <button onclick="window.print()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-6 py-3 rounded-2xl shadow-lg transition-all text-xs uppercase">
-                                    <i class="fas fa-print mr-2"></i> Cetak / Download PDF
-                                </button>
-                            </div>
-                            
-                            <!-- Area Tampilan / Template Cetak Invoice -->
-                            <div id="areaCetakInvoice" class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
-                                <div class="text-center border-b-2 border-slate-900 pb-4 mb-6">
-                                    <h2 class="text-2xl font-black uppercase tracking-tight">KELOMPOK KERJA GURU (KKG)</h2>
-                                    <h3 class="text-lg font-bold text-slate-700">KECAMATAN RENAH MENDALUH</h3>
-                                    <p class="text-xs text-slate-500 italic">Bukti Kuitansi &amp; Rincian Honorarium Narsum/Pengurus</p>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-4 text-xs font-semibold mb-6">
-                                    <div>
-                                        <p><span class="text-slate-400">No. Invoice:</span> <strong id="invNo">INV/KKG/2026/001</strong></p>
-                                        <p><span class="text-slate-400">Tanggal:</span> <strong id="invTanggal">22 Agustus 2026</strong></p>
-                                    </div>
-                                    <div class="text-right">
-                                        <p><span class="text-slate-400">Penerima:</span> <strong id="invPenerima">Pak Kiswanto</strong></p>
-                                        <p><span class="text-slate-400">Jabatan:</span> <strong id="invJabatan">Pengurus Inti</strong></p>
-                                    </div>
-                                </div>
-
-                                <table class="w-full text-left text-xs mb-8">
-                                    <thead class="bg-slate-200 uppercase text-[10px] font-black">
-                                        <tr>
-                                            <th class="p-3">Uraian / Kegiatan</th>
-                                            <th class="p-3 text-right">Nominal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-slate-200 font-medium">
-                                        <tr>
-                                            <td class="p-3">Honorarium Kegiatan KKG Renah Mendaluh</td>
-                                            <td class="p-3 text-right">Rp 500.000</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="font-black bg-slate-100">
-                                            <td class="p-3 uppercase">Total Diterima</td>
-                                            <td class="p-3 text-right text-emerald-600">Rp 500.000</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-
-                                <div class="flex justify-between items-end text-center text-xs pt-8">
-                                    <div>
-                                        <p class="mb-12">Bendahara,</p>
-                                        <p class="font-bold underline">(...................................)</p>
-                                    </div>
-                                    <div>
-                                        <p class="mb-12">Penerima Honor,</p>
-                                        <p class="font-bold underline" id="ttdPenerima">( Pak Kiswanto )</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div id="page-agenda" class="sub-page">
                         <div class="grid md:grid-cols-2 gap-8">
                             <div class="bg-white p-8 rounded-[3rem] text-slate-900">
@@ -353,6 +282,110 @@
                             <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50 text-emerald-400 font-black">Total Masuk</p><h3 id="totalMasuk" class="text-xl font-bold">Rp 0</h3></div>
                             <div class="glass p-8 rounded-[2.5rem]"><p class="text-[10px] uppercase opacity-50 text-rose-400 font-black">Total Keluar</p><h3 id="totalKeluar" class="text-xl font-bold">Rp 0</h3></div>
                         </div>
+
+                        <!-- Tombol Buka Editor Invoice (Khusus Master/Pengurus Inti) -->
+                        <div id="btnBukaInvoice" class="hidden text-right">
+                            <button onclick="toggleInvoiceBox()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-6 py-3 rounded-2xl shadow-xl transition-all text-xs uppercase">
+                                <i class="fas fa-file-invoice-dollar mr-2"></i> Buat / Cetak Invoice Honor
+                            </button>
+                        </div>
+
+                        <!-- Panel Editor & Preview Invoice Honorarium Interaktif -->
+                        <div id="panelInvoice" class="hidden bg-white p-6 md:p-10 rounded-[3rem] text-slate-900 shadow-2xl">
+                            <div class="flex justify-between items-center mb-6 border-b pb-4 no-print">
+                                <h4 class="font-black uppercase italic text-lg">Buat Invoice Honorarium</h4>
+                                <div class="flex gap-2">
+                                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-xs uppercase">
+                                        <i class="fas fa-print mr-1"></i> Cetak PDF
+                                    </button>
+                                    <button onclick="toggleInvoiceBox()" class="bg-rose-500 hover:bg-rose-600 text-white font-black px-4 py-2 rounded-xl text-xs uppercase">
+                                        Tutup
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Input Data Invoice -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 no-print bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400">NOMOR INVOICE</label>
+                                    <input type="text" id="inpInvNo" value="INV/KKG/2026/001" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400">TANGGAL</label>
+                                    <input type="text" id="inpInvTanggal" value="22 Agustus 2026" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400">NAMA PENERIMA</label>
+                                    <input type="text" id="inpInvPenerima" value="Pak Kiswanto" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400">JABATAN / PERAN</label>
+                                    <input type="text" id="inpInvJabatan" value="Narasumber / Pengurus Inti" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400">URAIAN KEGIATAN</label>
+                                    <input type="text" id="inpInvUraian" value="Honorarium Narsum / Kegiatan KKG Renah Mendaluh" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400">NOMINAL HONOR (RP)</label>
+                                    <input type="number" id="inpInvNominal" value="500000" oninput="updateInvoicePreview()" class="w-full p-3 bg-white border rounded-xl font-bold text-xs">
+                                </div>
+                            </div>
+
+                            <!-- Area Tampilan Kuitansi / Siap Cetak -->
+                            <div id="areaCetakInvoice" class="p-6 bg-white rounded-2xl border border-slate-300">
+                                <div class="text-center border-b-2 border-slate-900 pb-4 mb-6">
+                                    <h2 class="text-2xl font-black uppercase tracking-tight">KELOMPOK KERJA GURU (KKG)</h2>
+                                    <h3 class="text-lg font-bold text-slate-700">KECAMATAN RENAH MENDALUH</h3>
+                                    <p class="text-xs text-slate-500 italic">Bukti Kuitansi &amp; Rincian Honorarium</p>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4 text-xs font-semibold mb-6">
+                                    <div>
+                                        <p><span class="text-slate-400">No. Invoice:</span> <strong id="invNo">INV/KKG/2026/001</strong></p>
+                                        <p><span class="text-slate-400">Tanggal:</span> <strong id="invTanggal">22 Agustus 2026</strong></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p><span class="text-slate-400">Penerima:</span> <strong id="invPenerima">Pak Kiswanto</strong></p>
+                                        <p><span class="text-slate-400">Jabatan:</span> <strong id="invJabatan">Narasumber / Pengurus Inti</strong></p>
+                                    </div>
+                                </div>
+
+                                <table class="w-full text-left text-xs mb-8">
+                                    <thead class="bg-slate-100 uppercase text-[10px] font-black">
+                                        <tr>
+                                            <th class="p-3">Uraian / Kegiatan</th>
+                                            <th class="p-3 text-right">Nominal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 font-medium">
+                                        <tr>
+                                            <td class="p-3" id="invUraian">Honorarium Narsum / Kegiatan KKG Renah Mendaluh</td>
+                                            <td class="p-3 text-right" id="invNominal">Rp 500.000</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="font-black bg-slate-100">
+                                            <td class="p-3 uppercase">Total Diterima</td>
+                                            <td class="p-3 text-right text-emerald-600" id="invTotal">Rp 500.000</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                                <div class="flex justify-between items-end text-center text-xs pt-8">
+                                    <div>
+                                        <p class="mb-12">Bendahara KKG,</p>
+                                        <p class="font-bold underline">(...................................)</p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-12">Penerima Honor,</p>
+                                        <p class="font-bold underline" id="ttdPenerima">( Pak Kiswanto )</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Input Transaksi Kas -->
                         <div class="bg-white p-8 md:p-10 rounded-[3rem] text-slate-900 shadow-xl">
                             <h4 class="font-black uppercase italic mb-6 border-b pb-4">Input Transaksi</h4>
                             <form onsubmit="event.preventDefault(); simpanTransaksi();" class="grid md:grid-cols-2 gap-4">
@@ -365,6 +398,7 @@
                             </form>
                         </div>
 
+                        <!-- Tabel Riwayat Kas -->
                         <div class="bg-white p-8 md:p-10 rounded-[3rem] text-slate-900 shadow-xl">
                             <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6 border-b pb-4">
                                 <h4 class="font-black uppercase italic">Riwayat Transaksi</h4>
@@ -465,7 +499,12 @@
                 document.getElementById('mainDashboard').classList.remove('hidden');
                 document.getElementById('welcomeName').innerText = "Halo, " + sessionUser.nama;
                 document.getElementById('labelGugus').innerText = sessionUser.gugus;
-                if (sessionUser.role === "MASTER") document.getElementById('menuMaster').classList.remove('hidden');
+                
+                if (sessionUser.role === "MASTER") {
+                    document.getElementById('menuMaster').classList.remove('hidden');
+                    document.getElementById('btnBukaInvoice').classList.remove('hidden');
+                }
+
                 const tglInputs = document.querySelectorAll('#kasTanggal');
                 tglInputs.forEach(el => el.valueAsDate = new Date());
                 muatLaporan(); muatKeuangan(); muatAgenda();
@@ -552,6 +591,29 @@
         }
         function tutupPantauan() { document.getElementById('pantauanContainer').classList.add('hidden'); }
 
+        // ---------- invoice editor ----------
+        function toggleInvoiceBox() {
+            document.getElementById('panelInvoice').classList.toggle('hidden');
+        }
+
+        function updateInvoicePreview() {
+            const no = document.getElementById('inpInvNo').value.trim() || "-";
+            const tgl = document.getElementById('inpInvTanggal').value.trim() || "-";
+            const penerima = document.getElementById('inpInvPenerima').value.trim() || "-";
+            const jabatan = document.getElementById('inpInvJabatan').value.trim() || "-";
+            const uraian = document.getElementById('inpInvUraian').value.trim() || "-";
+            const nominal = parseInt(document.getElementById('inpInvNominal').value, 10) || 0;
+
+            document.getElementById('invNo').innerText = no;
+            document.getElementById('invTanggal').innerText = tgl;
+            document.getElementById('invPenerima').innerText = penerima;
+            document.getElementById('invJabatan').innerText = jabatan;
+            document.getElementById('invUraian').innerText = uraian;
+            document.getElementById('invNominal').innerText = formatRupiah(nominal);
+            document.getElementById('invTotal').innerText = formatRupiah(nominal);
+            document.getElementById('ttdPenerima').innerText = `( ${penerima} )`;
+        }
+
         // ---------- laporan ----------
         function simpanLaporan() {
             const btn = document.getElementById('btnKirimLaporan');
@@ -565,14 +627,9 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
 
             const dataBaru = { judul, desc, tgl, bukti: bukti || "-", timestamp: Date.now() };
-            const refBaru = db.ref(`sindara_laporan/${sessionUser.id}`).push();
 
-            refBaru.set(dataBaru)
+            db.ref(`sindara_laporan/${sessionUser.id}`).push().set(dataBaru)
                 .then(() => {
-                    semuaLaporan.unshift({ key: refBaru.key, ...dataBaru });
-                    semuaLaporan.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                    renderLaporan(semuaLaporan);
-
                     toast("Laporan berhasil dikirim!");
                     document.getElementById('lapJudul').value = "";
                     document.getElementById('lapDesc').value = "";
@@ -587,11 +644,7 @@
         function hapusLaporan(key, judul) {
             if (!confirm(`Hapus laporan "${judul}"?`)) return;
             db.ref(`sindara_laporan/${sessionUser.id}/${key}`).remove()
-                .then(() => {
-                    semuaLaporan = semuaLaporan.filter(l => l.key !== key);
-                    renderLaporan(semuaLaporan);
-                    toast("Laporan dihapus.");
-                })
+                .then(() => toast("Laporan dihapus."))
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
@@ -685,9 +738,6 @@
             };
             db.ref(`sindara_agenda/${sessionUser.id}/${selectedDate.replace(/-/g, '_')}`).set(dataAgenda)
                 .then(() => {
-                    agendaDataLocal[selectedDate] = dataAgenda;
-                    initCalendar();
-                    document.getElementById('agendaContent').innerText = dataAgenda.catatan || "Belum ada rencana kegiatan.";
                     toast("Agenda diperbarui!");
                 })
                 .catch(err => toast("Gagal menyimpan: " + err.message, "error"));
@@ -726,34 +776,27 @@
             const dataBaru = { tipe, nominal, keterangan: ket, bukti: bukti || "-", tgl: tglTampil, timestamp: Date.now() };
 
             if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...'; }
-            const refBaru = db.ref(`sindara_kas/${sessionUser.id}`).push();
 
-            refBaru.set(dataBaru).then(() => {
-                semuaKas.unshift({ key: refBaru.key, ...dataBaru });
-                semuaKas.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                hitungUlangTotalKas();
-                renderTransaksiKas();
-
-                toast("Kas tercatat!");
-                document.getElementById('kasNominal').value = "";
-                document.getElementById('kasKet').value = "";
-                document.getElementById('kasBukti').value = "";
-            }).catch(err => {
-                toast("Gagal menyimpan: " + err.message, "error");
-            }).finally(() => {
-                if (btn) { btn.disabled = false; btn.innerHTML = "Simpan Transaksi"; }
-            });
+            // Kirim ke Firebase, Listener Realtime (.on) akan secara otomatis memperbarui tabel tanpa ada bentrokan data
+            db.ref(`sindara_kas/${sessionUser.id}`).push().set(dataBaru)
+                .then(() => {
+                    toast("Kas tercatat!");
+                    document.getElementById('kasNominal').value = "";
+                    document.getElementById('kasKet').value = "";
+                    document.getElementById('kasBukti').value = "";
+                })
+                .catch(err => {
+                    toast("Gagal menyimpan: " + err.message, "error");
+                })
+                .finally(() => {
+                    if (btn) { btn.disabled = false; btn.innerHTML = "Simpan Transaksi"; }
+                });
         }
 
         function hapusKas(key, ket) {
             if (!confirm(`Hapus transaksi "${ket}"?`)) return;
             db.ref(`sindara_kas/${sessionUser.id}/${key}`).remove()
-                .then(() => {
-                    semuaKas = semuaKas.filter(t => t.key !== key);
-                    hitungUlangTotalKas();
-                    renderTransaksiKas();
-                    toast("Transaksi dihapus.");
-                })
+                .then(() => toast("Transaksi dihapus."))
                 .catch(err => toast("Gagal menghapus: " + err.message, "error"));
         }
 
